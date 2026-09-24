@@ -1,0 +1,1424 @@
+
+  
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="In-Process Data Governance">
+      
+      
+      
+        <link rel="canonical" href="https://kpruntov.github.io/holonomy-source/2_getting_started_and_installation/">
+      
+      
+        <link rel="prev" href="../1_introduction_and_core_concepts/">
+      
+      
+        <link rel="next" href="../7_infrastructure_and_security_integrations/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Getting Started - Holonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2-getting-started-installation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Holonomy" class="md-header__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Holonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting Started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Holonomy" class="md-nav__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Holonomy
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Concepts & Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Concepts & Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_introduction_and_core_concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21-system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. System Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-installation-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Installation Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-zero-config-local-dev-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Zero-Config Local Dev Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-configuration-reference-6-tier-cascade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Configuration Reference &amp; 6-Tier Cascade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4. Configuration Reference &amp; 6-Tier Cascade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-to-put-configuration-vs-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where to Put Configuration vs. Credentials
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where to Put Configuration vs. Credentials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-core-configuration-engine-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Core Configuration (Engine Settings)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-holonomy-authentication-credentials-jwt-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Holonomy Authentication Credentials (JWT Identity)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-third-party-infrastructure-credentials-awsgcps3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Third-Party Infrastructure Credentials (AWS/GCP/S3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-quick-start-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Quick-Start Tutorial
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5. Quick-Start Tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-15-defining-a-local-governance-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.5: Defining a Local Governance Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-writing-protected-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Writing Protected Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-reading-protected-data-zero-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Reading Protected Data (Zero-Copy)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-lazy-scanning-zero-copy-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Lazy Scanning (Zero-Copy Stream)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-predicate-pruning-pushdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Predicate Pruning (Pushdown)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-configuring-your-identity-provider-idp-for-the-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6. Configuring your Identity Provider (IdP) for the CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7_infrastructure_and_security_integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine & Paths
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engine & Paths
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_policy_and_governance_engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy and Governance Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_producer_path_secure_data_ingestion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Producer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_consumer_path_high_performance_analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consumer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_advanced_features_and_edge_case_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8_troubleshooting_safety_and_best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9_frequently_asked_questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21-system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. System Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-installation-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Installation Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-zero-config-local-dev-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Zero-Config Local Dev Mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-configuration-reference-6-tier-cascade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Configuration Reference &amp; 6-Tier Cascade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4. Configuration Reference &amp; 6-Tier Cascade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-to-put-configuration-vs-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where to Put Configuration vs. Credentials
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where to Put Configuration vs. Credentials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-core-configuration-engine-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Core Configuration (Engine Settings)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-holonomy-authentication-credentials-jwt-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Holonomy Authentication Credentials (JWT Identity)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-third-party-infrastructure-credentials-awsgcps3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Third-Party Infrastructure Credentials (AWS/GCP/S3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-quick-start-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Quick-Start Tutorial
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5. Quick-Start Tutorial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-15-defining-a-local-governance-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.5: Defining a Local Governance Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-writing-protected-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Writing Protected Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-reading-protected-data-zero-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Reading Protected Data (Zero-Copy)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-lazy-scanning-zero-copy-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Lazy Scanning (Zero-Copy Stream)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-predicate-pruning-pushdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Predicate Pruning (Pushdown)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-configuring-your-identity-provider-idp-for-the-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6. Configuring your Identity Provider (IdP) for the CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="2-getting-started-installation">2. Getting Started &amp; Installation</h1>
+<h2 id="21-system-requirements">2.1. System Requirements</h2>
+<p>Holonomy is designed to run anywhere you can run Python, without requiring users to compile Rust code themselves. </p>
+<p><strong>Supported Operating Systems:</strong></p>
+<ul>
+<li>Linux (x86_64, aarch64)</li>
+<li>macOS (Intel, Apple Silicon / ARM64)</li>
+<li>Windows (AMD64)</li>
+</ul>
+<p><strong>Supported Environments:</strong></p>
+<ul>
+<li>Python 3.8+ </li>
+<li>Rust compilation toolchain is <strong>not</strong> required for end-users, as Holonomy is distributed via PyPI as pre-compiled <code>maturin</code> wheels.</li>
+<li>Dependencies: Requires <code>pyarrow</code> for in-memory FFI handoffs.</li>
+</ul>
+<h2 id="22-installation-guide">2.2. Installation Guide</h2>
+<p>Because Holonomy bundles its Rust-compiled <code>core</code> and its standalone <code>cli</code> directly into the Python wheel, installation is completely unified. </p>
+<p><strong>Using <code>pip</code>:</strong></p>
+<pre><code class="language-bash">pip install holonomy
+</code></pre>
+<p><strong>Using <code>uv</code> (Recommended for Speed):</strong></p>
+<pre><code class="language-bash">uv add holonomy
+</code></pre>
+<p><strong>Verifying the Installation:</strong>
+To ensure both the Python API and the bundled CLI are functional, run:</p>
+<pre><code class="language-bash"># Check the Python module
+python -c &quot;import holonomy; print('Holonomy successfully loaded')&quot;
+
+# Check the bundled CLI (automatically injected into your environment's bin folder)
+holonomy --help
+</code></pre>
+<h2 id="23-zero-config-local-dev-mode">2.3. Zero-Config Local Dev Mode</h2>
+<p>If you simply install Holonomy and execute a script without configuring anything, the SDK automatically falls back to <strong>Local Dev Mode</strong>. It makes the following assumptions:</p>
+<ul>
+<li><strong>KMS Endpoint:</strong> Defaults to an internal <strong>Local Mock KMS</strong> that encrypts/decrypts using a local RAM session key.</li>
+<li><strong>Policy Storage:</strong> Defaults to checking the local <code>./.holonomy/policies/</code> directory. For a frictionless Developer Experience (DX), any raw YAML/JSON policies found here are automatically cryptographically signed in-memory using an ephemeral keypair during engine startup. This ensures the Engine's strict signature verification logic remains active and identical to production, while allowing you to simply write plain-text rules locally. If no policies exist, it permits local execution.</li>
+<li><strong>Audit Logs:</strong> Defaults to writing events locally to <code>~/.holonomy/audit.log</code> instead of streaming them to a SaaS control plane.</li>
+</ul>
+<p>This allows you to test Parquet Modular Encryption (PME) completely locally without needing AWS, HashiCorp Vault, or S3 credentials. Once you move to production, simply set environment variables (e.g., <code>HOLONOMY_KMS_ENDPOINT</code>) and the exact same code securely connects to your real infrastructure!</p>
+<h2 id="24-configuration-reference-6-tier-cascade">2.4. Configuration Reference &amp; 6-Tier Cascade</h2>
+<p>When you are ready to configure Holonomy for a real environment, you can supply configuration via a <strong>6-Tier Hierarchical Cascade</strong>. This deterministic resolution matrix ensures that infrastructure variables are abstracted away from primary query execution paths, allowing your code to remain 100% portable across environments.</p>
+<p>The configuration engine resolves parameters implicitly and exactly once. The exact resolution order is:</p>
+<ol>
+<li><strong>Programmatic Overrides:</strong> Arguments explicitly passed into <code>holonomy.init(...)</code>.</li>
+<li><strong>Environment Variables:</strong> Standard <code>HOLONOMY_*</code> environment variables (e.g., via standard shell exports or <code>.env</code> files).</li>
+<li><strong>Project Config:</strong> Reading from <code>./.holonomy.toml</code> in the current working directory.</li>
+<li><strong>User Config:</strong> Reading from <code>~/.config/holonomy/config.toml</code> (or the OS-specific user config directory).</li>
+<li><strong>System Global Config:</strong> Reading from <code>/etc/holonomy/config.toml</code> (or the OS-specific system config directory).</li>
+<li><strong>System Fail-Safe Defaults:</strong> Automatic fallbacks (e.g., <code>cache_ttl_hours = 24</code>).</li>
+</ol>
+<h3 id="where-to-put-configuration-vs-credentials">Where to Put Configuration vs. Credentials</h3>
+<p>It is vital to distinguish between <strong>Configuration</strong> (how Holonomy behaves) and <strong>Credentials</strong> (how Holonomy proves its identity to third-party services).</p>
+<h4 id="1-core-configuration-engine-settings">1. Core Configuration (Engine Settings)</h4>
+<p>Variables such as your KMS endpoint, policy bucket URI, storage routing, telemetry target, and IdP definitions belong in the Holonomy configuration cascade. We recommend keeping these in <code>.holonomy.toml</code> or <code>HOLONOMY_*</code> environment variables.</p>
+<p><em>Example <code>.holonomy.toml</code> structure:</em></p>
+<pre><code class="language-toml">[kms]
+provider = &quot;gcp&quot; # Optional, defaults to auto-discovery
+key_id = &quot;projects/.../cryptoKeys/holonomy-kms-test1&quot;
+
+[storage]
+endpoint = &quot;https://&lt;your-s3-endpoint&gt;.com&quot;
+region = &quot;auto&quot;
+
+[policy]
+central_bucket = &quot;r2://holonomy-test-policy-bucket&quot;
+public_key = &quot;e67b56a920edf3d693d2a1884ecfcb4b7d1da89e123c7bbed97d53552b9428ec&quot;
+
+[auth]
+jwks_url = &quot;http://localhost:8080/realms/holonomy-test/protocol/openid-connect/certs&quot;
+issuer = &quot;http://localhost:8080/realms/holonomy-test&quot;
+</code></pre>
+<h4 id="2-holonomy-authentication-credentials-jwt-identity">2. Holonomy Authentication Credentials (JWT Identity)</h4>
+<p>For Holonomy to prove <em>your identity</em> during policy evaluation, it requires an OIDC/JWT token. This is resolved natively by the Holonomy config engine cascade via:</p>
+<ul>
+<li><code>credential_file</code> config / <code>HOLONOMY_CREDENTIAL_FILE</code>: Path to a dynamically rotating token file (ideal for Kubernetes service accounts).</li>
+<li>Standard Fallbacks: If omitted, Holonomy searches standard identity paths like AWS/Azure Federated tokens or the local <code>~/.holonomy/credentials</code> file (which is automatically generated when you use the CLI command <code>holonomy auth login</code>).</li>
+</ul>
+<h4 id="3-third-party-infrastructure-credentials-awsgcps3">3. Third-Party Infrastructure Credentials (AWS/GCP/S3)</h4>
+<p><strong>Holonomy does NOT parse or store third-party infrastructure credentials (like <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, or <code>GOOGLE_APPLICATION_CREDENTIALS</code>) in its TOML files.</strong>
+Instead, Holonomy securely delegates infrastructure authentication directly to the native Cloud SDKs (e.g., <code>aws-config</code>, <code>gcp-auth</code>). </p>
+<ul>
+<li><strong>Cloud Credentials MUST remain in standard environment variables (e.g., loaded via a <code>.env</code> file) or native OS config files (e.g., <code>~/.aws/credentials</code>).</strong></li>
+<li>Do NOT place cloud access keys into <code>.holonomy.toml</code>.</li>
+</ul>
+<h2 id="25-quick-start-tutorial">2.5. Quick-Start Tutorial</h2>
+<h3 id="step-1-initialization">Step 1: Initialization</h3>
+<p>By default, Holonomy securely initializes its context by looking for your environment's Identity Token (OIDC, AWS IAM, K8s Service Account) and uses standard configuration discovery. </p>
+<p>For this local development tutorial, we will explicitly configure it to use mock cryptographic keys and local policy files.</p>
+<pre><code class="language-python">import holonomy
+
+# 1. Initialize your environment locally (explicit overrides)
+holonomy.init(
+    kms_provider=&quot;mock&quot;,
+    policy_bucket=&quot;local&quot;,
+    identity_provider=&quot;mock&quot;
+)
+</code></pre>
+<h3 id="step-15-defining-a-local-governance-policy">Step 1.5: Defining a Local Governance Policy</h3>
+<p>Holonomy's core strength is its Decoupled Governance Engine. By default in Local Dev Mode (which we enabled above), Holonomy looks for JSON policies in a <code>.holonomy/policies/</code> directory relative to where your script is running. </p>
+<p>Let's create a local policy that tells Holonomy to automatically redact the <code>email</code> column for anyone acting as the <code>data-sci-role</code>. </p>
+<p>Create a file named <code>.holonomy/policies/demo_policy.json</code> in your project folder (you may need to create the directory first) and paste this in:</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;encryption&quot;: {
+    &quot;required_columns&quot;: [&quot;email&quot;]
+  },
+  &quot;principals&quot;: {
+    &quot;data-sci-role&quot;: {
+      &quot;column_masks&quot;: {
+        &quot;email&quot;: &quot;REDACT&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p>When you run the read operations in the later steps as <code>data-sci-role</code>, the engine will intercept the decrypted data and instantly replace the email addresses with <code>***</code> directly in memory!</p>
+<h3 id="step-2-writing-protected-data">Step 2: Writing Protected Data</h3>
+<p>Let's encrypt and write a batch of sensitive data. We define an inline JSON contract ensuring structural integrity before the data ever leaves memory.</p>
+<pre><code class="language-python">import holonomy
+import pyarrow as pa
+
+# Create some dummy PyArrow data
+schema = pa.schema([
+    ('id', pa.int64()), 
+    ('email', pa.string())
+])
+batch = pa.RecordBatch.from_arrays(
+    [pa.array([1, 2]), pa.array([&quot;user@test.com&quot;, &quot;admin@test.com&quot;])], 
+    schema=schema
+)
+
+# 2. Write data with Parquet Modular Encryption (PME)
+contract_json = '{&quot;name&quot;: &quot;Users&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;columns&quot;: [{&quot;name&quot;: &quot;id&quot;, &quot;type&quot;: &quot;int64&quot;, &quot;required&quot;: true}, {&quot;name&quot;: &quot;email&quot;, &quot;type&quot;: &quot;string&quot;, &quot;required&quot;: true}]}'
+
+holonomy.write(
+    batch=batch, 
+    target=&quot;file://users_encrypted.parquet&quot;,
+    user_context=&quot;data-eng-role&quot;,
+    purpose=&quot;business-analysis&quot;,
+    contract_json=contract_json
+)
+</code></pre>
+<h3 id="step-3-reading-protected-data-zero-copy">Step 3: Reading Protected Data (Zero-Copy)</h3>
+<p>First, let's prove the data is actually encrypted at rest. If you try to read the file using standard tools like Polars, it will fail or return ciphertext because it lacks the cryptographic keys:</p>
+<pre><code class="language-python">import polars as pl
+try:
+    df_raw = pl.read_parquet(&quot;users_encrypted.parquet&quot;)
+    print(df_raw)
+except Exception as e:
+    print(f&quot;Standard reader failed: {e}&quot;)
+</code></pre>
+<p>Now, let's load that data securely directly into a Polars DataFrame. Holonomy handles the local file reads and decryption seamlessly.</p>
+<pre><code class="language-python">import holonomy
+import polars as pl
+
+# 3. Read specific encrypted column directly into Arrow
+arrow_data = holonomy.read(
+    target=&quot;file://users_encrypted.parquet&quot;,
+    user_context=&quot;data-sci-role&quot;,
+    columns_to_read=[&quot;email&quot;], 
+    purpose=&quot;data-science-analytics&quot;
+)
+
+# 4. Zero-Copy transition into Polars
+df = pl.from_arrow(arrow_data)
+print(df)
+</code></pre>
+<h3 id="step-4-lazy-scanning-zero-copy-stream">Step 4: Lazy Scanning (Zero-Copy Stream)</h3>
+<p>For massive datasets where eager <code>read()</code> would exceed memory limits, you can use <code>holonomy.scan()</code> to retrieve a deferred <code>pyarrow.RecordBatchReader</code>. This stream natively integrates with DuckDB's lazy query engine and Polars, deferring execution and allowing memory-bounded reads.</p>
+<p><strong>Option A: Ingesting into Polars</strong>
+Note that an Arrow stream is a one-pass iterator that can only be consumed once.</p>
+<pre><code class="language-python">import holonomy
+import polars as pl
+
+# 1. Open an encrypted stream via the Arrow C Stream interface
+stream = holonomy.scan(
+    target=&quot;file://users_encrypted.parquet&quot;,
+    user_context=&quot;data-sci-role&quot;,
+    columns_to_read=[&quot;id&quot;, &quot;email&quot;], 
+    purpose=&quot;large-scale-analytics&quot;
+)
+
+# 2. Consume the pre-filtered stream natively into Polars
+df = pl.from_arrow(stream)
+print(df)
+</code></pre>
+<p><strong>Option B: Querying robustly with DuckDB</strong>
+If you want to use DuckDB, you must open a fresh stream since the previous one was exhausted by Polars.</p>
+<pre><code class="language-python">import holonomy
+import duckdb
+
+stream2 = holonomy.scan(
+    target=&quot;file://users_encrypted.parquet&quot;,
+    user_context=&quot;data-sci-role&quot;,
+    columns_to_read=[&quot;id&quot;, &quot;email&quot;], 
+    purpose=&quot;large-scale-analytics&quot;
+)
+
+# Using from_arrow prevents scope resolution issues in production ETLs
+res = duckdb.from_arrow(stream2).query(&quot;my_table&quot;, &quot;SELECT * FROM my_table&quot;).df()
+print(res)
+</code></pre>
+<h3 id="step-5-predicate-pruning-pushdown">Step 5: Predicate Pruning (Pushdown)</h3>
+<p>To minimize network egress and decryption time, you can push AST filters down into Holonomy's Rust core. </p>
+<blockquote>
+<p>[!IMPORTANT]
+Holonomy uses these user filters <em>strictly</em> for block-level I/O pruning (skipping Parquet chunks where the <code>min</code>/<code>max</code> statistics don't overlap with your filter). It does <strong>not</strong> evaluate these filters row-by-row! You must still apply the exact filter in your compute engine (e.g. Polars) to remove any remaining invalid rows from the fetched chunks.</p>
+</blockquote>
+<p><em>(Note: If you run this on our dummy dataset of 2 rows, both rows are written into the exact same chunk, so the entire chunk is fetched and you will see both rows until Polars filters them out!)</em></p>
+<pre><code class="language-python">import holonomy
+import pyarrow.compute as pc
+import polars as pl
+
+# 1. Create a native PyArrow filter expression
+filters = pc.field(&quot;id&quot;) == 1
+
+# 2. Pass the filters to the scanner
+# Holonomy translates this AST and bypasses downloading any Parquet 
+# chunk where `id != 1` based on the chunk's footer statistics.
+stream = holonomy.scan(
+    target=&quot;file://users_encrypted.parquet&quot;,
+    user_context=&quot;data-sci-role&quot;,
+    columns_to_read=[&quot;id&quot;, &quot;email&quot;], 
+    purpose=&quot;large-scale-analytics&quot;,
+    filters=filters
+)
+
+# 3. Consume the stream and apply the EXACT row filter in Polars
+df = pl.from_arrow(stream).filter(pl.col(&quot;id&quot;) == 1)
+print(df)
+</code></pre>
+<h2 id="26-configuring-your-identity-provider-idp-for-the-cli">2.6. Configuring your Identity Provider (IdP) for the CLI</h2>
+<p>If you intend to use the interactive <code>holonomy auth login</code> command (which implements the OAuth 2.0 Device Authorization Grant - RFC 8628), you must configure your IdP (e.g., Keycloak, Auth0, Okta) as follows:</p>
+<ol>
+<li><strong>Client Type / Authentication:</strong> Set the client to be a <strong>Public Client</strong> (e.g., Client Authentication = Off). The CLI cannot securely store a <code>client_secret</code>, so it relies strictly on public flows.</li>
+<li><strong>Device Authorization Grant:</strong> You <strong>must explicitly enable</strong> the OAuth 2.0 Device Authorization Grant. </li>
+<li><strong>URL Settings:</strong> Because the CLI is a native terminal application and not a web server:</li>
+<li><strong>Root URL / Home URL:</strong> Leave blank.</li>
+<li><strong>Valid Redirect URIs:</strong> Leave blank (there is no redirect callback).</li>
+<li><strong>Web Origins / CORS:</strong> Leave blank.</li>
+<li><strong>Logout Settings:</strong> No Front-Channel or Back-Channel logout URLs are required. Logout is managed locally by deleting the credentials file.</li>
+</ol>
+<p>Once configured, ensure <code>HOLONOMY_ISSUER</code> and <code>HOLONOMY_CLIENT_ID</code> are set in your environment (e.g. <code>.env</code> file) to match your IdP settings.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,894 @@
+
+  
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="In-Process Data Governance">
+      
+      
+      
+        <link rel="canonical" href="https://kpruntov.github.io/holonomy-source/api/python_sdk/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Holonomy Python SDK API - Holonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#holonomy-python-sdk-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Holonomy" class="md-header__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Holonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Holonomy Python SDK API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Holonomy" class="md-nav__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Holonomy
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Concepts & Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Concepts & Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1_introduction_and_core_concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_getting_started_and_installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7_infrastructure_and_security_integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine & Paths
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engine & Paths
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3_policy_and_governance_engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy and Governance Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4_producer_path_secure_data_ingestion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Producer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5_consumer_path_high_performance_analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consumer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../6_advanced_features_and_edge_case_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../8_troubleshooting_safety_and_best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../9_frequently_asked_questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#holonomyreadtarget-user_contextnone-columns_to_readnone-purposenone-filters_jsonnone-contract_jsonnone-assumed_rolenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.read(target, user_context=None, columns_to_read=None, purpose=None, filters_json=None, contract_json=None, assumed_role=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holonomyscantarget-user_contextnone-columns_to_readnone-purposenone-filters_jsonnone-contract_jsonnone-assumed_rolenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.scan(target, user_context=None, columns_to_read=None, purpose=None, filters_json=None, contract_json=None, assumed_role=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holonomywritebatch-target-user_contextnone-purposenone-contract_jsonnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.write(batch, target, user_context=None, purpose=None, contract_json=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holonomywriter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.Writer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holonomyinitkms_endpointnone-kms_regionnone-policy_bucketnone-cache_ttl_hoursnone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.init(kms_endpoint=None, kms_region=None, policy_bucket=None, cache_ttl_hours=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="holonomy-python-sdk-api">Holonomy Python SDK API</h1>
+<p>This document describes the Python API wrapper for the Holonomy Governance SDK.</p>
+<h2 id="core-functions">Core Functions</h2>
+<h3 id="holonomyreadtarget-user_contextnone-columns_to_readnone-purposenone-filters_jsonnone-contract_jsonnone-assumed_rolenone"><code>holonomy.read(target, user_context=None, columns_to_read=None, purpose=None, filters_json=None, contract_json=None, assumed_role=None)</code></h3>
+<p>Reads a single column from a dataset securely into an Apache Arrow Array.</p>
+<p><strong>Parameters:</strong>
+- <code>target</code> (<em>str</em>): S3 URI (e.g., <code>s3://bucket/key.parquet</code>) or local file path (e.g., <code>file:///path/to/file.parquet</code>) to the dataset.
+- <code>user_context</code> (<em>str, optional</em>): A JSON Web Token (JWT) or identity string used for authentication, Row-Level Security (RLS), and dynamic data masking. Although marked as optional in the signature, omitting it will raise a <code>ValueError</code>.
+- <code>columns_to_read</code> (<em>list of str, optional</em>): A list containing exactly one column name to read. If not exactly one column, a <code>ValueError</code> is raised.
+- <code>purpose</code> (<em>str, optional</em>): Business purpose for audit logging and contextual policy evaluation.
+- <code>filters_json</code> (<em>str, optional</em>): Not used in <code>read()</code>. (Provided for API signature compatibility only).
+- <code>contract_json</code> (<em>str, optional</em>): Inline JSON string representing a data contract. Overrides any discovered contracts.
+- <code>assumed_role</code> (<em>str, optional</em>): A specific role to assume if the <code>user_context</code> grants multiple roles.</p>
+<p><strong>Returns:</strong>
+- <code>pyarrow.Array</code>: A zero-copy pointer from Rust to the decrypted and masked column data.</p>
+<p><strong>Raises:</strong>
+- <code>ValueError</code>: If <code>user_context</code> is not provided or if <code>columns_to_read</code> does not contain exactly one column.
+- <code>RuntimeError</code>: If decryption, policy validation, or storage access fails.</p>
+<p><strong>Recommendations &amp; Limitations:</strong>
+- <code>read()</code> is strictly limited to fetching a single column as a PyArrow Array. If you need multiple columns or a tabular structure, you must use <code>holonomy.scan()</code>.
+- The entire column data is loaded into memory at once. For large datasets, use <code>scan()</code> instead to stream the data.</p>
+<h3 id="holonomyscantarget-user_contextnone-columns_to_readnone-purposenone-filters_jsonnone-contract_jsonnone-assumed_rolenone"><code>holonomy.scan(target, user_context=None, columns_to_read=None, purpose=None, filters_json=None, contract_json=None, assumed_role=None)</code></h3>
+<p>Lazily scans a dataset securely, yielding an Apache Arrow <code>RecordBatchReader</code>.</p>
+<p><strong>Parameters:</strong>
+- <code>target</code> (<em>str</em>): S3 URI or local file path to the dataset.
+- <code>user_context</code> (<em>str, optional</em>): A JWT or identity string used for RLS and data masking. Must be provided or a <code>ValueError</code> is raised.
+- <code>columns_to_read</code> (<em>list of str, optional</em>): List of specific columns to project. If <code>None</code>, all columns defined in the schema/contract are projected.
+- <code>purpose</code> (<em>str, optional</em>): Business purpose for audit logging.
+- <code>filters_json</code> (<em>str, optional</em>): JSON string representing pushdown predicates (e.g., <code>[{"column": "age", "op": "Gt", "value": "18"}]</code>). Used to prune row groups before fetching data.
+- <code>contract_json</code> (<em>str, optional</em>): Inline JSON string representing a data contract.
+- <code>assumed_role</code> (<em>str, optional</em>): A specific role to assume.</p>
+<p><strong>Returns:</strong>
+- <code>pyarrow.RecordBatchReader</code>: An iterable stream of PyArrow <code>RecordBatch</code> objects.</p>
+<p><strong>Raises:</strong>
+- <code>ValueError</code>: If <code>user_context</code> is missing.
+- <code>RuntimeError</code>: If initialization, S3 communication, or decryption fails.</p>
+<p><strong>Recommendations &amp; Limitations:</strong>
+- <strong>Recommendation:</strong> Use <code>scan()</code> as the primary method for analytics (e.g., passing the result directly to Polars or DuckDB) to minimize memory footprint.
+- <strong>Limitation:</strong> While <code>scan()</code> pipelines I/O (prefetching footers and streams), performance may still be bottlenecked by network latency when processing a large number of very small Parquet files.</p>
+<h3 id="holonomywritebatch-target-user_contextnone-purposenone-contract_jsonnone"><code>holonomy.write(batch, target, user_context=None, purpose=None, contract_json=None)</code></h3>
+<p>Validates, encrypts, and writes a single <code>RecordBatch</code> to storage using policies mapped to the target.</p>
+<p><strong>Parameters:</strong>
+- <code>batch</code> (<em>pyarrow.RecordBatch</em>): The data to write.
+- <code>target</code> (<em>str</em>): S3 URI or local path destination.
+- <code>user_context</code> (<em>str, optional</em>): Identity string for audit logging. Does not require a strict JWT. If omitted or passed as free text, it will be used as a KMS encryption context. If an environment JWT is found, it will automatically override this value with the <code>sub</code> claim.
+- <code>purpose</code> (<em>str, optional</em>): Business purpose for the write operation.
+- <code>contract_json</code> (<em>str, optional</em>): Data contract override for schema validation.</p>
+<p><strong>Returns:</strong>
+- <code>str</code>: Returns <code>"Upload successful"</code> upon completion.</p>
+<p><strong>Raises:</strong>
+- <code>RuntimeError</code>: If schema validation (linting) fails or S3 upload fails.</p>
+<p><strong>Recommendations &amp; Limitations:</strong>
+- <strong>Limitation:</strong> The <code>write()</code> function accepts exactly one <code>RecordBatch</code>. To write streaming data or multiple batches incrementally, use the <code>holonomy.Writer</code> context manager instead.</p>
+<h3 id="holonomywriter"><code>holonomy.Writer</code></h3>
+<p>A Python context manager class for streaming multiple <code>RecordBatch</code> objects to a single encrypted dataset.</p>
+<p><strong>Constructor Parameters:</strong>
+- <code>target</code> (<em>str</em>): Destination S3 URI or local path.
+- <code>user_context</code> (<em>str, optional</em>): Identity string for audit logging. Can be free text. Overridden by environment JWT if present.
+- <code>purpose</code> (<em>str, optional</em>): Business purpose. Required.
+- <code>contract_json</code> (<em>str, optional</em>): Data contract override.</p>
+<p><strong>Methods:</strong>
+- <code>write_batch(batch: pyarrow.RecordBatch)</code>: Encrypts and uploads the batch asynchronously.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">with holonomy.Writer(&quot;s3://bucket/data.parquet&quot;, user_context=&quot;token&quot;, purpose=&quot;etl&quot;) as writer:
+    writer.write_batch(batch1)
+    writer.write_batch(batch2)
+</code></pre>
+<p><strong>Recommendations &amp; Limitations:</strong>
+- <strong>Recommendation:</strong> The <code>Writer</code> uses a dedicated Tokio background task to pipeline encryption and S3 multipart uploads. Always use the context manager (<code>with ...</code>) to ensure resources are cleaned up and the multipart upload is finalized safely on exit. If an exception occurs inside the <code>with</code> block, the upload is aborted to prevent corrupt data.</p>
+<h3 id="holonomyinitkms_endpointnone-kms_regionnone-policy_bucketnone-cache_ttl_hoursnone"><code>holonomy.init(kms_endpoint=None, kms_region=None, policy_bucket=None, cache_ttl_hours=None)</code></h3>
+<p>Explicitly configures the Holonomy Core environment programmatically.</p>
+<p><strong>Parameters:</strong>
+- <code>kms_endpoint</code> (<em>str, optional</em>): Custom AWS KMS endpoint URL (e.g., for LocalStack testing).
+- <code>kms_region</code> (<em>str, optional</em>): AWS region for KMS.
+- <code>policy_bucket</code> (<em>str, optional</em>): Central S3 bucket for downloading master policies.
+- <code>cache_ttl_hours</code> (<em>int, optional</em>): Time-to-live for cached DEKs and policies.</p>
+<p><strong>Returns:</strong>
+- <code>None</code></p>
+<p><strong>Raises:</strong>
+- <code>RuntimeError</code>: If Holonomy has already been initialized (either explicitly or implicitly).</p>
+<p><strong>Recommendations &amp; Limitations:</strong>
+- <strong>Recommendation:</strong> Call <code>init()</code> at the very beginning of your script if you need to override environment variables. If not called, Holonomy will implicitly initialize with default settings on the first read/write operation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

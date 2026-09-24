@@ -1,0 +1,1047 @@
+
+  
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="In-Process Data Governance">
+      
+      
+      
+        <link rel="canonical" href="https://kpruntov.github.io/holonomy-source/1_introduction_and_core_concepts/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../2_getting_started_and_installation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Introduction & Core Concepts - Holonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-introduction-core-concepts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Holonomy" class="md-header__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Holonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction & Core Concepts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Holonomy" class="md-nav__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Holonomy
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Concepts & Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Concepts & Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-what-is-holonomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. What is Holonomy?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-the-core-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. The Core Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2. The Core Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-layer-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid Layer Design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryptographic-envelope-encryption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cryptographic Envelope Encryption
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-security-philosophy-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3. Security Philosophy &amp; Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3. Security Philosophy &amp; Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-thick-client-architecture-the-internal-attacker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Thick-Client Architecture (The Internal Attacker)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-memory-accessibility-zeroizeondrop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Memory Accessibility &amp; ZeroizeOnDrop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-asynchronous-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Asynchronous Telemetry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_getting_started_and_installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7_infrastructure_and_security_integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine & Paths
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engine & Paths
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_policy_and_governance_engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy and Governance Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_producer_path_secure_data_ingestion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Producer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_consumer_path_high_performance_analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consumer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_advanced_features_and_edge_case_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8_troubleshooting_safety_and_best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9_frequently_asked_questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-what-is-holonomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. What is Holonomy?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-the-core-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. The Core Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2. The Core Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-layer-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid Layer Design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryptographic-envelope-encryption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cryptographic Envelope Encryption
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-security-philosophy-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3. Security Philosophy &amp; Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3. Security Philosophy &amp; Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-thick-client-architecture-the-internal-attacker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Thick-Client Architecture (The Internal Attacker)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-memory-accessibility-zeroizeondrop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Memory Accessibility &amp; ZeroizeOnDrop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-asynchronous-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Asynchronous Telemetry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="1-introduction-core-concepts">1. Introduction &amp; Core Concepts</h1>
+<h2 id="11-what-is-holonomy">1.1. What is Holonomy?</h2>
+<p>Holonomy is a high-performance, in-process Privacy Shield specifically designed for analytical engines like DuckDB, Polars, and Pandas. It solves a critical tension in modern data engineering: how to process highly sensitive data without losing the performance of zero-copy vectorized engines.</p>
+<p><strong>The Zero-Knowledge, Zero-Copy Philosophy:</strong></p>
+<ul>
+<li><strong>Zero-Knowledge</strong>: All cryptographic operations occur strictly within your local CPU context. Your plaintext data and your decrypted Data Encryption Keys (DEKs) never leave your environment. Holonomy leverages Key Management Systems (KMS) strictly for "Envelope Encryption" (unwrapping encrypted keys), meaning the KMS provider never sees your actual data.</li>
+<li><strong>Zero-Copy</strong>: Instead of decrypting data to disk or into standard Python memory (which requires expensive serialization), Holonomy decrypts data directly into native <strong>Apache Arrow</strong> memory buffers. This allows tools like Polars and DuckDB to execute relational queries against the decrypted data natively via Arrow FFI (Foreign Function Interface), eliminating overhead entirely.</li>
+</ul>
+<h2 id="12-the-core-architecture">1.2. The Core Architecture</h2>
+<p>Holonomy is fundamentally built to decouple raw storage from analytical computation. </p>
+<h3 id="hybrid-layer-design">Hybrid Layer Design</h3>
+<p>Holonomy uses a three-tier hybrid architecture:</p>
+<ol>
+<li><strong>Python DX Wrapper</strong>: A streamlined API (<code>holonomy.read()</code>, <code>holonomy.scan()</code>, <code>holonomy.write()</code>, <code>holonomy.writer()</code>) designed for seamless integration into standard Jupyter or Python workflows.</li>
+<li><strong>Rust Core</strong>: A hyper-optimized systems backend built on <code>tokio</code> (for asynchronous I/O and S3 integration) and <code>arrow-rs</code> (for memory structures). This layer guarantees memory safety and enables aggressive concurrency when streaming massive datasets.</li>
+<li><strong>Apache Arrow Memory Bridge</strong>: By exposing <code>PyArrowType&lt;arrow::array::ArrayData&gt;</code>, Holonomy hands direct memory pointers back to Python, allowing instantaneous integration with C++/Rust based engines like Polars.</li>
+</ol>
+<h3 id="cryptographic-envelope-encryption">Cryptographic Envelope Encryption</h3>
+<p>The cornerstone of Holonomy's security is Envelope Encryption.</p>
+<ul>
+<li><strong>Data Encryption Key (DEK)</strong>: Your actual Parquet columns are encrypted using a unique DEK via Parquet Modular Encryption (AES-GCM-SIV).</li>
+<li><strong>Key Encryption Key (KEK)</strong>: The DEK itself is encrypted using a master KEK securely stored in AWS KMS, Azure Key Vault, or HashiCorp Vault. </li>
+<li>During a read operation, Holonomy pulls the encrypted DEK, asks the KMS to unwrap it, and caches the plaintext DEK securely in memory (protected by <code>ZeroizeOnDrop</code>) to perform hyper-fast streaming decryption.</li>
+</ul>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant User as Data Scientist
+    participant H as Holonomy (Rust Core)
+    participant S3 as Storage (S3/R2)
+    participant KMS as Key Management (AWS/Vault)
+
+    User-&gt;&gt;H: holonomy.read(&quot;s3://data&quot;, columns_to_read=[&quot;ssn&quot;])
+    H-&gt;&gt;S3: Fetch Encrypted Parquet Footer
+    S3--&gt;&gt;H: Encrypted DEK
+    H-&gt;&gt;KMS: Unwrap DEK
+    KMS--&gt;&gt;H: Plaintext DEK (Cached in memory)
+    H-&gt;&gt;S3: HTTP Range Request for Column Bytes
+    S3--&gt;&gt;H: Encrypted Data Chunks
+    H-&gt;&gt;H: Local AES Decryption into Arrow
+    H--&gt;&gt;User: Zero-Copy Arrow Pointer
+</code></pre>
+<h2 id="13-security-philosophy-limitations">1.3. Security Philosophy &amp; Limitations</h2>
+<p>Holonomy is designed as a <strong>"Soft Governance"</strong> engine, not a strict, hardened security instrument. When faced with a trade-off between absolute cryptographic isolation and analytical performance (or Developer Experience), Holonomy actively chooses performance and DX. </p>
+<p>It is critical for engineering teams to understand the following architectural limitations:</p>
+<h3 id="1-thick-client-architecture-the-internal-attacker">1. Thick-Client Architecture (The Internal Attacker)</h3>
+<p>Holonomy runs locally as a thick client within the data analyst's execution environment (e.g., a Jupyter Notebook or a local container). Because it executes locally, it is not designed to defeat a determined, malicious internal attacker who has administrative or root-level access to their own machine. If a user can attach a memory debugger (like <code>gdb</code>), dump the kernel RAM, or intercept the Python process, they can extract the plaintext data after Holonomy has legitimately decrypted it. </p>
+<p>Holonomy's primary goal is to enforce access controls, apply column masking, and prevent accidental data leakage for well-intentioned actors—not to act as a hardware security module.</p>
+<h3 id="2-memory-accessibility-zeroizeondrop">2. Memory Accessibility &amp; <code>ZeroizeOnDrop</code></h3>
+<p>To achieve its signature "Zero-Copy" performance, Holonomy must hold both the Data Encryption Keys (DEKs) and the resulting plaintext data in standard RAM. </p>
+<ul>
+<li>While Holonomy rigorously uses <code>ZeroizeOnDrop</code> to securely wipe keys from Rust memory the exact millisecond they go out of scope, those keys are still transiently accessible in memory during active decryption.</li>
+<li>Furthermore, the resulting decrypted data is intentionally handed off as a native Apache Arrow pointer to Python. This memory is not cryptographically isolated (e.g., it is not stored in a secure enclave like Intel SGX) because isolating it would destroy the zero-copy performance benefits.</li>
+</ul>
+<h3 id="3-asynchronous-telemetry">3. Asynchronous Telemetry</h3>
+<p>Holonomy broadcasts access logs (Audit events) to a centralized telemetry endpoint. Because Holonomy runs on the edge (the analyst's machine), a malicious user with control over their local network stack could theoretically block outbound HTTP requests to the telemetry sink, bypassing the audit trail. Audit logging should be considered "best-effort" governance rather than mathematically guaranteed compliance.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1117 @@
+
+  
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="In-Process Data Governance">
+      
+      
+      
+        <link rel="canonical" href="https://kpruntov.github.io/holonomy-source/4_producer_path_secure_data_ingestion/">
+      
+      
+        <link rel="prev" href="../3_policy_and_governance_engine/">
+      
+      
+        <link rel="next" href="../5_consumer_path_high_performance_analytics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Producer Path - Holonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-the-producer-path-secure-data-ingestion-writing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Holonomy" class="md-header__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Holonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Producer Path
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Holonomy" class="md-nav__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Holonomy
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Concepts & Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Concepts & Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_introduction_and_core_concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_getting_started_and_installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7_infrastructure_and_security_integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine & Paths
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engine & Paths
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_policy_and_governance_engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy and Governance Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Producer Path
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Producer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41-the-holonomywrite-and-holonomywriter-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. The holonomy.write() and holonomy.Writer() APIs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1. The holonomy.write() and holonomy.Writer() APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#holonomywrite-single-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.write() (Single Batch)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holonomywriter-streaming-context-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.Writer() (Streaming Context Manager)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#411-identity-resolution-auditability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.1 Identity Resolution &amp; Auditability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-edge-quality-linters-validations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Edge Quality Linters &amp; Validations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2. Edge Quality Linters &amp; Validations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hierarchical-data-contract-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchical Data Contract Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatically-generating-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatically Generating Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-parquet-modular-encryption-pme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Parquet Modular Encryption (PME)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-time-based-dek-caching-streaming-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Time-Based DEK Caching (Streaming Writes)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_consumer_path_high_performance_analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consumer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_advanced_features_and_edge_case_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8_troubleshooting_safety_and_best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9_frequently_asked_questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41-the-holonomywrite-and-holonomywriter-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. The holonomy.write() and holonomy.Writer() APIs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1. The holonomy.write() and holonomy.Writer() APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#holonomywrite-single-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.write() (Single Batch)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holonomywriter-streaming-context-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        holonomy.Writer() (Streaming Context Manager)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#411-identity-resolution-auditability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.1 Identity Resolution &amp; Auditability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-edge-quality-linters-validations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Edge Quality Linters &amp; Validations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2. Edge Quality Linters &amp; Validations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hierarchical-data-contract-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchical Data Contract Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatically-generating-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatically Generating Contracts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-parquet-modular-encryption-pme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Parquet Modular Encryption (PME)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-time-based-dek-caching-streaming-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Time-Based DEK Caching (Streaming Writes)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="4-the-producer-path-secure-data-ingestion-writing">4. The Producer Path: Secure Data Ingestion (Writing)</h1>
+<h2 id="41-the-holonomywrite-and-holonomywriter-apis">4.1. The <code>holonomy.write()</code> and <code>holonomy.Writer()</code> APIs</h2>
+<p>The producer path is responsible for accepting plaintext data from a Python process, validating it against security contracts, encrypting sensitive columns, and streaming it upstream. Holonomy provides two APIs for this depending on the size of your data.</p>
+<p><em>(Source of truth: <a href="holonomy-py/python/holonomy/__init__.py">holonomy-py/python/holonomy/<strong>init</strong>.py</a>)</em></p>
+<h3 id="holonomywrite-single-batch"><code>holonomy.write()</code> (Single Batch)</h3>
+<p>Use this for writing a single PyArrow <code>RecordBatch</code> that fits entirely in memory.</p>
+<p><strong>Method Signature:</strong></p>
+<pre><code class="language-python">def write(
+    batch: pyarrow.RecordBatch,
+    target: str,
+    user_context: Optional[str] = None,
+    purpose: Optional[str] = None,
+    contract_json: Optional[str] = None
+) -&gt; str
+</code></pre>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">import pyarrow as pa
+import holonomy
+
+batch = pa.RecordBatch.from_arrays([pa.array([1, 2])], names=[&quot;id&quot;])
+holonomy.write(batch, &quot;s3://my-bucket/dataset.parquet&quot;, purpose=&quot;etl_job&quot;)
+</code></pre>
+<h3 id="holonomywriter-streaming-context-manager"><code>holonomy.Writer()</code> (Streaming Context Manager)</h3>
+<p>For massive datasets that exceed available RAM, use the <code>Writer</code> context manager. This opens a continuous multipart upload stream, allowing you to feed data incrementally via <code>.write_batch()</code>. The file is securely finalized and flushed when the context manager exits.</p>
+<p><strong>Method Signature:</strong></p>
+<pre><code class="language-python">class Writer:
+    def __init__(
+        self,
+        target: str,
+        user_context: Optional[str] = None,
+        purpose: Optional[str] = None,
+        contract_json: Optional[str] = None
+    ): ...
+
+    def write_batch(self, batch: pyarrow.RecordBatch) -&gt; None: ...
+</code></pre>
+<p><strong>Example:</strong></p>
+<pre><code class="language-python">import holonomy
+
+with holonomy.Writer(&quot;s3://my-bucket/huge_dataset.parquet&quot;, purpose=&quot;etl_job&quot;) as writer:
+    for chunk in generate_large_data_chunks():  # chunk is a pyarrow.RecordBatch
+        writer.write_batch(chunk)
+</code></pre>
+<p><strong>Under the Hood:</strong></p>
+<ol>
+<li>Python passes the <code>RecordBatch</code> directly to Rust via PyO3.</li>
+<li>The <code>WriteOrchestrator</code> consumes the memory pointer.</li>
+<li><strong>Audit Binding</strong>: The <code>user_context</code> identity is bound into the audit logs and KMS request for the Data Encryption Key (DEK). This enforces an immutable audit trail of the encrypting identity without requiring cryptographic JWT validation (which is reserved for reads).</li>
+<li><strong>Target Resolution</strong>: The <code>target</code> URI (e.g., <code>https://&lt;account&gt;.r2.cloudflarestorage.com/bucket/dataset.parquet</code>) allows dynamic multipart uploader routing without mutating environment variables.</li>
+<li>The dataset is chunked and processed securely.</li>
+<li><strong>Concurrent Multipart Uploads</strong>: Encrypted chunks are flushed directly to the target location via the <code>S3MultipartUploader</code>. Rather than sequentially awaiting each multi-megabyte chunk to reach S3/R2 over the network, <code>S3MultipartUploader</code> utilizes <code>tokio::spawn</code> to orchestrate massive parallel ingestion asynchronously, dramatically reducing network IO bottlenecks for large datasets.</li>
+<li><strong>Graceful Drop Guard</strong>: In the event that the Python process crashes, the <code>write</code> orchestrator panics, or the upload stream is cancelled prematurely, an RAII <code>Drop</code> guard automatically catches the dropped future and issues an <code>abort_multipart_upload</code> request to S3/R2 in the background. This prevents orphaned chunk accumulation and storage leakage on the target bucket.</li>
+</ol>
+<h3 id="411-identity-resolution-auditability">4.1.1 Identity Resolution &amp; Auditability</h3>
+<p>Because data ingestion (M2M pipelines) is strictly authorized by the KMS credentials (e.g. <code>GOOGLE_APPLICATION_CREDENTIALS</code>) rather than an end-user JWT, cryptographic validation is bypassed on writes. However, to ensure secure and accurate audit trails without leaking active Bearer tokens, the Python SDK intelligently resolves the <code>user_context</code> through 5 strict scenarios:</p>
+<ol>
+<li><strong>Explicit Identity overrides Active ID Token</strong>: If a developer explicitly provides a <code>user_context</code> (e.g., <code>"nightly-etl-pipeline"</code>) but their environment contains an active human ID token (with a <code>sub</code> claim), the explicit string is overridden by the human's <code>sub</code> claim to prevent accountability obfuscation, and a warning is logged.</li>
+<li><strong>Explicit Identity with Active Access Token</strong>: If a developer provides an explicit context but their environment contains a machine Access Token (no <code>sub</code> claim), their explicit context string is respected and logged.</li>
+<li><strong>Implicit ID Token</strong>: If no context is provided, the SDK reads the environment's <code>HOLONOMY_CREDENTIAL_FILE</code>, extracts the JWT payload, and if a <code>sub</code> claim exists, logs it securely.</li>
+<li><strong>Implicit Access Token (M2M)</strong>: If no context is provided and the environment token lacks a <code>sub</code> claim (typical for M2M workloads), the SDK extracts the <code>client_id</code> or <code>azp</code> claim to identify the service account, emitting a warning that a machine token was utilized.</li>
+<li><strong>No Identity Provided</strong>: If no context is provided and no tokens exist in the environment, the SDK safely falls back to recording <code>"undefined"</code> in the audit logs.</li>
+</ol>
+<p><em>Note: If an explicit <code>user_context</code> is provided that structurally resembles a JWT, the SDK will automatically extract its claims rather than logging the raw token string, preventing credential leakage in audit logs.</em></p>
+<h2 id="42-edge-quality-linters-validations">4.2. Edge Quality Linters &amp; Validations</h2>
+<p>Before encryption begins, the <code>WriteOrchestrator</code> invokes the <code>Validator</code>. This is the "upstream quarantine block."</p>
+<h3 id="hierarchical-data-contract-resolution">Hierarchical Data Contract Resolution</h3>
+<p>To prevent rigid lockouts while enforcing governance, <code>write()</code> resolves the schema contract hierarchically:</p>
+<ol>
+<li><strong>Remote Schema Registry (<code>S3SchemaRegistryProvider</code>)</strong>: Attempts to fetch the canonical schema contract from the remote metadata store (<code>HOLONOMY_POLICY_BUCKET</code>) based on the <code>target</code> URI. The engine automatically Base64-encodes (URL-safe, no padding) the target URI and looks for <code>[base64_target].json</code>.</li>
+<li><strong>Local Fallback</strong>: If no remote schema is registered, it checks for a <code>.holonomy_contract.json</code> file in the current working directory.</li>
+<li><strong>Explicit Override</strong>: If passed via the <code>contract_json</code> method argument, it will use that string explicitly (highest local precedence in scripts).
+If no contract can be resolved across these three layers, the write is aborted.</li>
+</ol>
+<h3 id="automatically-generating-contracts">Automatically Generating Contracts</h3>
+<p>To significantly lessen the burden of manually creating these contracts from scratch, developers can use the Holonomy CLI to instantly generate a boilerplate JSON contract directly from any existing physical dataset:</p>
+<pre><code class="language-bash">holonomy inspect s3://my-bucket/dataset.parquet --generate-contract &gt; .holonomy_contract.json
+</code></pre>
+<p>This inspects the metadata footprint of the target URI and scaffolds a structurally perfect dummy contract based on the underlying PyArrow data types.</p>
+<ul>
+<li><strong>Structural Constraints</strong>: The validator strictly checks the PyArrow schema against the resolved JSON definitions.</li>
+<li><strong>Failure Mode</strong>: If an unexpected column is present, or if an integer field is passed as a string, the ingestion process is immediately aborted (<code>Err</code>), returning a <code>PyRuntimeError</code>. This ensures that downstream consumers are never exposed to malformed structures.</li>
+</ul>
+<h2 id="43-parquet-modular-encryption-pme">4.3. Parquet Modular Encryption (PME)</h2>
+<p>Holonomy does not encrypt the entire Parquet file as a single blob. Instead, it leverages Parquet Modular Encryption (PME) via its <code>pme_encrypt.rs</code> module.</p>
+<p><strong>Why PME is Critical:</strong></p>
+<ul>
+<li><strong>Column-level Granularity</strong>: Data contracts and Policy Manifests (<code>EncryptionBlock</code>) are evaluated dynamically to determine exactly which columns must be scrambled.</li>
+<li><strong>Strict Cryptography</strong>: Holonomy uses strict schema-based cryptographic directives; legacy regex fallback heuristics for encryption are forbidden, enforcing a fail-closed paradigm.</li>
+<li><strong>Query Optimization</strong>: Because non-sensitive data remains plaintext, downstream tools can perform metadata pruning (like predicate pushdown) over the plaintext columns without paying the CPU cost of decrypting the sensitive ones.</li>
+</ul>
+<p><strong>Encryption Algorithm:</strong>
+Holonomy utilizes hardware-accelerated <strong>AES-GCM</strong> natively supported by the Apache Parquet specification. This provides authenticated encryption, ensuring that both the confidentiality and the integrity of the data chunks are mathematically guaranteed before they are parsed into Arrow arrays.</p>
+<h2 id="44-time-based-dek-caching-streaming-writes">4.4. Time-Based DEK Caching (Streaming Writes)</h2>
+<p>During streaming ingestion (where millions of rows are continually flushed to object storage), fetching Data Encryption Keys (DEKs) from the KMS for every single file partition can exhaust KMS API quotas and introduce significant latency.</p>
+<p>To mitigate this, Holonomy implements a <code>WriteDekCache</code> that operates inside <code>PmeEncryptor</code>.</p>
+<ul>
+<li>When a write is initiated, Holonomy generates a raw cryptographically secure DEK in-memory.</li>
+<li>It calls the KMS to wrap this key <em>once</em>.</li>
+<li>Both the plaintext key and the wrapped key are stored in a thread-safe global <code>DashMap</code> cache keyed by <code>target | purpose | column</code>.</li>
+<li>Future continuous writes to the same target/purpose combination reuse this cached DEK seamlessly.</li>
+</ul>
+<p><strong>Recommendation for Users:</strong> DEKs are automatically rotated (flushed from the cache) based on a default 15-minute Time-To-Live (TTL). This ensures optimal performance without sacrificing security. For most streaming architectures, the default 15-minute TTL provides the best balance of throughput and cryptographic rotation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

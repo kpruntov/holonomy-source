@@ -1,0 +1,972 @@
+
+  
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="In-Process Data Governance">
+      
+      
+      
+        <link rel="canonical" href="https://kpruntov.github.io/holonomy-source/policy_authoring/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Policy Authoring Guide - Holonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#policy-authoring-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Holonomy" class="md-header__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Holonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Policy Authoring Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Holonomy" class="md-nav__button md-logo" aria-label="Holonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Holonomy
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Concepts & Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Concepts & Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_introduction_and_core_concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_getting_started_and_installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7_infrastructure_and_security_integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine & Paths
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engine & Paths
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_policy_and_governance_engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy and Governance Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_producer_path_secure_data_ingestion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Producer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_consumer_path_high_performance_analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consumer Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_advanced_features_and_edge_case_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8_troubleshooting_safety_and_best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9_frequently_asked_questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-policy-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is a Policy Manifest?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-policymanifest-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The PolicyManifest Object
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-principalpolicy-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The PrincipalPolicy Object
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The PrincipalPolicy Object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allowed-masking-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed Masking Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-encryptionblock-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The EncryptionBlock Object
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-policy-manifest-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Policy Manifest (JSON)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#purpose-bindings-and-role-disambiguation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose Bindings and Role Disambiguation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="policy-authoring-guide">Policy Authoring Guide</h1>
+<p>The Holonomy Governance Engine relies on cryptographically signed Policy Manifests (<code>holonomy_master_policy.json</code>). This document describes the schema expected by the <code>PolicyManager</code>.</p>
+<h2 id="what-is-a-policy-manifest">What is a Policy Manifest?</h2>
+<p>A <strong>Policy Manifest</strong> governs <strong>who</strong> can access the data and <strong>how</strong> that data should be masked or filtered for specific users. It is evaluated at read-time (and write-time for encryption assertions).</p>
+<p>Unlike a Data Contract (which defines the structural shape and assigns Semantic Tags to columns), a Policy defines the <strong>Role-Based Access Control (RBAC)</strong> rules. It maps Enterprise Identity Provider (IdP) roles/groups directly to row-level filters and column-level masking strategies (which can target the semantic tags assigned by the contract).</p>
+<h2 id="the-policymanifest-object">The <code>PolicyManifest</code> Object</h2>
+<p>The root object describes the access rules for a specific domain or the global environment.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version</code></td>
+<td>String</td>
+<td>Semantic version of the policy.</td>
+</tr>
+<tr>
+<td><code>principals</code></td>
+<td>Object (Map)</td>
+<td>A map where the key is the Principal string (e.g., <code>"data-scientist"</code>) and the value is a <code>PrincipalPolicy</code>. (Can also be aliased as <code>roles</code> in JSON).</td>
+</tr>
+<tr>
+<td><code>encryption</code></td>
+<td>Object (Optional)</td>
+<td>Defines mandatory encryption constraints (see <code>EncryptionBlock</code>).</td>
+</tr>
+<tr>
+<td><code>purpose_bindings</code></td>
+<td>Object (Map)</td>
+<td>Maps specific business "purposes" to IdP Roles for runtime disambiguation.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-principalpolicy-object">The <code>PrincipalPolicy</code> Object</h2>
+<p>Defines the exact permissions for a specific Principal (IdP Group, Role, or User Hash). When a user's JWT contains this Principal string in their <code>sub</code>, <code>groups</code>, or <code>roles</code> claim, these rules are applied.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>global_row_filters</code></td>
+<td>Array of Strings</td>
+<td>SQL-like predicates that are <strong>STRICTLY ENFORCED</strong>. If the referenced column is missing from the dataset being read, the entire read operation is aborted with an <code>AccessDenied</code> error (Fail-Closed).</td>
+</tr>
+<tr>
+<td><code>selective_row_filters</code></td>
+<td>Array of Strings</td>
+<td>SQL-like predicates that are <strong>CONDITIONALLY ENFORCED</strong>. If the dataset contains the referenced column, the filter is applied. If the column is missing, the filter is safely ignored (Fail-Open).</td>
+</tr>
+<tr>
+<td><code>column_masks</code></td>
+<td>Object (Map)</td>
+<td>Maps exact physical column names to a masking strategy. (See <strong>Allowed Masking Strategies</strong> below).</td>
+</tr>
+<tr>
+<td><code>tag_masks</code></td>
+<td>Object (Map)</td>
+<td>Maps Semantic Tags to a masking strategy. Any column carrying this tag in the Contract will automatically inherit this mask.</td>
+</tr>
+<tr>
+<td><code>sampling_cap</code></td>
+<td>Integer (Optional)</td>
+<td>Hard limit on the number of rows this principal can read.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="allowed-masking-strategies">Allowed Masking Strategies</h3>
+<p>When defining a mask in <code>column_masks</code> or <code>tag_masks</code>, Holonomy supports exactly three string values:</p>
+<ol>
+<li><code>"PLAINTEXT"</code>: Explicitly allows the principal to read the raw, unmasked data.</li>
+<li><code>"REDACT"</code>: Replaces string values with <code>"***"</code>. For all other data types (integers, floats, dates), the entire column is nullified.</li>
+<li><code>"HASH"</code>: Computes a deterministic SHA-256 hex digest of string values. Useful for join keys. (Note: Non-string columns are currently returned untouched if HASH is applied to them).</li>
+</ol>
+<h2 id="the-encryptionblock-object">The <code>EncryptionBlock</code> Object</h2>
+<p>Defines what data MUST be encrypted at rest. The Write Orchestrator will reject any write that does not encrypt these assets.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>required_tags</code></td>
+<td>Array of Strings</td>
+<td>Any column in the Data Contract possessing one of these tags MUST be encrypted (e.g., <code>["pii"]</code>).</td>
+</tr>
+<tr>
+<td><code>required_columns</code></td>
+<td>Array of Strings</td>
+<td>Explicit physical columns that MUST be encrypted (e.g., <code>["ssn"]</code>).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example-policy-manifest-json">Example Policy Manifest (JSON)</h2>
+<p>Note: When distributed, this JSON payload is wrapped inside a <code>PolicyEnvelope</code> containing the Ed25519 signature. Below is the raw <code>payload</code> structure:</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;purpose_bindings&quot;: {
+    &quot;data-science-analytics&quot;: &quot;data-scientist&quot;
+  },
+  &quot;encryption&quot;: {
+    &quot;required_tags&quot;: [&quot;pii&quot;],
+    &quot;required_columns&quot;: [&quot;salary&quot;]
+  },
+  &quot;principals&quot;: {
+    &quot;data-scientist&quot;: {
+      &quot;global_row_filters&quot;: [&quot;department = 'HR'&quot;],
+      &quot;selective_row_filters&quot;: [],
+      &quot;column_masks&quot;: {
+        &quot;salary&quot;: &quot;PLAINTEXT&quot;
+      },
+      &quot;tag_masks&quot;: {
+        &quot;pii&quot;: &quot;REDACT&quot;
+      },
+      &quot;sampling_cap&quot;: 1000
+    },
+    &quot;admin&quot;: {
+      &quot;global_row_filters&quot;: [],
+      &quot;selective_row_filters&quot;: [],
+      &quot;column_masks&quot;: {},
+      &quot;tag_masks&quot;: {}
+    }
+  }
+}
+</code></pre>
+<h2 id="purpose-bindings-and-role-disambiguation">Purpose Bindings and Role Disambiguation</h2>
+<p>When a user authenticates (e.g., via JWT), they might belong to multiple roles simultaneously (e.g., <code>data-scientist</code> and <code>marketing</code>). To apply the correct access control rules, the <code>GovernanceManager</code> needs to know which role the user is acting under for a specific query.</p>
+<p>The <code>purpose_bindings</code> map solves this by explicitly linking business "purposes" to specific roles. For example:</p>
+<pre><code class="language-json">{
+  &quot;purpose_bindings&quot;: {
+    &quot;data-science-analytics&quot;: &quot;data-scientist&quot;,
+    &quot;marketing-campaign&quot;: &quot;marketing&quot;
+  }
+}
+</code></pre>
+<p>When a user executes a query with <code>purpose="data-science-analytics"</code>, the engine looks up the <code>purpose_bindings</code>, identifies the <code>data-scientist</code> role, and applies those specific row/column masking rules. If a user possesses multiple roles and no valid purpose (or <code>assumed_role</code>) is provided to disambiguate, the query is rejected.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
