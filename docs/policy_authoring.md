@@ -33,6 +33,7 @@ Defines the exact permissions for a specific Principal (IdP Group, Role, or User
 
 ### Allowed Masking Strategies
 When defining a mask in `column_masks` or `tag_masks`, Holonomy supports exactly three string values:
+
 1. `"PLAINTEXT"`: Explicitly allows the principal to read the raw, unmasked data.
 2. `"REDACT"`: Replaces string values with `"***"`. For all other data types (integers, floats, dates), the entire column is nullified.
 3. `"HASH"`: Computes a deterministic SHA-256 hex digest of string values. Useful for join keys. (Note: Non-string columns are currently returned untouched if HASH is applied to them).

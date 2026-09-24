@@ -12,6 +12,7 @@ Holonomy is engineered to ensure that reading encrypted data over the network is
 
 ### Targeted HTTP Range Requests
 Inside the `S3Client`, Holonomy avoids downloading the entire multi-gigabyte Parquet file.
+
 1. **Speculative Footer Fetching**: It issues an HTTP `Range` request for the last 64KB of the file to grab the Parquet metadata in a single network round-trip.
 2. **Column Extraction**: By analyzing the footer, it calculates the exact byte offsets of the requested `columns_to_read`.
 3. **Bounded Concurrency**: It issues highly concurrent HTTP requests (strictly bounded to `100` max in-flight requests to prevent TCP port exhaustion) to pull down only those specific chunks. 

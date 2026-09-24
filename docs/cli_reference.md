@@ -17,6 +17,7 @@ holonomy inspect r2://my-cloudflare-bucket/dataset-v1/
 ### AWS / R2 Authentication (SigV4)
 The `inspect` command utilizes the official `aws-sdk-s3` Rust crate, enabling full support for authenticated Range requests against private buckets.
 To authenticate, you must set standard AWS environment variables (or load them from an `.env` file):
+
 - `AWS_ACCESS_KEY_ID`: Your AWS or Cloudflare R2 Access Key
 - `AWS_SECRET_ACCESS_KEY`: Your AWS or Cloudflare R2 Secret Key
 - `AWS_ENDPOINT_URL`: For R2, this MUST be set to your account's R2 endpoint (e.g., `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`)
@@ -24,6 +25,7 @@ To authenticate, you must set standard AWS environment variables (or load them f
 
 ### Automatic Directory Traversal & Schema Drift Detection
 If you point `holonomy inspect` at a *directory* instead of a single file, the tool intelligently behaves as a drift detector:
+
 1. It lists the directory contents.
 2. It randomly samples up to **50 Parquet files** from the partition tree.
 3. It downloads the Parquet metadata footers for each of the 50 files.

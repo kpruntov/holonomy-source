@@ -4,11 +4,13 @@
 Holonomy is designed to run anywhere you can run Python, without requiring users to compile Rust code themselves. 
 
 **Supported Operating Systems:**
+
 - Linux (x86_64, aarch64)
 - macOS (Intel, Apple Silicon / ARM64)
 - Windows (AMD64)
 
 **Supported Environments:**
+
 - Python 3.8+ 
 - Rust compilation toolchain is **not** required for end-users, as Holonomy is distributed via PyPI as pre-compiled `maturin` wheels.
 - Dependencies: Requires `pyarrow` for in-memory FFI handoffs.
@@ -39,6 +41,7 @@ holonomy --help
 ## 2.3. Zero-Config Local Dev Mode
 
 If you simply install Holonomy and execute a script without configuring anything, the SDK automatically falls back to **Local Dev Mode**. It makes the following assumptions:
+
 - **KMS Endpoint:** Defaults to an internal **Local Mock KMS** that encrypts/decrypts using a local RAM session key.
 - **Policy Storage:** Defaults to checking the local `./.holonomy/policies/` directory. For a frictionless Developer Experience (DX), any raw YAML/JSON policies found here are automatically cryptographically signed in-memory using an ephemeral keypair during engine startup. This ensures the Engine's strict signature verification logic remains active and identical to production, while allowing you to simply write plain-text rules locally. If no policies exist, it permits local execution.
 - **Audit Logs:** Defaults to writing events locally to `~/.holonomy/audit.log` instead of streaming them to a SaaS control plane.
@@ -50,6 +53,7 @@ This allows you to test Parquet Modular Encryption (PME) completely locally with
 When you are ready to configure Holonomy for a real environment, you can supply configuration via a **6-Tier Hierarchical Cascade**. This deterministic resolution matrix ensures that infrastructure variables are abstracted away from primary query execution paths, allowing your code to remain 100% portable across environments.
 
 The configuration engine resolves parameters implicitly and exactly once. The exact resolution order is:
+
 1. **Programmatic Overrides:** Arguments explicitly passed into `holonomy.init(...)`.
 2. **Environment Variables:** Standard `HOLONOMY_*` environment variables (e.g., via standard shell exports or `.env` files).
 3. **Project Config:** Reading from `./.holonomy.toml` in the current working directory.
@@ -85,6 +89,7 @@ issuer = "http://localhost:8080/realms/holonomy-test"
 
 #### 2. Holonomy Authentication Credentials (JWT Identity)
 For Holonomy to prove *your identity* during policy evaluation, it requires an OIDC/JWT token. This is resolved natively by the Holonomy config engine cascade via:
+
 - `credential_file` config / `HOLONOMY_CREDENTIAL_FILE`: Path to a dynamically rotating token file (ideal for Kubernetes service accounts).
 - Standard Fallbacks: If omitted, Holonomy searches standard identity paths like AWS/Azure Federated tokens or the local `~/.holonomy/credentials` file (which is automatically generated when you use the CLI command `holonomy auth login`).
 

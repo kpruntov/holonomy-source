@@ -1,0 +1,245 @@
+{% if page.is_homepage %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holonomy | In-Process Data Governance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@1,500;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-flax: #E7D889;
+            --goldenrod: #D3A923;
+            --white: #FFFFFF;
+            --coral: #FD7C6E;
+            --lapis: #2F62A2;
+            
+            /* Negative skew leans right / / */
+            --skew-angle: -6deg;
+        }
+
+        body {
+            background-color: var(--bg-flax);
+            margin: 0;
+            padding: 4rem 2rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--lapis);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .grid-container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+        }
+
+        /* Base Block Skew */
+        .block {
+            transform: skewX(var(--skew-angle));
+            border: 3px solid var(--lapis);
+            box-shadow: 12px 12px 0px var(--lapis);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .block:hover {
+            transform: skewX(var(--skew-angle)) translate(-4px, -4px);
+            box-shadow: 16px 16px 0px var(--lapis);
+        }
+
+        /* Unskew content inside blocks */
+        .content {
+            transform: skewX(calc(var(--skew-angle) * -1));
+            padding: 2.5rem;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Oswald', sans-serif;
+            font-style: italic;
+            text-transform: uppercase;
+            margin-top: 0;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* 1. Header (Spans all columns) */
+        .header-block {
+            grid-column: 1 / -1;
+            background-color: var(--white);
+            color: var(--lapis);
+            text-align: center;
+            align-items: center;
+        }
+
+        .header-block h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--coral);
+        }
+
+        .header-block p {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            max-width: 900px;
+        }
+
+        /* Skewed Button */
+        .docs-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 3rem;
+            background-color: var(--lapis);
+            color: var(--white);
+            text-decoration: none;
+            border: 3px solid var(--lapis);
+            transform: skewX(var(--skew-angle));
+            box-shadow: 6px 6px 0px var(--coral);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .docs-btn:hover {
+            transform: skewX(var(--skew-angle)) translate(-3px, -3px);
+            box-shadow: 9px 9px 0px var(--coral);
+        }
+
+        .docs-btn span {
+            display: inline-block;
+            transform: skewX(calc(var(--skew-angle) * -1));
+            font-family: 'Oswald', sans-serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        /* 2. Pillar Blocks (3 Columns) */
+        .pillar h3 {
+            font-size: 1.8rem;
+        }
+
+        /* Left Pillar: Company Pitch */
+        .block-company {
+            background-color: var(--white);
+            color: var(--lapis);
+        }
+        .block-company h3 { color: var(--coral); }
+
+        /* Middle Pillar: Developers */
+        .block-dev {
+            background-color: var(--lapis);
+            color: var(--white);
+            box-shadow: 12px 12px 0px var(--goldenrod);
+            border-color: var(--lapis);
+        }
+        .block-dev h3 { color: var(--bg-flax); }
+
+        /* Right Pillar: Compliance */
+        .block-comp {
+            background-color: var(--coral);
+            color: var(--white);
+            box-shadow: 12px 12px 0px var(--white);
+            border-color: var(--white);
+        }
+        .block-comp h3 { color: var(--bg-flax); }
+
+        @media (max-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        
+        <!-- Header -->
+        <div class="block header-block">
+            <div class="content" style="align-items: center;">
+                <h1>Holonomy</h1>
+                <p>Execute analytics locally without proxies. Safely pull encrypted datasets to your local machine and dynamically enforce Row-Level Security (RLS) and Data Masking at read-time—before the data ever reaches your DataFrame.</p>
+                
+                <a href="{{ base_url }}/1_introduction_and_core_concepts/" class="docs-btn">
+                    <span>Read the Documentation &rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Pillar 1: General/Company -->
+        <div class="block pillar block-company">
+            <div class="content">
+                <h3>Local Processing Enablement</h3>
+                <p>
+                    Stop forcing analytical workloads into expensive, centralized cloud environments just to enforce access policies. 
+                </p>
+                <p>
+                    Holonomy leverages your existing infrastructure (KMS, IdP, S3) to decrypt and filter data entirely in-process, saving immense compute costs while enabling data scientists to work comfortably on their local machines.
+                </p>
+            </div>
+        </div>
+
+        <!-- Pillar 2: Developers -->
+        <div class="block pillar block-dev">
+            <div class="content">
+                <h3>Blazing Fast & Secure</h3>
+                <p>
+                    Built on a highly concurrent Rust core and the Apache Arrow C Data Interface for true zero-copy semantics.
+                </p>
+                <p>
+                    Your data is handled with extreme paranoia. Cryptographic keys (DEKs) are forcefully wiped from memory the exact moment they are no longer needed using strict <code>ZeroizeOnDrop</code> patterns.
+                </p>
+            </div>
+        </div>
+
+        <!-- Pillar 3: Compliance -->
+        <div class="block pillar block-comp">
+            <div class="content">
+                <h3>Centrally Manageable</h3>
+                <p>
+                    Write policies once, enforce them everywhere. 
+                </p>
+                <p>
+                    Compliance officers dictate access rules via centralized JSON Policy Manifests. Holonomy strictly evaluates these contracts at runtime to enforce masking, ensuring enterprise compliance no matter where the Python script is executed.
+                </p>
+            </div>
+        </div>
+
+        <!-- Licensing & Contact -->
+        <div class="block header-block" style="margin-top: 2rem; border-color: var(--coral); box-shadow: 12px 12px 0px var(--goldenrod);">
+            <div class="content" style="align-items: center; text-align: center;">
+                <h2 style="color: var(--coral); font-size: 2.2rem;">Early Adopter Licensing</h2>
+                <p style="max-width: 900px; margin: 0 auto 1.5rem auto; font-size: 1.25rem;">
+                    Holonomy is currently in its final stages of development. The source code is made available under the <a href="https://github.com/kpruntov/holonomy-source/blob/main/LICENSE" style="color: var(--lapis);">Business Source License (BSL 1.1)</a>.
+                </p>
+                <p style="max-width: 900px; margin: 0 auto 1.5rem auto; font-size: 1.15rem;">
+                    Although the standard commercial license will be priced at <strong>$3,000 / year</strong>, we are currently issuing Early Adopter licenses completely free of charge (<strong>$0</strong>), valid for full production use until <strong>June 1, 2027</strong>.
+                </p>
+                <p style="font-size: 1.5rem; font-family: 'Oswald', sans-serif; font-style: italic; margin-top: 1rem;">
+                    Reach out for early access keys and inquiries: <br>
+                    <a href="mailto:license@holonomy.eu" style="color: var(--coral); text-decoration: none; font-size: 2rem; display: inline-block; margin-top: 0.5rem;">license@holonomy.eu</a>
+                </p>
+
+                <div style="margin-top: 3rem; font-size: 0.9rem; font-family: monospace; color: #64748B;">
+                    &copy; 2026 Kirill Pruntov. All rights reserved.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+{% else %}
+  {% extends "base.html" %}
+{% endif %}

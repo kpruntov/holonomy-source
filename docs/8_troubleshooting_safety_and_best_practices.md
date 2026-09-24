@@ -17,5 +17,6 @@ Holonomy intercepts low-level Rust panics and safely bubbles them up across the 
 Holonomy was designed under the assumption that the host machine running the analytics process might be compromised or might crash and leave memory dumps behind.
 
 All sensitive in-memory assets (such as the `ResolvedKmsConfig` endpoint URLs, and most critically, the raw plaintext DEKs stored in the `DekCache`) are wrapped in the `Zeroize` and `ZeroizeOnDrop` traits. 
+
 - The moment a variable goes out of scope, or the moment a Python script crashes and the Rust runtime initiates cleanup, the OS memory allocations holding those secrets are actively overwritten with zeroes before they are released back to the operating system.
 - This effectively prevents cold-boot attacks and post-crash memory forensics from exposing your Data Encryption Keys.

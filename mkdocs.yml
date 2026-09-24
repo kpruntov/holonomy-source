@@ -1,0 +1,23 @@
+site_name: Holonomy
+site_description: In-Process Data Governance
+site_url: https://kpruntov.github.io/holonomy-source/
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    primary: indigo
+    accent: deep orange
+nav:
+  - Home: index.md
+  - Core Concepts & Setup:
+    - Introduction & Core Concepts: 1_introduction_and_core_concepts.md
+    - Getting Started: 2_getting_started_and_installation.md
+  - Infrastructure Integrations: 7_infrastructure_and_security_integrations.md
+  - Engine & Paths:
+    - Policy and Governance Engine: 3_policy_and_governance_engine.md
+    - Producer Path: 4_producer_path_secure_data_ingestion.md
+    - Consumer Path: 5_consumer_path_high_performance_analytics.md
+  - Advanced:
+    - Advanced Features: 6_advanced_features_and_edge_case_handling.md
+    - Troubleshooting: 8_troubleshooting_safety_and_best_practices.md
+    - FAQ: 9_frequently_asked_questions.md

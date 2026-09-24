@@ -55,6 +55,7 @@ with holonomy.Writer("s3://my-bucket/huge_dataset.parquet", purpose="etl_job") a
 ```
 
 **Under the Hood:**
+
 1. Python passes the `RecordBatch` directly to Rust via PyO3.
 2. The `WriteOrchestrator` consumes the memory pointer.
 3. **Audit Binding**: The `user_context` identity is bound into the audit logs and KMS request for the Data Encryption Key (DEK). This enforces an immutable audit trail of the encrypting identity without requiring cryptographic JWT validation (which is reserved for reads).
@@ -79,6 +80,7 @@ Before encryption begins, the `WriteOrchestrator` invokes the `Validator`. This 
 
 ### Hierarchical Data Contract Resolution
 To prevent rigid lockouts while enforcing governance, `write()` resolves the schema contract hierarchically:
+
 1. **Remote Schema Registry (`S3SchemaRegistryProvider`)**: Attempts to fetch the canonical schema contract from the remote metadata store (`HOLONOMY_POLICY_BUCKET`) based on the `target` URI. The engine automatically Base64-encodes (URL-safe, no padding) the target URI and looks for `[base64_target].json`.
 2. **Local Fallback**: If no remote schema is registered, it checks for a `.holonomy_contract.json` file in the current working directory.
 3. **Explicit Override**: If passed via the `contract_json` method argument, it will use that string explicitly (highest local precedence in scripts).
@@ -98,6 +100,7 @@ This inspects the metadata footprint of the target URI and scaffolds a structura
 Holonomy does not encrypt the entire Parquet file as a single blob. Instead, it leverages Parquet Modular Encryption (PME) via its `pme_encrypt.rs` module.
 
 **Why PME is Critical:**
+
 - **Column-level Granularity**: Data contracts and Policy Manifests (`EncryptionBlock`) are evaluated dynamically to determine exactly which columns must be scrambled.
 - **Strict Cryptography**: Holonomy uses strict schema-based cryptographic directives; legacy regex fallback heuristics for encryption are forbidden, enforcing a fail-closed paradigm.
 - **Query Optimization**: Because non-sensitive data remains plaintext, downstream tools can perform metadata pruning (like predicate pushdown) over the plaintext columns without paying the CPU cost of decrypting the sensitive ones.
@@ -109,6 +112,7 @@ Holonomy utilizes hardware-accelerated **AES-GCM** natively supported by the Apa
 During streaming ingestion (where millions of rows are continually flushed to object storage), fetching Data Encryption Keys (DEKs) from the KMS for every single file partition can exhaust KMS API quotas and introduce significant latency.
 
 To mitigate this, Holonomy implements a `WriteDekCache` that operates inside `PmeEncryptor`.
+
 - When a write is initiated, Holonomy generates a raw cryptographically secure DEK in-memory.
 - It calls the KMS to wrap this key *once*.
 - Both the plaintext key and the wrapped key are stored in a thread-safe global `DashMap` cache keyed by `target | purpose | column`.

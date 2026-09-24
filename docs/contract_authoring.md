@@ -77,6 +77,7 @@ Defines numeric bounds for any integer or floating-point type.
 When a batch is passed through `Validator::validate`, it returns an exhaustive list of all violations. Data Engineers will receive complete error vectors instead of single failures to accelerate debugging.
 
 Errors include:
+
 *   `MissingColumn`: A required column was not present in the dataset.
 *   `ExtraColumn`: An undocumented column was found in the dataset.
 *   `NullViolation`: A required column contained a null value.

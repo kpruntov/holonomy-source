@@ -68,6 +68,7 @@ lazy_df = pl.scan_pyarrow_dataset(stream)
 ```
 
 **Under the Hood (The Read Orchestration Flow):**
+
 1. The user requests specific columns from a dataset using `holonomy.scan()`.
 2. The `ScanOrchestrator` fetches the Parquet Footer to extract the cryptographic metadata for those columns.
 3. If `filters` (a PyArrow `Expression`) are provided, they are serialized to JSON in Python, passed into Rust, and evaluated against the Parquet row group statistics (min/max bounds). Entire row groups are pruned *before* decryption and *before* HTTP data fetches, saving significant memory and compute (Predicate Pushdown).
@@ -128,12 +129,14 @@ Holonomy doesn't just decrypt data; it actively enforces Row-Level Security (RLS
 
 ### How the Kernel Evaluates Masking (Without `contract_json`)
 Unlike `holonomy.write()` which requires a `contract_json` to define the data schema, `read()` and `scan()` do not require it. This is because **governance policies are centralized, not data-attached**. 
+
 1. When `read()` or `scan()` is invoked, the `GovernanceManager` receives the `target`, the `purpose`, and the **User Identity** (JWT or local context).
 2. The user identity is checked against the central `holonomy_master_policy.json` to find their roles. If the user belongs to multiple roles (e.g. `data-scientist` and `marketing`), the `purpose` string is used to disambiguate. The engine looks up the `purpose_bindings` map in the policy to dynamically resolve the active role for the query.
 3. If the active role lacks plaintext clearance for a specific **encrypted** column, the `GovernanceManager` dynamically instructs `simd_ops` to apply the masking rule defined in the master policy.
 
 ### Graceful Degradation
 If a user requests a column they do not have full plaintext clearance for (based on the `purpose` provided and their role inside the master policy), Holonomy applies graceful degradation:
+
 - Instead of crashing the application, it returns the column securely masked.
 - Using vectorized SIMD operations, string columns may be replaced with fixed constants (e.g., `***MASKED***`) or `NULL` substitutions.
 - This allows data science pipelines to continue running structurally, even when dealing with highly sensitive datasets where certain cell values are strictly forbidden.

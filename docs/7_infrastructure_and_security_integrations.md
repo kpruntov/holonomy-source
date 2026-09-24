@@ -4,6 +4,7 @@
 Holonomy relies heavily on external Key Management Systems to perform the cryptographic "Envelope Unwrapping" of the Data Encryption Keys (DEKs). The core encryption logic is entirely agnostic to the provider, relying on extensible adapters located in `holonomy-core/src/adapters/`.
 
 **Supported Adapters:**
+
 - **AWS KMS**: Fully supported natively using standard AWS credential chains for unwrapping symmetric keys.
 - **GCP KMS**: Fully supported natively using standard Application Default Credentials for unwrapping symmetric keys.
 - **HashiCorp Vault**: Experimental. Ideal for on-premise or multi-cloud environments. Connects via Transit Secrets Engine endpoints. *Note: HashiCorp Vault integration currently requires passing the `VAULT_TOKEN` as a raw environment variable and does not follow the standard programmatic configuration cascade.*
@@ -13,6 +14,7 @@ Holonomy relies heavily on external Key Management Systems to perform the crypto
 Holonomy uses **Envelope Encryption**. This means Holonomy generates a random AES-256 Data Encryption Key (DEK) locally, uses the DEK to encrypt the Parquet data, and then asks your KMS to encrypt (wrap) that DEK. Because the DEK is a small, symmetric AES key, your KMS keys **must** be configured specifically for symmetric encryption.
 
 **Crucial Key Nuances:**
+
 * **Must be Symmetric:** You *cannot* use Asymmetric (RSA/ECC) keys. Asymmetric keys are for signing or encrypting tiny payloads directly, not for high-speed DEK wrapping.
 * **AWS KMS:** When creating a key in AWS KMS, you must select **Symmetric** as the Key type and **Encrypt and decrypt** as the Key usage. (The default `SYMMETRIC_DEFAULT` spec is correct).
 * **GCP Cloud KMS:** When creating a Key Ring and Key in GCP, the Purpose must be set to **Symmetric encrypt/decrypt**. You cannot use MAC or Asymmetric sign/decrypt keys.
@@ -40,6 +42,7 @@ Your infrastructure or security team must first configure your Identity Provider
 Once the IdP is configured, the Security/Access team must grant the user the appropriate permissions in the IdP, and the Data Owner must write a Holonomy Policy (`.holonomy_contract.json`) that matches those permissions.
 
 Holonomy evaluates access by extracting strings from the JWT and flattening them into a single unified list of **"Principals"**. It automatically supports multiple major IdPs by extracting from all of the following JWT claims:
+
 *   `sub` (The unique User ID)
 *   `client_id` (The Machine/Service Account ID)
 *   `groups` (Standard groups used by Okta, Azure Entra Groups, etc.)
@@ -47,6 +50,7 @@ Holonomy evaluates access by extracting strings from the JWT and flattening them
 *   `realm_access.roles` (The default role structure used by **Keycloak**)
 
 **How it works in practice:**
+
 1. **In the IdP:** The Security team assigns a user to a specific Group or Role (e.g., assigning a user the Keycloak Realm Role `"data-scientist"`, or an Entra Group `"data-scientist"`). 
 2. **In the JWT:** When the user authenticates, the JWT will contain that string in one of the claims above (e.g., `"realm_access": {"roles": ["data-scientist"]}`).
 3. **In the Policy:** The Data Owner must use that exact string as the key in the `principals` block of the policy:
@@ -114,6 +118,7 @@ For headless environments (Kubernetes, Airflow, GitHub Actions), Holonomy operat
 2. **Edge Devices & Static Environments:** For simpler setups, you can directly pass the raw token string via the `HOLONOMY_JWT` environment variable.
 
 *Note: Holonomy automatically checks standard Cloud/Kubernetes paths before giving up. The exact resolution order is:*
+
 1. `HOLONOMY_CREDENTIAL_FILE` (Explicit override)
 2. `HOLONOMY_JWT` (Explicit override)
 3. `AWS_WEB_IDENTITY_TOKEN_FILE` (AWS EKS / IAM)
@@ -129,6 +134,7 @@ If your Infra team configured an Audience in Step 1, enforce it by setting `HOLO
 Every cryptographic action (e.g., DEK unwrap request, Policy rejection, Successful decryption) generates a security event.
 
 To ensure analytics performance is never blocked by security logging, Holonomy uses the `AuditRingBuffer` and `Broadcaster` modules.
+
 - Events are pushed onto an asynchronous, non-blocking lock-free ring buffer.
 - A dedicated background thread drains this buffer and flushes the events via UDP/HTTPS to your centralized governance dashboard (e.g., Datadog, Splunk) outside the critical data path.
 
@@ -140,14 +146,17 @@ Holonomy uses a cascade resolution system to discover and apply commercial licen
    ```bash
    export HOLONOMY_LICENSE_KEY='{"signature": "...", "payload": "..."}'
    ```
+
 2. **Configuration File (TOML):** You can provide the license key via any of the standard 6-tier configuration TOML files (e.g., `.holonomy.toml`, `~/.config/holonomy/config.toml`, `/etc/holonomy/config.toml`).
    ```toml
    [license]
    key = '''{"signature": "...", "payload": "..."}'''
    ```
+
 3. **Programmatic Override (Python SDK):** If you are wrapping Holonomy in your own application, you can pass the license key directly during initialization.
    ```python
    import holonomy
    holonomy.init(license='{"signature": "...", "payload": "..."}')
    ```
+
 4. **S3 Central Policy Bucket Fallback:** If no license is found locally, Holonomy will automatically attempt to download a file named `holonomy.lic` from the root of your configured central policy bucket (`policy.central_bucket`). This allows you to deploy a license to your entire organization centrally without updating individual developer workstations.
