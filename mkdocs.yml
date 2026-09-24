@@ -17,7 +17,7 @@ nav:
   - Cookbooks:
     - Pseudonymization for Analytics: cookbook_pseudonymization.md
     - Purpose-Based Access: cookbook_purpose_based_access.md
-    - Crypto-Shredding & Retention: cookbook_consent_revocation.md
+    - Crypto-Shredding & Retention: cookbook_data_retention.md
     - Cross-Org Sharing: cookbook_cross_org.md
   - Engine & Paths:
     - Policy and Governance Engine: 3_policy_and_governance_engine.md
