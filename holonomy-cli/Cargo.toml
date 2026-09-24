@@ -1,0 +1,31 @@
+[package]
+name = "holonomy-cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.6.1", features = ["derive"] }
+hex = "0.4.3"
+holonomy-core = { version = "0.1.0", path = "../holonomy-core" }
+tokio = { version = "1.52.3", features = ["full"] }
+parquet = "59.0.0"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "charset", "http2", "macos-system-configuration", "json"] }
+serde_json = "1.0.150"
+aws-config = { version = "1.8.18", default-features = false, features = ["behavior-version-latest", "rustls", "rt-tokio"] }
+aws-sdk-s3 = { version = "1.137.0", default-features = false, features = ["rustls", "rt-tokio"] }
+dotenvy = "0.15.7"
+rand_core = { version = "0.6", features = ["getrandom"] }
+thiserror = "1.0"
+dirs = "5.0"
+base64 = "0.22.1"
+sha2 = "0.11.0"
+rand = { version = "0.10.1", features = ["std"] }
+
+[dev-dependencies]
+assert_cmd = "2.2.2"
+ed25519-dalek = { version = "2.2.0", features = ["rand_core"] }
+hex = "0.4.3"
+predicates = "3.1.4"
+tempfile = "3.27.0"
+wiremock = "0.6.0"
+serial_test = "3.1.1"

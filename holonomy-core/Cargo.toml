@@ -1,0 +1,78 @@
+# @trace TASK-027
+# @trace TASK-091
+[package]
+name = "holonomy-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+arrow = "59.0.0"
+chrono = { version = "0.4.45", features = ["serde"] }
+crossbeam-queue = "0.3.12"
+dashmap = "6.2.1"
+moka = { version = "0.12", features = ["future"] }
+serde = { version = "1.0.228", features = ["derive"] }
+toml = "0.8.20"
+tokio = { version = "1.52.3", features = ["full"] }
+tokio-util = "0.7.18"
+zeroize = { version = "1.9.0", features = ["zeroize_derive"] }
+futures = "0.3"
+bytes = "1.9"
+parquet = { version = "59.0.0", features = ["encryption", "async"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "charset", "http2", "macos-system-configuration", "json"] }
+quick-xml = "0.31.0"
+# @trace TASK-011
+aes-gcm = "0.10.3"
+thiserror = "2.0.18"
+# @trace TASK-024
+base64 = "0.22.1"
+sha2 = "0.11.0"
+hex = "0.4.3"
+rand = { version = "0.10.1", features = ["std"] }
+regex = "1.12.4"
+serde_json = "1.0.150"
+# @trace TASK-023
+aws-config = { version = "1.8.18", default-features = false, features = ["behavior-version-latest", "rustls", "rt-tokio"] }
+aws-sdk-s3 = { version = "1.137.0", default-features = false, features = ["rustls", "rt-tokio"] }
+secrecy = "0.10.3"
+aws-credential-types = "1.2.14"
+aws-smithy-types = "1.5.0"
+ed25519-dalek = { version = "2.2.0", features = ["rand_core"] }
+aws-sdk-kms = { version = "1.111.0", default-features = false, features = ["rustls", "rt-tokio"] }
+# @trace TASK-026
+azure_core = { version = "0.21.0", default-features = false, features = ["enable_reqwest_rustls", "tokio"] }
+azure_storage = { version = "0.21.0", default-features = false, features = ["enable_reqwest_rustls", "hmac_rust"] }
+azure_storage_blobs = { version = "0.21.0", default-features = false, features = ["enable_reqwest_rustls", "hmac_rust"] }
+iana-time-zone = "0.1.65"
+get_if_addrs = "0.5.3"
+async-trait = "0.1.89"
+gcp_auth = "0.12.7"
+jsonwebtoken = "9.3.0"
+aws-sigv4 = "1.5.1"
+http = "1.4.2"
+aws-smithy-runtime-api = { version = "1.14.0", features = ["client"] }
+dirs = "7.0.0"
+
+[dev-dependencies]
+rand_core = "0.6"
+mockito = "1.7.0"
+tempfile = "3.27.0"
+testcontainers = "0.27.3"
+testcontainers-modules = { version = "0.15.0", features = ["localstack"] }
+serial_test = "4.0.1"
+
+[[test]]
+name = "test_signature"
+path = "tests/crypto/test_signature.rs"
+
+[[test]]
+name = "test_dek_cache"
+path = "tests/crypto/test_dek_cache.rs"
+
+[[test]]
+name = "test_jwt"
+path = "tests/auth/test_jwt.rs"
+
+[[test]]
+name = "test_semantic_tags"
+path = "tests/manager/test_semantic_tags.rs"

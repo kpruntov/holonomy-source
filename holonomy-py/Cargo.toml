@@ -1,0 +1,23 @@
+[package]
+name = "holonomy-py"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "_holonomy"
+crate-type = ["cdylib"]
+
+[dependencies]
+async-trait = "0.1.83"
+holonomy-core = { version = "0.1.0", path = "../holonomy-core" }
+holonomy-cli = { version = "0.1.0", path = "../holonomy-cli" }
+pyo3 = { version = "0.28.2", features = ["extension-module"] }
+tokio = { version = "1.0", features = ["rt-multi-thread", "sync"] }
+arrow = { version = "59.0.0", features = ["pyarrow"] }
+serde_json = "1.0.138"
+hex = "0.4.3"
+aws-config = { version = "1.8.18", default-features = false, features = ["behavior-version-latest", "rustls", "rt-tokio"] }
+parquet = "59.0.0"
+chrono = "0.4.38"
+ed25519-dalek = { version = "2.2.0", features = ["rand_core"] }
+rand_core = "0.6"

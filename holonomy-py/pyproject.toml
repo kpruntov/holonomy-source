@@ -1,0 +1,32 @@
+[build-system]
+requires = ["maturin>=1.5,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "holonomy"
+version = "0.1.0"
+description = "Python SDK bridge for Holonomy"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+    "pyarrow>=10.0.0",
+]
+
+[tool.maturin]
+python-source = "python"
+module-name = "holonomy._holonomy"
+
+[project.scripts]
+holonomy = "holonomy.cli:main"
+
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0.0",
+    "polars>=0.19.0",
+    "pyjwt[crypto]>=2.8.0"
+]

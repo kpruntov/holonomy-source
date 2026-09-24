@@ -1,0 +1,73 @@
+# Rust
+target/
+
+# Logs
+*.log
+*.log.*
+**/*.rs.bk
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# SpecLoom
+.spec/.lock
+.spec/graph.db
+.spec/task_memory_backup.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.implementation_logs/
+
+# E2E Tests & Data
+e2e_tests/
+.ipynb_checkpoints/
+
+# Credentials & Keys
+root_keys.txt
+*.pem
+*.key
+*.crt
+.holonomy.toml
+
+# Licenses & Telemetry
+holonomy.lic
+licence_payload.json
+
+# Temporary & Scratch Files
+tmp/

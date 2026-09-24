@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "holonomy-core",
+    "holonomy-cli",
+    "holonomy-py"
+]
+resolver = "2"
