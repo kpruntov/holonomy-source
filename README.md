@@ -74,22 +74,22 @@ print(df)
 
 ## Documentation
 
-Comprehensive documentation is available in the [`docs/`](docs/) directory:
+Comprehensive documentation is available in the [`docs/`](https://github.com/kpruntov/holonomy-source/blob/main/docs/) directory:
 
-- [1. Introduction & Core Concepts](docs/1_introduction_and_core_concepts.md)
-- [2. Getting Started & Installation](docs/2_getting_started_and_installation.md)
-- [3. Policy and Governance Engine](docs/3_policy_and_governance_engine.md)
-- [4. Producer Path: Secure Data Ingestion](docs/4_producer_path_secure_data_ingestion.md)
-- [5. Consumer Path: High Performance Analytics](docs/5_consumer_path_high_performance_analytics.md)
-- [6. Advanced Features & Edge Case Handling](docs/6_advanced_features_and_edge_case_handling.md)
-- [7. Infrastructure & Security Integrations](docs/7_infrastructure_and_security_integrations.md)
-- [8. Troubleshooting, Safety & Best Practices](docs/8_troubleshooting_safety_and_best_practices.md)
-- [9. Frequently Asked Questions](docs/9_frequently_asked_questions.md)
+- [1. Introduction & Core Concepts](https://github.com/kpruntov/holonomy-source/blob/main/docs/1_introduction_and_core_concepts.md)
+- [2. Getting Started & Installation](https://github.com/kpruntov/holonomy-source/blob/main/docs/2_getting_started_and_installation.md)
+- [3. Policy and Governance Engine](https://github.com/kpruntov/holonomy-source/blob/main/docs/3_policy_and_governance_engine.md)
+- [4. Producer Path: Secure Data Ingestion](https://github.com/kpruntov/holonomy-source/blob/main/docs/4_producer_path_secure_data_ingestion.md)
+- [5. Consumer Path: High Performance Analytics](https://github.com/kpruntov/holonomy-source/blob/main/docs/5_consumer_path_high_performance_analytics.md)
+- [6. Advanced Features & Edge Case Handling](https://github.com/kpruntov/holonomy-source/blob/main/docs/6_advanced_features_and_edge_case_handling.md)
+- [7. Infrastructure & Security Integrations](https://github.com/kpruntov/holonomy-source/blob/main/docs/7_infrastructure_and_security_integrations.md)
+- [8. Troubleshooting, Safety & Best Practices](https://github.com/kpruntov/holonomy-source/blob/main/docs/8_troubleshooting_safety_and_best_practices.md)
+- [9. Frequently Asked Questions](https://github.com/kpruntov/holonomy-source/blob/main/docs/9_frequently_asked_questions.md)
 
 ### Authoring Guides
-- [Contract Authoring](docs/contract_authoring.md)
-- [Policy Authoring](docs/policy_authoring.md)
-- [CLI Reference](docs/cli_reference.md)
+- [Contract Authoring](https://github.com/kpruntov/holonomy-source/blob/main/docs/contract_authoring.md)
+- [Policy Authoring](https://github.com/kpruntov/holonomy-source/blob/main/docs/policy_authoring.md)
+- [CLI Reference](https://github.com/kpruntov/holonomy-source/blob/main/docs/cli_reference.md)
 
 ## License
 
