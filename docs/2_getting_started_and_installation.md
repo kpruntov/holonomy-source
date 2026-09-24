@@ -11,7 +11,7 @@ Holonomy is designed to run anywhere you can run Python, without requiring users
 
 **Supported Environments:**
 
-- Python 3.8+ 
+- Python 3.10+ 
 - Rust compilation toolchain is **not** required for end-users, as Holonomy is distributed via PyPI as pre-compiled `maturin` wheels.
 - Dependencies: Requires `pyarrow` for in-memory FFI handoffs.
 
@@ -43,7 +43,7 @@ holonomy --help
 If you simply install Holonomy and execute a script without configuring anything, the SDK automatically falls back to **Local Dev Mode**. It makes the following assumptions:
 
 - **KMS Endpoint:** Defaults to an internal **Local Mock KMS** that encrypts/decrypts using a local RAM session key.
-- **Policy Storage:** Defaults to checking the local `./.holonomy/policies/` directory. For a frictionless Developer Experience (DX), any raw YAML/JSON policies found here are automatically cryptographically signed in-memory using an ephemeral keypair during engine startup. This ensures the Engine's strict signature verification logic remains active and identical to production, while allowing you to simply write plain-text rules locally. If no policies exist, it permits local execution.
+- **Policy Storage:** Defaults to checking the local `./` directory. For a frictionless Developer Experience (DX), any raw YAML/JSON policies found here are automatically cryptographically signed in-memory using an ephemeral keypair during engine startup. This ensures the Engine's strict signature verification logic remains active and identical to production, while allowing you to simply write plain-text rules locally. If no policies exist, it permits local execution.
 - **Audit Logs:** Defaults to writing events locally to `~/.holonomy/audit.log` instead of streaming them to a SaaS control plane.
 
 This allows you to test Parquet Modular Encryption (PME) completely locally without needing AWS, HashiCorp Vault, or S3 credentials. Once you move to production, simply set environment variables (e.g., `HOLONOMY_KMS_ENDPOINT`) and the exact same code securely connects to your real infrastructure!
@@ -120,11 +120,11 @@ holonomy.init(
 ```
 
 ### Step 1.5: Defining a Local Governance Policy
-Holonomy's core strength is its Decoupled Governance Engine. By default in Local Dev Mode (which we enabled above), Holonomy looks for JSON policies in a `.holonomy/policies/` directory relative to where your script is running. 
+Holonomy's core strength is its Decoupled Governance Engine. By default in Local Dev Mode (which we enabled above), Holonomy looks for JSON policies in a `` directory relative to where your script is running. 
 
 Let's create a local policy that tells Holonomy to automatically redact the `email` column for anyone acting as the `data-sci-role`. 
 
-Create a file named `.holonomy/policies/demo_policy.json` in your project folder (you may need to create the directory first) and paste this in:
+Create a file named `demo_policy.json` in your project folder (you may need to create the directory first) and paste this in:
 ```json
 {
   "version": "1.0",

@@ -27,7 +27,7 @@ Holonomy implements strict cryptographic OpenID Connect (OIDC) identity validati
 
 ### How to Configure Holonomy Authentication in Production
 
-To make Holonomy work securely across your organization, follow these three clear steps:
+To make Holonomy work securely across your organization, follow these five clear steps:
 
 #### Step 1: Infrastructure Team Configures the IdP
 Your infrastructure or security team must first configure your Identity Provider (e.g., Keycloak, Azure Entra, Auth0, Okta) to support both human analysts and machine workloads:

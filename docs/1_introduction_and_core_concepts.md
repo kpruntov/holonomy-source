@@ -3,10 +3,10 @@
 ## 1.1. What is Holonomy?
 Holonomy is a high-performance, in-process Privacy Shield specifically designed for analytical engines like DuckDB, Polars, and Pandas. It solves a critical tension in modern data engineering: how to process highly sensitive data without losing the performance of zero-copy vectorized engines.
 
-**The Zero-Knowledge, Zero-Copy Philosophy:**
+**The Client-Side Encryption, Zero-Copy Philosophy:**
 
-- **Zero-Knowledge**: All cryptographic operations occur strictly within your local CPU context. Your plaintext data and your decrypted Data Encryption Keys (DEKs) never leave your environment. Holonomy leverages Key Management Systems (KMS) strictly for "Envelope Encryption" (unwrapping encrypted keys), meaning the KMS provider never sees your actual data.
-- **Zero-Copy**: Instead of decrypting data to disk or into standard Python memory (which requires expensive serialization), Holonomy decrypts data directly into native **Apache Arrow** memory buffers. This allows tools like Polars and DuckDB to execute relational queries against the decrypted data natively via Arrow FFI (Foreign Function Interface), eliminating overhead entirely.
+- **Client-Side Encryption**: All cryptographic operations occur strictly within your local CPU context. Your plaintext data and your decrypted Data Encryption Keys (DEKs) never leave your environment. Holonomy leverages Key Management Systems (KMS) strictly for "Envelope Encryption" (unwrapping encrypted keys), meaning the KMS provider never sees your actual data.
+- **Zero-Copy**: Instead of decrypting data to disk or into standard Python memory (which requires expensive serialization), Holonomy decrypts data directly into native **Apache Arrow** memory buffers. This allows tools like Polars and DuckDB to execute relational queries against the decrypted data natively via Arrow FFI (Foreign Function Interface), minimizing memory overhead.
 
 ## 1.2. The Core Architecture
 Holonomy is fundamentally built to decouple raw storage from analytical computation. 

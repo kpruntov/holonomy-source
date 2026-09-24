@@ -13,8 +13,6 @@
             --white: #FFFFFF;
             --coral: #FD7C6E;
             --lapis: #2F62A2;
-            
-            /* Negative skew leans right / / */
             --skew-angle: -6deg;
         }
 
@@ -37,7 +35,6 @@
             gap: 3rem;
         }
 
-        /* Base Block Skew */
         .block {
             transform: skewX(var(--skew-angle));
             border: 3px solid var(--lapis);
@@ -51,7 +48,6 @@
             box-shadow: 16px 16px 0px var(--lapis);
         }
 
-        /* Unskew content inside blocks */
         .content {
             transform: skewX(calc(var(--skew-angle) * -1));
             padding: 2.5rem;
@@ -74,7 +70,6 @@
             line-height: 1.6;
         }
 
-        /* 1. Header (Spans all columns) */
         .header-block {
             grid-column: 1 / -1;
             background-color: var(--white);
@@ -96,7 +91,6 @@
             max-width: 900px;
         }
 
-        /* Skewed Button */
         .docs-btn {
             display: inline-block;
             margin-top: 2rem;
@@ -125,98 +119,68 @@
             text-transform: uppercase;
         }
 
-        /* 2. Pillar Blocks (3 Columns) */
-        .pillar h3 {
-            font-size: 1.8rem;
-        }
-
-        /* Left Pillar: Company Pitch */
-        .block-company {
-            background-color: var(--white);
-            color: var(--lapis);
-        }
+        .pillar h3 { font-size: 1.8rem; }
+        .block-company { background-color: var(--white); color: var(--lapis); }
         .block-company h3 { color: var(--coral); }
-
-        /* Middle Pillar: Developers */
-        .block-dev {
-            background-color: var(--lapis);
-            color: var(--white);
-            box-shadow: 12px 12px 0px var(--goldenrod);
-            border-color: var(--lapis);
-        }
+        .block-dev { background-color: var(--lapis); color: var(--white); box-shadow: 12px 12px 0px var(--goldenrod); border-color: var(--lapis); }
         .block-dev h3 { color: var(--bg-flax); }
-
-        /* Right Pillar: Compliance */
-        .block-comp {
-            background-color: var(--coral);
-            color: var(--white);
-            box-shadow: 12px 12px 0px var(--white);
-            border-color: var(--white);
-        }
+        .block-comp { background-color: var(--coral); color: var(--white); box-shadow: 12px 12px 0px var(--white); border-color: var(--white); }
         .block-comp h3 { color: var(--bg-flax); }
 
         @media (max-width: 900px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
+            .grid-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="grid-container">
         
-        <!-- Header -->
         <div class="block header-block">
             <div class="content" style="align-items: center;">
                 <h1>Holonomy</h1>
-                <p>Execute analytics locally without proxies. Safely pull encrypted datasets to your local machine and dynamically enforce Row-Level Security (RLS) and Data Masking at read-time—before the data ever reaches your DataFrame.</p>
-                
+                <p>Lightweight, decentralized governance for well-intentioned users. Evaluate Row-Level Security (RLS) and Data Masking entirely in-process using client-side Parquet Modular Encryption—without expensive proxies.</p>
                 <a href="{{ base_url }}/1_introduction_and_core_concepts/" class="docs-btn">
                     <span>Read the Documentation &rarr;</span>
                 </a>
             </div>
         </div>
 
-        <!-- Pillar 1: General/Company -->
         <div class="block pillar block-company">
             <div class="content">
                 <h3>Local Processing Enablement</h3>
                 <p>
-                    Stop forcing analytical workloads into expensive, centralized cloud environments just to enforce access policies. 
+                    Stop forcing analytical workloads into centralized cloud compute clusters just to enforce access policies. 
                 </p>
                 <p>
-                    Holonomy leverages your existing infrastructure (KMS, IdP, S3) to decrypt and filter data entirely in-process, saving immense compute costs while enabling data scientists to work comfortably on their local machines.
+                    Holonomy leverages your existing infrastructure (KMS, IdP, S3) to filter data entirely in-process. Ideal for EU and GDPR-minded teams requiring strict data localization and pseudonymization without the cloud egress costs.
                 </p>
             </div>
         </div>
 
-        <!-- Pillar 2: Developers -->
         <div class="block pillar block-dev">
             <div class="content">
-                <h3>Blazing Fast & Secure</h3>
+                <h3>Lightweight & Transparent</h3>
                 <p>
-                    Built on a highly concurrent Rust core and the Apache Arrow C Data Interface for true zero-copy semantics.
+                    Built on a highly concurrent Rust core and the Apache Arrow C Data Interface to keep local analytics blazing fast with native integrations for Polars and DuckDB.
                 </p>
                 <p>
-                    Your data is handled with extreme paranoia. Cryptographic keys (DEKs) are forcefully wiped from memory the exact moment they are no longer needed using strict <code>ZeroizeOnDrop</code> patterns.
+                    A clean DX with a zero-config local mock mode ensures developers can rapidly prototype notebooks and pipelines while preventing accidental exposure of sensitive columns.
                 </p>
             </div>
         </div>
 
-        <!-- Pillar 3: Compliance -->
         <div class="block pillar block-comp">
             <div class="content">
-                <h3>Centrally Manageable</h3>
+                <h3>Cross-Org & Central Control</h3>
                 <p>
-                    Write policies once, enforce them everywhere. 
+                    Share encrypted Parquet files safely across organization boundaries.
                 </p>
                 <p>
-                    Compliance officers dictate access rules via centralized JSON Policy Manifests. Holonomy strictly evaluates these contracts at runtime to enforce masking, ensuring enterprise compliance no matter where the Python script is executed.
+                    Compliance officers dictate access rules via centralized JSON Policy Manifests. Holonomy applies these as guardrails at runtime to enforce masking, enabling secure collaboration and dev/test environments.
                 </p>
             </div>
         </div>
 
-        <!-- Licensing & Contact -->
         <div class="block header-block" style="margin-top: 2rem; border-color: var(--coral); box-shadow: 12px 12px 0px var(--goldenrod);">
             <div class="content" style="align-items: center; text-align: center;">
                 <h2 style="color: var(--coral); font-size: 2.2rem;">Early Adopter Licensing</h2>

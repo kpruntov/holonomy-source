@@ -11,7 +11,7 @@ The Policy & Governance Engine relies on several key configuration variables to 
 **How these are resolved:**
 Holonomy evaluates these variables via a deterministic **6-Tier Configuration Cascade**. It checks for values in a strict order of priority, starting from explicit programmatic overrides in code (`holonomy.init()`), down through environment variables (`HOLONOMY_*`), local project configuration files (`.holonomy.toml`), user/system TOML files, and finally falling back to hardcoded system defaults.
 
-For an extended breakdown of the 6-tier cascade and where you should store specific variables across different deployment environments, please refer to:
+For an extended breakdown of the 4-tier cascade and where you should store specific variables across different deployment environments, please refer to:
 
 - [2. Getting Started & Installation (Section 2.4)](2_getting_started_and_installation.md)
 - [7. Infrastructure & Security Integrations](7_infrastructure_and_security_integrations.md)
