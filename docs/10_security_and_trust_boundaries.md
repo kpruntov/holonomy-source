@@ -19,6 +19,11 @@ Because Holonomy utilizes Parquet Modular Encryption (PME) via Envelope Encrypti
 
 To achieve a "Hard Boundary", you must map specific sensitive columns to dedicated KMS keys, and restrict those KMS keys via strict cloud IAM policies.
 
+### Fail-Closed Cryptographic Assertions
+Holonomy actively protects against ingestion misconfigurations (e.g., a data engineer accidentally writing a sensitive column as plaintext Parquet). 
+The `holonomy_master_policy.json` contains an `EncryptionBlock` that strictly defines which semantic tags (e.g., `["pii"]`) or specific columns (e.g., `["email"]`) **MUST** be physically encrypted. 
+During the read path, Holonomy inspects the Parquet footer. If a column is required to be encrypted by the Policy Manifest but is found in plaintext, Holonomy immediately aborts the read with a `DataLeakPrevented` error. This fail-closed mechanism guarantees that mistakenly unencrypted sensitive data cannot silently slip through the governance engine.
+
 ## 2. Soft Controls (In-Memory Guardrails)
 
 Once the KMS successfully unwraps the DEK, the data enters Holonomy's memory space. From this point forward, all governance is considered a **Soft Control**. 
@@ -30,11 +35,29 @@ RLS and data masking are evaluated *post-decryption* in the analyst's local RAM.
 
 These controls are designed as guardrails to prevent well-intentioned data scientists from accidentally viewing or leaking sensitive data, not to thwart malicious insiders with root access to the execution environment.
 
+### Cryptographic Material Lifecycle (DEKs)
+To optimize performance, Holonomy maintains an internal `DekCache` of unwrapped Data Encryption Keys (DEKs) with a strict 5-minute Time-To-Live (TTL). When a DEK expires from this cache, Holonomy guarantees the memory is mathematically zeroized (`ZeroizeOnDrop`).
+
+However, passing the DEK into the upstream Apache Parquet Rust library requires copying it into a standard `Vec<u8>` vector. Because the Parquet library takes ownership of this vector and relies on the global system allocator to drop it, Holonomy cannot actively zeroize this specific copy without triggering Use-After-Free (UAF) corruption. 
+**The Limitation:** This means a copy of the plaintext DEK may linger in the process heap until the OS allocator reuses the memory. Consequently, if a process crash occurs, the plaintext DEK could be exposed in the resulting crash dump.
+
 ### Memory Isolation & Zero-Copy
-Holonomy guarantees high performance by handing a native Apache Arrow memory pointer back to Python. This memory is not cryptographically isolated (e.g., via Intel SGX). Isolating it would require expensive serialization, destroying the zero-copy benefits.
+Holonomy guarantees high performance by handing a native Apache Arrow memory pointer back to Python. This memory is not cryptographically isolated (e.g., via Intel SGX). Isolating it would require expensive serialization, destroying the zero-copy benefits. As a result, protecting against local memory inspection or crash dumps is explicitly out of scope for Holonomy's threat model.
+
+### Policy Signature Trust Chain
+Holonomy uses Ed25519 signatures to separate policy authorship (Security Team) from policy execution (Data Scientists). 
+However, the trust chain relies entirely on how the `HOLONOMY_PUBLIC_KEY` environment variable is injected into the execution environment:
+- **Managed Environments (JupyterHub, ECS, Databricks):** The infrastructure team injects the public key as a locked environment variable. The ordinary analyst cannot change it, ensuring a strong trust chain.
+- **Local Laptops:** If the analyst runs Holonomy locally, they have administrative access to their own environment variables. An authorized but malicious analyst could theoretically replace `HOLONOMY_PUBLIC_KEY` with their own key, sign a permissive policy, and bypass the governance rules (another reason this is a **Soft Control**).
+
+**Important Limitations (Rollback Attacks):** Currently, the `holonomy_master_policy.json` schema does not support expiration dates (`expires_at`) or monotonically increasing sequence checks. If a security team signs a restrictive `v2.0` policy to replace a permissive `v1.0` policy, an attacker with a copy of `v1.0` can continue to use it indefinitely because the cryptographic signature on `v1.0` remains mathematically valid.
 
 ### Telemetry & Audit Logging
 Holonomy broadcasts access events to a centralized sink. Because this executes on the edge, a malicious user could manipulate their local firewall to block outbound HTTP requests to the telemetry server. Audit logging is a best-effort compliance trail.
+
+### Authorized User Data Sprawl (Data Exfiltration)
+If an analyst is legitimately authorized to access the plaintext data, Holonomy provides the masked/unmasked DataFrame to their local environment. Holonomy **cannot** prevent that authorized analyst from subsequently writing the plaintext data back to a new S3 bucket, saving it to a local CSV, or manually using `boto3`/`pyarrow` to perform a custom decryption. 
+Once the data is legitimately decrypted into the analyst's memory space, technical enforcement ends. Companies must rely on standard Data Loss Prevention (DLP) tools, endpoint monitoring, network egress controls, and proper organizational training to prevent authorized users from sprawling or exfiltrating sensitive data.
 
 ## 3. Summary
 
