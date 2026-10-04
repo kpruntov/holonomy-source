@@ -27,11 +27,14 @@ pub struct ResolvedLicenseConfig {
 }
 
 #[derive(Clone, Zeroize, Default)]
+#[zeroize(drop)]
 pub struct ResolvedKmsConfig {
     pub provider: String,
     pub endpoint: String,
     pub key_id: String,
     pub region: String,
+    pub token_file_path: String,
+    pub credential: String,
 }
 
 // Manually implement Debug to redact sensitive fields if any
@@ -42,6 +45,8 @@ impl fmt::Debug for ResolvedKmsConfig {
             .field("endpoint", &"<REDACTED>")
             .field("key_id", &"<REDACTED>")
             .field("region", &self.region)
+            .field("token_file_path", &self.token_file_path)
+            .field("credential", &"<REDACTED>")
             .finish()
     }
 }
@@ -121,6 +126,8 @@ fn merge_config(base: &mut Configuration, over: Configuration) {
         if k.endpoint.is_some() { b.endpoint = k.endpoint; }
         if k.key_id.is_some() { b.key_id = k.key_id; }
         if k.region.is_some() { b.region = k.region; }
+        if k.token_file_path.is_some() { b.token_file_path = k.token_file_path; }
+        if k.credential.is_some() { b.credential = k.credential; }
         base.kms = Some(b);
     }
     if let Some(p) = over.policy {
@@ -213,6 +220,8 @@ pub fn resolve_configuration(
     if let Ok(v) = env::var("HOLONOMY_KMS_PROVIDER") { env_kms.provider = Some(v); }
     if let Ok(v) = env::var("HOLONOMY_KMS_ENDPOINT") { env_kms.endpoint = Some(v); }
     if let Ok(v) = env::var("HOLONOMY_KMS_KEY_ID") { env_kms.key_id = Some(v); }
+    if let Ok(v) = env::var("HOLONOMY_KMS_TOKEN_FILE_PATH") { env_kms.token_file_path = Some(v); }
+    if let Ok(v) = env::var("HOLONOMY_KMS_CREDENTIAL") { env_kms.credential = Some(v); }
     env_cfg.kms = Some(env_kms);
     
     let mut env_pol = super::PolicyConfig::default();
@@ -265,6 +274,8 @@ pub fn resolve_configuration(
             endpoint: merged.kms.as_ref().and_then(|k| k.endpoint.clone()).unwrap_or_default(),
             key_id: merged.kms.as_ref().and_then(|k| k.key_id.clone()).unwrap_or_default(),
             region: merged.kms.as_ref().and_then(|k| k.region.clone()).unwrap_or_default(),
+            token_file_path: merged.kms.as_ref().and_then(|k| k.token_file_path.clone()).unwrap_or_default(),
+            credential: merged.kms.as_ref().and_then(|k| k.credential.clone()).unwrap_or_default(),
         },
         policy: ResolvedPolicyConfig {
             central_bucket,

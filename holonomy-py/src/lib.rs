@@ -21,13 +21,15 @@ use pyo3::prelude::*;
 
 /// Initialize the configuration engine with programmatic overrides.
 #[pyfunction]
-#[pyo3(signature = (kms_provider=None, kms_endpoint=None, kms_key_id=None, kms_region=None, policy_bucket=None, cache_ttl_hours=None, hash_salt=None, public_key=None, identity_provider=None, jwks_url=None, audience=None, issuer=None, client_id=None, telemetry_endpoint=None, telemetry_token=None))]
+#[pyo3(signature = (kms_provider=None, kms_endpoint=None, kms_key_id=None, kms_region=None, kms_token_file_path=None, kms_credential=None, policy_bucket=None, cache_ttl_hours=None, hash_salt=None, public_key=None, identity_provider=None, jwks_url=None, audience=None, issuer=None, client_id=None, telemetry_endpoint=None, telemetry_token=None))]
 #[allow(clippy::too_many_arguments)]
 fn init(
     kms_provider: Option<String>,
     kms_endpoint: Option<String>,
     kms_key_id: Option<String>,
     kms_region: Option<String>,
+    kms_token_file_path: Option<String>,
+    kms_credential: Option<String>,
     policy_bucket: Option<String>,
     cache_ttl_hours: Option<u32>,
     hash_salt: Option<String>,
@@ -42,12 +44,14 @@ fn init(
 ) -> PyResult<()> {
     use holonomy_core::config::{AuthConfig, TelemetryConfig};
     let programmatic = Configuration {
-        kms: if kms_provider.is_some() || kms_endpoint.is_some() || kms_key_id.is_some() || kms_region.is_some() {
+        kms: if kms_provider.is_some() || kms_endpoint.is_some() || kms_key_id.is_some() || kms_region.is_some() || kms_token_file_path.is_some() || kms_credential.is_some() {
             Some(KmsConfig {
                 provider: kms_provider,
                 endpoint: kms_endpoint,
                 key_id: kms_key_id,
                 region: kms_region,
+                token_file_path: kms_token_file_path,
+                credential: kms_credential,
             })
         } else {
             None
@@ -263,9 +267,23 @@ fn build_engine_state(
                 if endpoint.is_empty() {
                     return Err("FATAL: HOLONOMY_KMS_ENDPOINT is required for Vault KMS".to_string());
                 }
-                let token = std::env::var("VAULT_TOKEN").unwrap_or_else(|_| "".to_string());
+                
+                let mut token = config.kms.credential.clone();
+                
+                if token.is_empty() && !config.kms.token_file_path.is_empty() {
+                    let path = &config.kms.token_file_path;
+                    token = std::fs::read_to_string(path)
+                        .map_err(|e| format!("FATAL: Failed to read Vault token from file {}: {}", path, e))?
+                        .trim()
+                        .to_string();
+                }
+
                 if token.is_empty() {
-                    return Err("FATAL: VAULT_TOKEN environment variable is required for Vault KMS".to_string());
+                    token = std::env::var("VAULT_TOKEN").unwrap_or_else(|_| "".to_string());
+                }
+                
+                if token.is_empty() {
+                    return Err("FATAL: Vault KMS requires a token via config credential, token_file_path, or VAULT_TOKEN env var".to_string());
                 }
                 let adapter = holonomy_core::adapters::vault::VaultAdapter::new(endpoint, token, key_id);
                 Arc::new(adapter)
@@ -694,6 +712,8 @@ mod tests {
                 endpoint: "".to_string(),
                 key_id: "".to_string(),
                 region: "".to_string(),
+                token_file_path: "".to_string(),
+                credential: "".to_string(),
             },
             policy: ResolvedPolicyConfig {
                 central_bucket: "".to_string(),
@@ -738,7 +758,7 @@ mod tests {
     async fn test_parse_user_context_jwt() {
         let mock_config = holonomy_core::config::resolver::ResolvedConfiguration {
             kms: holonomy_core::config::resolver::ResolvedKmsConfig {
-                provider: "".to_string(), endpoint: "".to_string(), key_id: "".to_string(), region: "".to_string(),
+                provider: "".to_string(), endpoint: "".to_string(), key_id: "".to_string(), region: "".to_string(), token_file_path: "".to_string(), credential: "".to_string(),
             },
             policy: holonomy_core::config::resolver::ResolvedPolicyConfig {
                 central_bucket: "".to_string(), hash_salt: "".to_string(), cache_ttl_hours: 24, public_key: "".to_string(),

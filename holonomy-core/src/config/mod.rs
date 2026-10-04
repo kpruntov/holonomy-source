@@ -32,6 +32,8 @@ pub struct KmsConfig {
     pub endpoint: Option<String>,
     pub key_id: Option<String>,
     pub region: Option<String>,
+    pub token_file_path: Option<String>,
+    pub credential: Option<String>,
 }
 
 /// Global storage configuration for S3 backends.
@@ -230,6 +232,8 @@ mod tests {
                 endpoint: Some("prog_kms_endpoint".to_string()),
                 key_id: None,
                 region: None,
+                token_file_path: None,
+                credential: None,
             }),
             policy: None,
             auth: None,
@@ -290,6 +294,8 @@ mod tests {
                 endpoint: Some("singleton_kms_endpoint".to_string()),
                 key_id: None,
                 region: None,
+                token_file_path: None,
+                credential: None,
             }),
             policy: None,
             auth: None,
@@ -316,6 +322,8 @@ mod tests {
                 endpoint: Some("ignored_kms_endpoint".to_string()),
                 key_id: None,
                 region: None,
+                token_file_path: None,
+                credential: None,
             }),
             policy: None,
             auth: None,
