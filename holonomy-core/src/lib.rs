@@ -22,6 +22,8 @@
 //!         endpoint: Some("https://kms.eu-west-1.amazonaws.com".to_string()),
 //!         key_id: Some("alias/holonomy".to_string()),
 //!         region: Some("eu-west-1".to_string()),
+//!         token_file_path: None,
+//!         credential: None,
 //!     }),
 //!     policy: None,
 //!     auth: None,

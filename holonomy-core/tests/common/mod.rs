@@ -29,7 +29,7 @@ impl holonomy_core::manager::crypto_manager::KmsProvider for MockKmsProvider {
     async fn decrypt_dek(
         &self,
         _wrapped_dek_ciphertext: &[u8],
-        _context: Option<&std::collections::HashMap<String, String>>,
+        _context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, holonomy_core::manager::crypto_manager::CryptoError> {
         Ok(b"1234567890123456".to_vec())
     }
@@ -37,7 +37,7 @@ impl holonomy_core::manager::crypto_manager::KmsProvider for MockKmsProvider {
     async fn wrap_key(
         &self,
         key: &[u8],
-        _context: Option<&std::collections::HashMap<String, String>>,
+        _context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, holonomy_core::manager::crypto_manager::CryptoError> {
         let mut wrapped = b"kms_wrapped:".to_vec();
         wrapped.extend_from_slice(key);

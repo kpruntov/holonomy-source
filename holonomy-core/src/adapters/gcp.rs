@@ -81,7 +81,7 @@ impl GcpAdapter {
         &self,
         key_name: &str,
         plaintext: &[u8],
-        encryption_context: Option<&std::collections::HashMap<String, String>>,
+        encryption_context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<String, Box<dyn Error + Send + Sync>> {
         let b64_plaintext = base64_standard.encode(plaintext);
 
@@ -125,7 +125,7 @@ impl GcpAdapter {
         &self,
         key_name: &str,
         ciphertext: &str,
-        encryption_context: Option<&std::collections::HashMap<String, String>>,
+        encryption_context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, Box<dyn Error + Send + Sync>> {
         let url = format!("{}/v1/{}:decrypt", self.endpoint_url, key_name);
 
@@ -170,7 +170,7 @@ impl crate::manager::crypto_manager::KmsProvider for GcpAdapter {
     async fn decrypt_dek(
         &self,
         wrapped_dek_ciphertext: &[u8],
-        context: Option<&std::collections::HashMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
         let ciphertext_str = String::from_utf8(wrapped_dek_ciphertext.to_vec())
             .map_err(|_| crate::manager::crypto_manager::CryptoError::KmsFailed("Invalid ciphertext".to_string()))?;
@@ -185,7 +185,7 @@ impl crate::manager::crypto_manager::KmsProvider for GcpAdapter {
     async fn wrap_key(
         &self,
         key: &[u8],
-        context: Option<&std::collections::HashMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
         let encrypted = self
             .encrypt(&self.key_id, key, context)

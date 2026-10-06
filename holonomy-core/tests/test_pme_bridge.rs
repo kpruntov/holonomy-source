@@ -13,7 +13,7 @@ impl KmsProvider for MockAsyncKmsProvider {
     async fn decrypt_dek(
         &self,
         wrapped_dek_ciphertext: &[u8],
-        _context: Option<&std::collections::HashMap<String, String>>,
+        _context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, CryptoError> {
         if wrapped_dek_ciphertext == b"valid_ciphertext" {
             Ok(b"secret_key_12345".to_vec())
@@ -25,7 +25,7 @@ impl KmsProvider for MockAsyncKmsProvider {
     async fn wrap_key(
         &self,
         _key: &[u8],
-        _context: Option<&std::collections::HashMap<String, String>>,
+        _context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, CryptoError> {
         Ok(b"wrapped".to_vec())
     }

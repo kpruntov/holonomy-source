@@ -78,7 +78,7 @@ fn test_resolve_dek_partition_logic() {
 
     assert_eq!(hash1, hash2, "Trailing slashes must be sanitized");
 
-    let mut ctx = std::collections::HashMap::new();
+    let mut ctx = std::collections::BTreeMap::new();
     ctx.insert("year".to_string(), "2026".to_string());
     ctx.insert("month".to_string(), "06".to_string());
 

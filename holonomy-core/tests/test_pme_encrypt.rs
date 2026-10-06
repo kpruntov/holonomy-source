@@ -17,6 +17,7 @@ fn test_pme_encryptor_wraps_dek() {
     wrapped_column_deks.insert("col1".to_string(), b"kms_wrapped:abcdefghijklmnop".to_vec());
 
     let encryptor = PmeEncryptor::new(
+        "test_dataset".to_string(),
         footer_dek,
         wrapped_footer_dek.clone(),
         column_deks,
@@ -34,7 +35,9 @@ fn test_pme_encryptor_wraps_dek() {
         .expect("Should have footer key metadata");
 
     use base64::{Engine as _, engine::general_purpose::STANDARD as base64_standard};
-    let expected_val = base64_standard.encode(&wrapped_footer_dek).into_bytes();
-    assert_eq!(footer_metadata, expected_val.as_slice());
-    assert_ne!(footer_metadata, b"1234567890123456");
+    let metadata_str = String::from_utf8(footer_metadata.to_vec()).unwrap();
+    let parsed: serde_json::Value = serde_json::from_str(&metadata_str).unwrap();
+    let expected_val = base64_standard.encode(&wrapped_footer_dek);
+    assert_eq!(parsed["wrapped_dek"].as_str().unwrap(), expected_val);
+    assert_eq!(parsed["aad"]["dataset"].as_str().unwrap(), "test_dataset");
 }

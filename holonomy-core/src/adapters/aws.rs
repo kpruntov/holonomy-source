@@ -31,7 +31,7 @@ impl AwsAdapter {
     pub async fn decrypt(
         &self,
         ciphertext: &[u8],
-        encryption_context: Option<&std::collections::HashMap<String, String>>,
+        encryption_context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, AwsError> {
         let mut builder = self
             .kms_client
@@ -59,7 +59,7 @@ impl AwsAdapter {
         &self,
         key_id: &str,
         plaintext: &[u8],
-        encryption_context: Option<&std::collections::HashMap<String, String>>,
+        encryption_context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, AwsError> {
         let mut builder = self
             .kms_client
@@ -122,7 +122,7 @@ impl crate::manager::crypto_manager::KmsProvider for AwsAdapter {
     async fn decrypt_dek(
         &self,
         wrapped_dek_ciphertext: &[u8],
-        context: Option<&std::collections::HashMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
         let decrypted = self
             .decrypt(wrapped_dek_ciphertext, context)
@@ -134,7 +134,7 @@ impl crate::manager::crypto_manager::KmsProvider for AwsAdapter {
     async fn wrap_key(
         &self,
         key: &[u8],
-        context: Option<&std::collections::HashMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
         let encrypted = self
             .encrypt(&self.key_id, key, context)

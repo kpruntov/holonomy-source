@@ -14,7 +14,7 @@ test: test-python
 
 test-python:
 	@echo "Running Python integration tests..."
-	cd holonomy-py && . .venv/bin/activate && maturin develop && pytest tests/
+	cd holonomy-py && . .venv/bin/activate && pip install pytest pyarrow polars pyjwt && maturin develop && python -m pytest tests/
 
 test-integration:
 	@echo "Running Azure integration tests requiring Podman..."

@@ -22,6 +22,7 @@ async fn test_end_to_end_write_flow_with_pme() {
     let mut wrapped_column_deks = std::collections::HashMap::new();
     wrapped_column_deks.insert("name".to_string(), b"kms_wrapped_col_dek".to_vec());
     let encryptor = PmeEncryptor::new(
+        "test_dataset".to_string(),
         zeroize::Zeroizing::new(dek.as_bytes().to_vec()),
         wrapped_dek,
         column_deks,

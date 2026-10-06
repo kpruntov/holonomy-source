@@ -40,6 +40,7 @@ pub enum StreamItem {
 }
 
 pub struct PmeEncryptor {
+    pub dataset_name: String,
     pub footer_dek: Zeroizing<Vec<u8>>,
     pub wrapped_footer_dek: Vec<u8>,
     pub column_deks: std::collections::HashMap<String, Zeroizing<Vec<u8>>>,
@@ -48,12 +49,14 @@ pub struct PmeEncryptor {
 
 impl PmeEncryptor {
     pub fn new(
+        dataset_name: String,
         footer_dek: Zeroizing<Vec<u8>>,
         wrapped_footer_dek: Vec<u8>,
         column_deks: std::collections::HashMap<String, Zeroizing<Vec<u8>>>,
         wrapped_column_deks: std::collections::HashMap<String, Vec<u8>>,
     ) -> Self {
         Self {
+            dataset_name,
             footer_dek,
             wrapped_footer_dek,
             column_deks,
@@ -65,8 +68,17 @@ impl PmeEncryptor {
         &self,
     ) -> parquet::file::properties::WriterPropertiesBuilder {
         use base64::Engine;
-        let b64_wrapped =
+        let b64_wrapped_footer =
             base64::engine::general_purpose::STANDARD.encode(&self.wrapped_footer_dek);
+
+        let footer_metadata = serde_json::json!({
+            "wrapped_dek": b64_wrapped_footer,
+            "aad": {
+                "tool": "holonomy",
+                "dataset": self.dataset_name,
+                "column": "footer"
+            }
+        }).to_string();
 
         // RISK ACCEPTANCE (BR-001 Zero Persistence):
         // The upstream Apache Parquet Rust crate requires a standard `Vec<u8>` for keys.
@@ -75,15 +87,25 @@ impl PmeEncryptor {
         // The DEK is briefly exposed in Parquet's memory but remains protected in our DekCache.
         let mut builder = FileEncryptionProperties::builder(self.footer_dek.as_slice().to_vec())
             .with_plaintext_footer(true)
-            .with_footer_key_metadata(b64_wrapped.into_bytes());
+            .with_footer_key_metadata(footer_metadata.into_bytes());
 
         for (col, dek) in &self.column_deks {
             let wrapped = &self.wrapped_column_deks[col];
             let b64_col_wrapped = base64::engine::general_purpose::STANDARD.encode(wrapped);
+            
+            let col_metadata = serde_json::json!({
+                "wrapped_dek": b64_col_wrapped,
+                "aad": {
+                    "tool": "holonomy",
+                    "dataset": self.dataset_name,
+                    "column": col
+                }
+            }).to_string();
+
             builder = builder.with_column_key_and_metadata(
                 col,
                 dek.as_slice().to_vec(),
-                b64_col_wrapped.into_bytes(),
+                col_metadata.into_bytes(),
             );
         }
         let file_encryption = builder.build().unwrap();
@@ -111,8 +133,13 @@ impl PmeEncryptor {
                 let mut raw_key = vec![0u8; 16];
                 rand::rng().fill_bytes(&mut raw_key);
 
+                let mut aad_context = std::collections::BTreeMap::new();
+                aad_context.insert("tool".to_string(), "holonomy".to_string());
+                aad_context.insert("dataset".to_string(), target.to_string());
+                aad_context.insert("column".to_string(), column_name.to_string());
+
                 let wrapped = crypto_manager
-                    .wrap_key(&raw_key, None)
+                    .wrap_key(&raw_key, Some(&aad_context))
                     .await
                     .map_err(|e| Box::new(e) as Box<dyn std::error::Error + Send + Sync>)?;
 

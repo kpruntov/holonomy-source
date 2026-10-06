@@ -53,7 +53,7 @@ impl crate::manager::crypto_manager::KmsProvider for VaultAdapter {
     async fn wrap_key(
         &self,
         key: &[u8],
-        context: Option<&std::collections::HashMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
         let b64_plaintext = base64_standard.encode(key);
         let url = format!("{}/v1/transit/encrypt/{}", self.endpoint, self.key_name);
@@ -96,7 +96,7 @@ impl crate::manager::crypto_manager::KmsProvider for VaultAdapter {
     async fn decrypt_dek(
         &self,
         wrapped_dek_ciphertext: &[u8],
-        context: Option<&std::collections::HashMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
         let url = format!("{}/v1/transit/decrypt/{}", self.endpoint, self.key_name);
 

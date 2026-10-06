@@ -157,6 +157,7 @@ impl Writer {
                 }
 
                 let encryptor = PmeEncryptor::new(
+                    validator.contract.name.clone(),
                     footer_dek.plaintext,
                     footer_dek.wrapped,
                     column_deks,

@@ -47,7 +47,7 @@ impl IngestionProvider for MockS3Client {
         _url: &str,
         _decryption_props: Option<parquet::encryption::decrypt::FileDecryptionProperties>,
     ) -> Result<parquet::file::metadata::ParquetMetaData, IngestionError> {
-        let file = File::open("../dummy_data.parquet").unwrap();
+        let file = File::open("tests/sample.parquet").unwrap();
         let reader = SerializedFileReader::new(file).unwrap();
         Ok(reader.metadata().clone())
     }

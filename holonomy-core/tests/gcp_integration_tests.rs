@@ -61,7 +61,7 @@ async fn test_gcp_kms_mock_server() {
         .create_async()
         .await;
 
-    let mut ctx = HashMap::new();
+    let mut ctx = std::collections::BTreeMap::new();
     ctx.insert("purpose".to_string(), "test".to_string());
 
     // Test wrap_key
