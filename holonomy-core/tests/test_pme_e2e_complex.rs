@@ -13,7 +13,6 @@ use holonomy_core::manager::read_orchestrator::ReadOrchestrator;
 use holonomy_core::manager::scan_orchestrator::ScanOrchestrator;
 
 use holonomy_core::ingestion::s3_client::{Predicate, PredicateValue};
-use std::collections::HashMap;
 use std::ops::Range;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};

@@ -4,7 +4,6 @@ use base64::{Engine as _, engine::general_purpose::STANDARD as base64_standard};
 use holonomy_core::adapters::gcp::GcpAdapter;
 use holonomy_core::manager::crypto_manager::KmsProvider;
 use mockito::Server;
-use std::collections::HashMap;
 
 #[tokio::test]
 #[ignore]
