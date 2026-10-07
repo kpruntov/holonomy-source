@@ -167,7 +167,7 @@ impl WriteOrchestrator {
         // @trace TASK-070
         let footer_dek = PmeEncryptor::generate_or_get_dek(
             &self.crypto_manager,
-            _partition_root,
+            validator.contract.name.as_str(),
             valid_purpose,
             "__footer__",
             user_hash,
@@ -180,7 +180,7 @@ impl WriteOrchestrator {
         for col in columns_to_encrypt {
             let col_dek = PmeEncryptor::generate_or_get_dek(
                 &self.crypto_manager,
-                _partition_root,
+                validator.contract.name.as_str(),
                 valid_purpose,
                 &col,
                 user_hash,

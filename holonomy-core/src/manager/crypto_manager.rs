@@ -17,6 +17,7 @@ pub enum CryptoError {
     DecryptionFailed,
 }
 
+// @trace TASK-144
 #[async_trait::async_trait]
 pub trait KmsProvider: Send + Sync {
     async fn decrypt_dek(
@@ -193,6 +194,7 @@ impl KeyRetriever for ParquetKmsBridge {
             parquet::errors::ParquetError::General(format!("Invalid metadata utf8: {:?}", e))
         })?;
 
+        // @trace TASK-144
         let (ciphertext_b64, parsed_context) = if let Ok(json) = serde_json::from_str::<serde_json::Value>(metadata_str) {
             let wrapped_dek = json.get("wrapped_dek").and_then(|v| v.as_str()).ok_or_else(|| {
                 parquet::errors::ParquetError::General("Missing wrapped_dek in metadata JSON".into())

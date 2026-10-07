@@ -28,18 +28,42 @@ pub struct MockKmsProvider;
 impl holonomy_core::manager::crypto_manager::KmsProvider for MockKmsProvider {
     async fn decrypt_dek(
         &self,
-        _wrapped_dek_ciphertext: &[u8],
-        _context: Option<&std::collections::BTreeMap<String, String>>,
+        wrapped_dek_ciphertext: &[u8],
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, holonomy_core::manager::crypto_manager::CryptoError> {
+        let mut _key = wrapped_dek_ciphertext;
+        if wrapped_dek_ciphertext.starts_with(b"kms_wrapped:") {
+            let rest = &wrapped_dek_ciphertext[12..];
+            let ctx_len = u32::from_le_bytes(rest[0..4].try_into().unwrap()) as usize;
+            let expected_ctx_bytes = &rest[4..4 + ctx_len];
+            let expected_ctx: Option<std::collections::BTreeMap<String, String>> = if ctx_len > 0 {
+                Some(serde_json::from_slice(expected_ctx_bytes).unwrap())
+            } else {
+                None
+            };
+            if context != expected_ctx.as_ref() {
+                return Err(holonomy_core::manager::crypto_manager::CryptoError::KmsFailed(
+                    format!("AAD Context mismatch! Expected {:?}, got {:?}", expected_ctx, context)
+                ));
+            }
+            _key = &rest[4 + ctx_len..];
+        }
         Ok(b"1234567890123456".to_vec())
     }
 
     async fn wrap_key(
         &self,
         key: &[u8],
-        _context: Option<&std::collections::BTreeMap<String, String>>,
+        context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, holonomy_core::manager::crypto_manager::CryptoError> {
         let mut wrapped = b"kms_wrapped:".to_vec();
+        if let Some(ctx) = context {
+            let ctx_bytes = serde_json::to_vec(ctx).unwrap();
+            wrapped.extend_from_slice(&(ctx_bytes.len() as u32).to_le_bytes());
+            wrapped.extend_from_slice(&ctx_bytes);
+        } else {
+            wrapped.extend_from_slice(&0u32.to_le_bytes());
+        }
         wrapped.extend_from_slice(key);
         Ok(wrapped)
     }

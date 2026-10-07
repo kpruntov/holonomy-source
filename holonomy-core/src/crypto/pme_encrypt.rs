@@ -39,6 +39,7 @@ pub enum StreamItem {
     Success,
 }
 
+// @trace TASK-144
 pub struct PmeEncryptor {
     pub dataset_name: String,
     pub footer_dek: Zeroizing<Vec<u8>>,
@@ -64,6 +65,7 @@ impl PmeEncryptor {
         }
     }
 
+    // @trace TASK-144
     pub fn get_writer_properties_builder(
         &self,
     ) -> parquet::file::properties::WriterPropertiesBuilder {
@@ -117,14 +119,15 @@ impl PmeEncryptor {
     }
 
     // @trace TASK-070
+    // @trace TASK-144
     pub async fn generate_or_get_dek(
         crypto_manager: &Arc<CryptoManager>,
-        target: &str,
+        dataset_name: &str,
         purpose: &str,
         column_name: &str,
         user_ctx: &str,
     ) -> Result<CachedDek, Box<dyn std::error::Error + Send + Sync>> {
-        let cache_key = format!("{}|{}|{}|{}", target, purpose, column_name, user_ctx);
+        let cache_key = format!("{}|{}|{}|{}", dataset_name, purpose, column_name, user_ctx);
 
         let dek = crypto_manager
             .write_dek_cache
@@ -135,7 +138,7 @@ impl PmeEncryptor {
 
                 let mut aad_context = std::collections::BTreeMap::new();
                 aad_context.insert("tool".to_string(), "holonomy".to_string());
-                aad_context.insert("dataset".to_string(), target.to_string());
+                aad_context.insert("dataset".to_string(), dataset_name.to_string());
                 aad_context.insert("column".to_string(), column_name.to_string());
 
                 let wrapped = crypto_manager
