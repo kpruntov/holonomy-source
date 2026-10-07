@@ -132,7 +132,7 @@ impl Writer {
 
                 let footer_dek = PmeEncryptor::generate_or_get_dek(
                     &engine_state.crypto_manager,
-                    &self.target,
+                    validator.contract.name.as_str(),
                     valid_purpose,
                     "__footer__",
                     &self.user_context,
@@ -145,7 +145,7 @@ impl Writer {
                 for col in columns_to_encrypt {
                     let col_dek = PmeEncryptor::generate_or_get_dek(
                         &engine_state.crypto_manager,
-                        &self.target,
+                        validator.contract.name.as_str(),
                         valid_purpose,
                         &col,
                         &self.user_context,
