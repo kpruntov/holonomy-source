@@ -33,3 +33,9 @@ table = holonomy.read("s3://data-lake/year=2024/month=01/")
 - **Zero Compute Rewrite Costs**: You can execute massive monthly PII retention purges in milliseconds by simply deleting a key in AWS KMS, entirely eliminating the need to rewrite terabytes of historical Parquet data.
 - **Indefinite Analytical Value**: Because only the sensitive columns are shredded, your data science teams retain permanent access to the unencrypted, anonymized columns for long-term machine learning models.
 - **Absolute Cryptographic Guarantee**: Crypto-shredding is a mathematical absolute. Even if an attacker steals the expired Parquet files, the PII is permanently inaccessible to everyone in the universe.
+
+
+### 💡 Infrastructure & Pipeline Tips for Crypto-Shredding
+- **Advanced Partitioning Strategies:** While partitioning purely by time (e.g., `s3://bucket/year=X/month=Y/`) perfectly solves bulk retention purges, you can also adopt hybrid strategies. For B2B platforms with a manageable amount of huge enterprise customers, partitioning strictly by customer (`s3://bucket/customer_id=X/`) allows you to instantly honor a specific customer's "Right to be Forgotten" simply by deleting their unique KMS key. For high-volume environments, you can combine both (`s3://bucket/customer_id=X/month=Y/`) to handle both global time-based retention and targeted customer offboarding simultaneously.
+- **KMS Key Organization:** Use Key Aliases (e.g., `alias/retention-2024-01`) to logically separate keys. 
+- **IAM Least Privilege:** The ETL pipeline writing the data needs `kms:Encrypt` permissions. However, the automated chron job responsible for deleting the keys must be strictly isolated. Grant `kms:ScheduleKeyDeletion` only to a highly restricted, audited CI/CD service account, never to human operators.

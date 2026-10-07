@@ -51,3 +51,9 @@ user_spend = df.group_by("email").agg(pl.col("amount").sum())
 ## Business Impact
 - **Maintained Utility**: Analysts can still perform primary-key joins and behavioral clustering.
 - **Privacy Guardrail**: The raw PII never enters the analyst's constructed data frame, aligning with robust pseudonymization practices.
+
+
+### 💡 Compliance & Analytical Tips for Pseudonymous Data
+- **Pseudonymous Data is Still Personal Data:** Under GDPR and CCPA, hashing an email address does *not* render it fully anonymous if the individual can still be singled out or re-identified. Treat pseudonymous columns with the same regulatory respect as raw PII.
+- **Process-Driven Purposes:** Your policy `purpose_bindings` should directly map to your organization's Record of Processing Activities (RoPA). Instead of a generic `analytics` purpose, define narrow purposes like `cohort-retention-analysis` or `fraud-model-training`.
+- **Beware of Linkability:** A hashed ID allows analysts to `JOIN` datasets, but if those datasets contain granular timestamp or location data, an analyst might easily deduce who the user is. Always pair `HASH` masks on identifiers with `REDACT` masks on hyper-specific secondary attributes.

@@ -19,6 +19,8 @@ nav:
     - Purpose-Based Access: cookbook_purpose_based_access.md
     - Crypto-Shredding & Retention: cookbook_data_retention.md
     - Cross-Org Sharing: cookbook_cross_org.md
+    - Secure Local Workspaces: cookbook_secure_workspaces.md
+    - Production Data for Test Fixtures: cookbook_test_fixtures.md
   - Engine & Paths:
     - Policy and Governance Engine: 3_policy_and_governance_engine.md
     - Producer Path: 4_producer_path_secure_data_ingestion.md

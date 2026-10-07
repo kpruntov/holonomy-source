@@ -56,3 +56,9 @@ df_marketing = holonomy.read("s3://data-lake/users.parquet", purpose="marketing-
 ## Business Impact
 - **Massive Cost Savings**: You completely eliminate the compute costs of running anonymization ETL pipelines, and you halve your AWS S3 storage footprint by maintaining a single golden copy of the data.
 - **Strict Compliance**: You mathematically prove to auditors that users can only access PII when operating under an approved, tightly scoped business purpose.
+
+
+### 💡 Infrastructure & Pipeline Tips for Purpose Bindings
+- **Dynamic JWT Issuance:** Avoid long-lived static tokens. Integrate Holonomy with your corporate Identity Provider (IdP) like Okta or Keycloak. Issue short-lived JWTs (e.g., 15 minutes) containing the user's `purpose` directly in the claims.
+- **Pipeline vs. Human Roles:** Differentiate between automated pipelines and human analysts. Pipelines should run under isolated service accounts with strict, hardcoded purposes.
+- **Policy Versioning:** Keep your `holonomy_master_policy.json` in a dedicated Git repository. Require PR approvals before any purpose binding is modified.

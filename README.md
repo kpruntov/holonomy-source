@@ -93,11 +93,6 @@ Comprehensive documentation is available in the [`docs/`](https://github.com/kpr
 
 ## License
 
-Holonomy is licensed under the Business Source License (BSL). See the [LICENSE](LICENSE) file for more information.
+Holonomy is licensed under the Business Source License (BSL). The BSL is an alternative to closed source or open core licensing models. Under the BSL, the source code is always publicly available. Non-production use of the code is always free, and the licensor can also make an Additional Use Grant allowing limited production use. On a specified Change Date, the BSL license converts into a standard open source license. 
 
-Product evaluation and non-production testing are completely free. A commercial license is required only for production use. 
-
-### Early Adopters Program
-We are currently offering Early Adopter licenses free of charge. Additionally, we are happy to grant free production licenses to small teams, startups, and projects of public importance. 
-
-To request a license or inquire about the Early Adopters program, please contact us at [license@holonomy.eu](mailto:license@holonomy.eu).
+For Holonomy, the Change Date is 2029-01-01, at which point the license converts to MIT. Our Additional Use Grant permits you to use the Licensed Work for development, testing, and internal production on unlimited nodes. See the [LICENSE](LICENSE) file for full details and commercial exceptions.

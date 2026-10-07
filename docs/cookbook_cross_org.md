@@ -44,3 +44,10 @@ In this case, you must grant the partner Cross-Account IAM access to your KMS to
 > A malicious partner could theoretically attach a memory debugger (like `gdb`) to the Holonomy process and dump the RAM to extract the decrypted rows belonging to their competitors. 
 >
 > This approach should **only** be used if you have strong contractual trust with the partner, or if they are executing the Holonomy client within an isolated, trusted execution environment (TEE) or secure workspace that you control.
+
+
+### 💡 Infrastructure & OS-Level Tips for Soft Controls
+If you must rely on Approach 2 (Soft Controls via RLS), the 3rd party is decrypting data in their local RAM. You must enforce OS-level constraints on the machines executing the queries:
+- **No Local Admin Access:** Analysts running Holonomy must operate as standard users, not `root` or `Administrator`. This prevents them from attaching memory debuggers to extract raw DEKs.
+- **Disable Core Dumps:** Ensure the OS is configured to block crash dumps (`ulimit -c 0` on Linux/macOS). If the Python process crashes, a core dump could persist the plaintext data to disk.
+- **Ephemeral Workspaces:** Rather than allowing partners to download data to local laptops, provide them with ephemeral Cloud Workspaces (e.g., AWS WorkSpaces, GitHub Codespaces) where you can enforce these OS-level network and memory constraints centrally.
