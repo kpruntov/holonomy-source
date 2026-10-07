@@ -1,6 +1,6 @@
 # Cookbook: Pseudonymization for Analytics
 
-One of the core tensions in data engineering is balancing compliance with analytical utility. Data scientists need to track user journeys across datasets, but GDPR and CCPA require that Personally Identifiable Information (PII) is not freely accessible.
+One of the core tensions in data engineering is balancing privacy with analytical utility. Data scientists need to track user journeys across datasets, but modern privacy regulations and best practices require that Personally Identifiable Information (PII) is not freely accessible.
 
 ## The Challenge
 If you simply `REDACT` or nullify an `email` column, data scientists lose the ability to group records by user or perform `JOIN` operations across different tables. Conversely, giving them plaintext access violates compliance mandates.
@@ -50,4 +50,4 @@ user_spend = df.group_by("email").agg(pl.col("amount").sum())
 
 ## Business Impact
 - **Maintained Utility**: Analysts can still perform primary-key joins and behavioral clustering.
-- **Compliance Guarantee**: The raw PII never enters the analyst's constructed data frame, perfectly satisfying GDPR pseudonymization requirements.
+- **Privacy Guardrail**: The raw PII never enters the analyst's constructed data frame, aligning with robust pseudonymization practices.

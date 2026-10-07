@@ -21,7 +21,7 @@ By integrating directly into your Python process, Holonomy decrypts, filters, an
 - **Local Processing, Enterprise Compliance**: Safely pull encrypted datasets to your local machine. Holonomy evaluates centralized JSON Policy Manifests to dynamically enforce Row-Level Security (RLS) and Data Masking at read-time before the data ever reaches your DataFrame.
 - **In-Process Execution (No Proxies)**: Forget deploying dedicated proxy servers, sidecars, or heavy compute clusters just for governance. Holonomy leverages your existing enterprise infrastructure (KMS, IdP, S3) and runs the actual decryption and policy filtering completely inside your application's Python process. Just run `pip install holonomy`.
 - **Zero-Copy Performance**: Built on a highly concurrent Rust core and the Apache Arrow C Data Interface, Holonomy operates with true zero-copy semantics. The computational overhead for cryptographic validation and policy linting is practically invisible.
-- **Zero-Knowledge Cryptography**: Data is protected at rest. In memory, your data is handled with extreme paranoia: cryptographic keys (DEKs) are forcefully wiped the moment they are no longer needed using the `ZeroizeOnDrop` pattern.
+- **Strong Cryptography**: Data is protected at rest. In memory, your data is handled with extreme paranoia: cryptographic keys (DEKs) are forcefully wiped the moment they are no longer needed using the `ZeroizeOnDrop` pattern.
 
 ## Installation
 
@@ -94,3 +94,10 @@ Comprehensive documentation is available in the [`docs/`](https://github.com/kpr
 ## License
 
 Holonomy is licensed under the Business Source License (BSL). See the [LICENSE](LICENSE) file for more information.
+
+Product evaluation and non-production testing are completely free. A commercial license is required only for production use. 
+
+### Early Adopters Program
+We are currently offering Early Adopter licenses free of charge. Additionally, we are happy to grant free production licenses to small teams, startups, and projects of public importance. 
+
+To request a license or inquire about the Early Adopters program, please contact us at [license@holonomy.eu](mailto:license@holonomy.eu).

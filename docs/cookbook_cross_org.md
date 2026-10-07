@@ -13,7 +13,7 @@ The absolute most secure—and easiest—way to share data with a 3rd party is t
 3. You grant the partner organization simple read access to the raw `.parquet` files in your S3 bucket.
 
 **The Result:** 
-The partner does not need access to your KMS. They do not need *any* cryptographic keys. They simply read the Parquet file using the standard Holonomy consumer role (or even raw PyArrow). They can seamlessly read all the unencrypted columns, while the sensitive columns remain impenetrable mathematical blobs. This requires zero ETL on your end and offers an absolute, zero-trust cryptographic guarantee.
+The partner does not need access to your KMS. They do not need *any* cryptographic keys. They simply read the Parquet file using the standard Holonomy consumer role (or even raw PyArrow). They can seamlessly read all the unencrypted columns, while the sensitive columns remain impenetrable mathematical blobs. This requires no additional ETL on your end and provides a strong cryptographic boundary.
 
 ## Approach 2: Soft Controls via Row-Level Security (High Trust Required)
 Sometimes a partner *does* need access to an encrypted column, but you want to restrict *which rows* they can see (e.g., they should only see rows where `client_id = vendor_a`).
