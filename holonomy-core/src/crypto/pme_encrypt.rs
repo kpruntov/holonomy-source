@@ -78,7 +78,7 @@ impl PmeEncryptor {
             "aad": {
                 "tool": "holonomy",
                 "dataset": self.dataset_name,
-                "column": "footer"
+                "column": "__footer__"
             }
         }).to_string();
 
