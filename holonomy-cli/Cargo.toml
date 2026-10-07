@@ -1,12 +1,12 @@
 [package]
 name = "holonomy-cli"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2024"
 
 [dependencies]
 clap = { version = "4.6.1", features = ["derive"] }
 hex = "0.4.3"
-holonomy-core = { version = "0.1.0", path = "../holonomy-core" }
+holonomy-core = { version = "0.1.2", path = "../holonomy-core" }
 tokio = { version = "1.52.3", features = ["full"] }
 parquet = "59.0.0"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "charset", "http2", "macos-system-configuration", "json"] }

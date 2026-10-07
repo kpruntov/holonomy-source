@@ -1,6 +1,6 @@
 [package]
 name = "holonomy-py"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2024"
 
 [lib]
@@ -9,8 +9,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 async-trait = "0.1.83"
-holonomy-core = { version = "0.1.0", path = "../holonomy-core" }
-holonomy-cli = { version = "0.1.0", path = "../holonomy-cli" }
+holonomy-core = { version = "0.1.2", path = "../holonomy-core" }
+holonomy-cli = { version = "0.1.2", path = "../holonomy-cli" }
 pyo3 = { version = "0.28.2", features = ["extension-module"] }
 tokio = { version = "1.0", features = ["rt-multi-thread", "sync"] }
 arrow = { version = "59.0.0", features = ["pyarrow"] }

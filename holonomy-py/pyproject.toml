@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "holonomy"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python SDK bridge for Holonomy"
 requires-python = ">=3.8"
 readme = "../README.md"

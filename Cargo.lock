@@ -2398,7 +2398,7 @@ dependencies = [
 
 [[package]]
 name = "holonomy-cli"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
  "assert_cmd",
  "aws-config",
@@ -2426,7 +2426,7 @@ dependencies = [
 
 [[package]]
 name = "holonomy-core"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
  "aes-gcm",
  "arrow",
@@ -2480,7 +2480,7 @@ dependencies = [
 
 [[package]]
 name = "holonomy-py"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
  "arrow",
  "async-trait",
