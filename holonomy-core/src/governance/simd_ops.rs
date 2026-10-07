@@ -183,27 +183,13 @@ impl GovernanceEngine {
                 let mut builder =
                     StringBuilder::with_capacity(array.len(), array.value_data().len());
                 let mut hex_buffer = [0u8; 64]; // 256 bits = 32 bytes = 64 hex chars
-                let hex_alphabet = b"0123456789abcdef";
 
                 for i in 0..array.len() {
                     if array.is_null(i) {
                         builder.append_null();
                     } else {
                         let val = array.value(i);
-                        let mut hasher = Sha256::new();
-                        let salt = &crate::config::resolver::get_config().policy.hash_salt;
-                        hasher.update(salt.as_bytes());
-                        hasher.update(val.as_bytes());
-                        let digest = hasher.finalize();
-
-                        // Avoid hex::encode string allocation
-                        for (i, &byte) in digest.iter().enumerate() {
-                            hex_buffer[i * 2] = hex_alphabet[(byte >> 4) as usize];
-                            hex_buffer[i * 2 + 1] = hex_alphabet[(byte & 0x0F) as usize];
-                        }
-
-                        // Unsafe is fine here because we control the alphabet
-                        let hex_str = unsafe { std::str::from_utf8_unchecked(&hex_buffer) };
+                        let hex_str = compute_salted_hash_into(val, &mut hex_buffer);
                         builder.append_value(hex_str);
                     }
                 }
@@ -334,4 +320,21 @@ fn build_scalar_string_array(
     } else {
         Ok(std::sync::Arc::new(StringArray::from(vec![s; len])))
     }
+}
+
+// @trace TASK-145
+pub fn compute_salted_hash_into<'a>(val: &str, hex_buffer: &'a mut [u8; 64]) -> &'a str {
+    let mut hasher = Sha256::new();
+    let salt = &crate::config::resolver::get_config().policy.hash_salt;
+    hasher.update(salt.as_bytes());
+    hasher.update(val.as_bytes());
+    let digest = hasher.finalize();
+
+    let hex_alphabet = b"0123456789abcdef";
+    for (i, &byte) in digest.iter().enumerate() {
+        hex_buffer[i * 2] = hex_alphabet[(byte >> 4) as usize];
+        hex_buffer[i * 2 + 1] = hex_alphabet[(byte & 0x0F) as usize];
+    }
+
+    unsafe { std::str::from_utf8_unchecked(hex_buffer) }
 }

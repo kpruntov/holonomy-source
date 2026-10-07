@@ -5,8 +5,10 @@ One of the core tensions in data engineering is balancing compliance with analyt
 ## The Challenge
 If you simply `REDACT` or nullify an `email` column, data scientists lose the ability to group records by user or perform `JOIN` operations across different tables. Conversely, giving them plaintext access violates compliance mandates.
 
-## The Holonomy Solution: Deterministic Hashing
-Holonomy solves this by offering a native `HASH` masking strategy. Instead of destroying the data, the Rust core computes a deterministic SHA-256 digest of the identifier *in-memory* before the data is handed to the Python environment.
+## The Holonomy Solution: Salted Deterministic Hashing
+Holonomy solves this by offering a native `HASH` masking strategy. Instead of destroying the data, the Rust core computes a deterministic, **salted** SHA-256 digest of the identifier *in-memory* before the data is handed to the Python environment. 
+
+This generates a **salted deterministic pseudonym designed for cross-dataset JOIN equality**. Because the same global salt (configured via `hash_salt`) is applied universally across all queries and datasets, data scientists can still perform `JOIN` and `GROUP BY` operations securely, while remaining protected against dictionary or rainbow-table attacks.
 
 ### The Policy Architecture
 You target the semantic `pii` tag (or a specific column) in your `holonomy_master_policy.json` and set the action to `HASH`.

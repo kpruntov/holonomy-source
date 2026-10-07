@@ -237,15 +237,16 @@ impl GovernanceManager {
                 )));
             }
         } else if target_mask == "HASH" {
+            // @trace TASK-145
             if let Some(sa) = array.as_any().downcast_ref::<arrow::array::StringArray>() {
-                use sha2::{Digest, Sha256};
                 let mut builder = arrow::array::StringBuilder::new();
+                let mut hex_buffer = [0u8; 64];
                 for i in 0..sa.len() {
                     if sa.is_null(i) {
                         builder.append_null();
                     } else {
                         let val = sa.value(i);
-                        let hash = hex::encode(Sha256::digest(val.as_bytes()));
+                        let hash = crate::governance::simd_ops::compute_salted_hash_into(val, &mut hex_buffer);
                         builder.append_value(hash);
                     }
                 }
@@ -254,14 +255,14 @@ impl GovernanceManager {
                 .as_any()
                 .downcast_ref::<arrow::array::LargeStringArray>()
             {
-                use sha2::{Digest, Sha256};
                 let mut builder = arrow::array::LargeStringBuilder::new();
+                let mut hex_buffer = [0u8; 64];
                 for i in 0..sa.len() {
                     if sa.is_null(i) {
                         builder.append_null();
                     } else {
                         let val = sa.value(i);
-                        let hash = hex::encode(Sha256::digest(val.as_bytes()));
+                        let hash = crate::governance::simd_ops::compute_salted_hash_into(val, &mut hex_buffer);
                         builder.append_value(hash);
                     }
                 }
@@ -356,8 +357,8 @@ pub mod tests {
             .as_any()
             .downcast_ref::<arrow::array::StringArray>()
             .unwrap();
-        use sha2::{Digest, Sha256};
-        let expected_hash = hex::encode(Sha256::digest(b"test@test.com"));
+        let mut hex_buf = [0u8; 64];
+        let expected_hash = crate::governance::simd_ops::compute_salted_hash_into("test@test.com", &mut hex_buf);
         assert_eq!(str_res1.value(0), expected_hash);
 
         // Case 2: User has RoleA and RoleB -> Should be error without assumed_role
