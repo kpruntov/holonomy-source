@@ -175,45 +175,16 @@ impl ScanOrchestrator {
     #[allow(clippy::too_many_arguments)]
     #[allow(clippy::type_complexity)]
     pub async fn scan(
-
         &self,
-
-
-
         targets: Vec<String>,
-
-
-
         purpose: Option<&str>,
-
-
-
         user_ctx: &crate::auth::jwt_validator::UserContext,
-
-
-
         columns: Option<Vec<String>>,
-
-
-
         predicates: &[crate::ingestion::s3_client::Predicate],
-
-
-
         contract_json: Option<&str>,
-
-
-
         target_schema: Option<SchemaRef>,
-
-
-
         assumed_role: Option<&str>,
-
-
-
         fail_closed_mode: Option<crate::manager::governance_manager::FailClosedMode>,
-
     ) -> Result<Box<dyn RecordBatchReader + Send>, String> {
 
         let user_hash = user_ctx.identity();

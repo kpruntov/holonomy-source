@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 
 def test_writer_context_manager():
-    os.environ["HOLONOMY_JWKS_URL"] = "file:///home/pruntoff/projects/holonomy/test_fixtures/dummy_jwks.json"
+    os.environ["HOLONOMY_JWKS_URL"] = f"file://{FIXTURE_DIR}/dummy_jwks.json"
     os.environ["HOLONOMY_ISSUER"] = "holonomy-test-issuer"
     os.environ["HOLONOMY_AUDIENCE"] = "holonomy-test-audience"
     os.environ["HOLONOMY_ISSUER"] = "mock"

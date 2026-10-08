@@ -13,7 +13,7 @@ SAMPLE_PATH = os.path.abspath(os.path.join(TEST_DIR, "../../holonomy-core/tests/
 
 def test_lazy_scan_returns_valid_reader():
     os.environ["HOLONOMY_PUBLIC_KEY"] = "0" * 64
-    os.environ["HOLONOMY_JWKS_URL"] = "file:///home/pruntoff/projects/holonomy/test_fixtures/dummy_jwks.json"
+    os.environ["HOLONOMY_JWKS_URL"] = f"file://{FIXTURE_DIR}/dummy_jwks.json"
     os.environ["HOLONOMY_ISSUER"] = "holonomy-test-issuer"
     os.environ["HOLONOMY_AUDIENCE"] = "holonomy-test-audience"
     os.environ["HOLONOMY_POLICY_BUCKET"] = "mock"
@@ -31,7 +31,7 @@ def test_lazy_scan_returns_valid_reader():
 
 def test_lazy_scan_polars_integration():
     os.environ["HOLONOMY_PUBLIC_KEY"] = "0" * 64
-    os.environ["HOLONOMY_JWKS_URL"] = "file:///home/pruntoff/projects/holonomy/test_fixtures/dummy_jwks.json"
+    os.environ["HOLONOMY_JWKS_URL"] = f"file://{FIXTURE_DIR}/dummy_jwks.json"
     os.environ["HOLONOMY_ISSUER"] = "holonomy-test-issuer"
     os.environ["HOLONOMY_AUDIENCE"] = "holonomy-test-audience"
     os.environ["HOLONOMY_POLICY_BUCKET"] = "mock"
