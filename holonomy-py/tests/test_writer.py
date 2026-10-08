@@ -1,4 +1,6 @@
 import pyarrow as pa
+import os
+FIXTURE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../test_fixtures"))
 import pytest
 import holonomy
 import json
