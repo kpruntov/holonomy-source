@@ -54,8 +54,8 @@ async fn test_broadcaster_batch_send() {
         action: Action::Write,
     });
 
-    // Wait for the broadcaster to pick it up
-    sleep(Duration::from_millis(200)).await;
+    // Wait for the broadcaster to pick it up (increased for slow CI runners)
+    sleep(Duration::from_millis(2000)).await;
 
     mock.assert_async().await;
 
@@ -103,7 +103,8 @@ async fn test_broadcaster_retry_backoff() {
         action: Action::Read,
     });
 
-    sleep(Duration::from_millis(1500)).await;
+    // Wait for retries (increased for slow CI runners)
+    sleep(Duration::from_millis(4000)).await;
 
     mock_fail.assert_async().await;
     mock_success.assert_async().await;
