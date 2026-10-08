@@ -193,15 +193,13 @@ impl WriteOrchestrator {
 
         use crate::manager::sidecar::SidecarKeyEntry;
         use base64::Engine;
-        
-        let mut keys_to_append = vec![
-            SidecarKeyEntry {
-                purpose: valid_purpose.to_string(),
-                column: "__footer__".to_string(),
-                wrapped_dek: base64::engine::general_purpose::STANDARD.encode(&footer_dek.wrapped),
-            }
-        ];
-        
+
+        let mut keys_to_append = vec![SidecarKeyEntry {
+            purpose: valid_purpose.to_string(),
+            column: "__footer__".to_string(),
+            wrapped_dek: base64::engine::general_purpose::STANDARD.encode(&footer_dek.wrapped),
+        }];
+
         for (col, dek) in &wrapped_column_deks {
             keys_to_append.push(SidecarKeyEntry {
                 purpose: valid_purpose.to_string(),
@@ -209,9 +207,12 @@ impl WriteOrchestrator {
                 wrapped_dek: base64::engine::general_purpose::STANDARD.encode(dek),
             });
         }
-        
+
         {
-            let mut sidecar = self.sidecar_deks.entry(_partition_root.to_string()).or_default();
+            let mut sidecar = self
+                .sidecar_deks
+                .entry(_partition_root.to_string())
+                .or_default();
             for key in keys_to_append {
                 if !sidecar.keys.contains(&key) {
                     sidecar.keys.push(key);
@@ -312,14 +313,19 @@ impl WriteOrchestrator {
         if let Some((_, sidecar)) = self.sidecar_deks.remove(partition_root) {
             let json = serde_json::to_string(&sidecar)
                 .map_err(|e| WriteError::SerializationError(e.to_string()))?;
-            
-            let target_key = format!("{}/_holonomy_keys.json", partition_root.trim_end_matches('/'));
-            
+
+            let target_key = format!(
+                "{}/_holonomy_keys.json",
+                partition_root.trim_end_matches('/')
+            );
+
             let (tx, rx) = tokio::sync::mpsc::channel(2);
             let _ = tx.send(StreamItem::Data(json.into_bytes())).await;
             let _ = tx.send(StreamItem::Success).await;
-            
-            self.uploader.upload_stream(&target_key, rx).await
+
+            self.uploader
+                .upload_stream(&target_key, rx)
+                .await
                 .map_err(|e| WriteError::UploadFailed(format!("{:?}", e)))?;
         }
         Ok(())

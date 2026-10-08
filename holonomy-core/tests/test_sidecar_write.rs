@@ -80,7 +80,7 @@ async fn test_sidecar_generation_and_flush() {
         hex::encode(hasher.finalize())
     };
     dek_cache.insert(dek_id, b"1234567890123456".to_vec());
-    
+
     let crypto_manager = Arc::new(CryptoManager::new(
         Arc::new(dek_cache),
         Arc::new(common::MockKmsProvider),
@@ -103,7 +103,7 @@ async fn test_sidecar_generation_and_flush() {
     );
 
     let partition_root = "s3://bucket/path/to/partition";
-    
+
     // Write two files to the same partition
     let result1 = orchestrator
         .write(
@@ -132,7 +132,11 @@ async fn test_sidecar_generation_and_flush() {
         let sidecar = orchestrator.sidecar_deks.get(partition_root).unwrap();
         // 2 files * (footer + any encrypted columns). Assuming 0 columns encrypted by default policy -> 1 key per file.
         // Wait, default policy doesn't encrypt columns, only footer.
-        assert_eq!(sidecar.keys.len(), 1, "Should deduplicate identical keys for multiple files in same partition");
+        assert_eq!(
+            sidecar.keys.len(),
+            1,
+            "Should deduplicate identical keys for multiple files in same partition"
+        );
     }
 
     // Flush partition

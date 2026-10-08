@@ -164,7 +164,7 @@ mod tests {
         assert_eq!(policy.hash_salt, Some("super-secret".to_string()));
         assert_eq!(policy.public_key, Some("04abcd...".to_string()));
         assert!(config.telemetry.is_none());
-        
+
         let auth = config.auth.expect("Missing auth block");
         assert_eq!(auth.audience, Some("holonomy-api".to_string()));
     }

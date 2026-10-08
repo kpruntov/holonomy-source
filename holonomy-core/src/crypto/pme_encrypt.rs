@@ -80,12 +80,13 @@ impl PmeEncryptor {
                 "dataset": self.dataset_name,
                 "column": "__footer__"
             }
-        }).to_string();
+        })
+        .to_string();
 
         // RISK ACCEPTANCE (BR-001 Zero Persistence):
         // The upstream Apache Parquet Rust crate requires a standard `Vec<u8>` for keys.
-        // It takes ownership of these vectors and drops them via the global allocator, 
-        // bypassing the `Zeroizing` pattern. We accept this known limitation. 
+        // It takes ownership of these vectors and drops them via the global allocator,
+        // bypassing the `Zeroizing` pattern. We accept this known limitation.
         // The DEK is briefly exposed in Parquet's memory but remains protected in our DekCache.
         let mut builder = FileEncryptionProperties::builder(self.footer_dek.as_slice().to_vec())
             .with_plaintext_footer(true)
@@ -94,7 +95,7 @@ impl PmeEncryptor {
         for (col, dek) in &self.column_deks {
             let wrapped = &self.wrapped_column_deks[col];
             let b64_col_wrapped = base64::engine::general_purpose::STANDARD.encode(wrapped);
-            
+
             let col_metadata = serde_json::json!({
                 "wrapped_dek": b64_col_wrapped,
                 "aad": {
@@ -102,7 +103,8 @@ impl PmeEncryptor {
                     "dataset": self.dataset_name,
                     "column": col
                 }
-            }).to_string();
+            })
+            .to_string();
 
             builder = builder.with_column_key_and_metadata(
                 col,
@@ -197,6 +199,7 @@ pub struct S3MultipartUploader {
     chunk_size: usize,
 }
 
+#[allow(clippy::double_must_use)]
 #[async_trait::async_trait]
 pub trait StorageUploader: Send + Sync {
     async fn upload_stream(
@@ -219,13 +222,11 @@ impl S3MultipartUploader {
             loader = loader.region(aws_config::Region::new(reg));
         }
         let sdk_config = loader.load().await;
-        
+
         let mut builder = aws_sdk_s3::config::Builder::from(&sdk_config);
 
         if let Some(url) = endpoint_url {
-            builder = builder
-                .endpoint_url(url)
-                .force_path_style(true);
+            builder = builder.endpoint_url(url).force_path_style(true);
 
             if let Some((access_key, secret_key)) = credentials {
                 builder = builder.credentials_provider(Credentials::new(

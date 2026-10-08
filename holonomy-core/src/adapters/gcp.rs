@@ -172,8 +172,9 @@ impl crate::manager::crypto_manager::KmsProvider for GcpAdapter {
         wrapped_dek_ciphertext: &[u8],
         context: Option<&std::collections::BTreeMap<String, String>>,
     ) -> Result<Vec<u8>, crate::manager::crypto_manager::CryptoError> {
-        let ciphertext_str = String::from_utf8(wrapped_dek_ciphertext.to_vec())
-            .map_err(|_| crate::manager::crypto_manager::CryptoError::KmsFailed("Invalid ciphertext".to_string()))?;
+        let ciphertext_str = String::from_utf8(wrapped_dek_ciphertext.to_vec()).map_err(|_| {
+            crate::manager::crypto_manager::CryptoError::KmsFailed("Invalid ciphertext".to_string())
+        })?;
 
         let decrypted = self
             .decrypt(&self.key_id, &ciphertext_str, context)

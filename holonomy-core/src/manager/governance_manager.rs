@@ -246,7 +246,10 @@ impl GovernanceManager {
                         builder.append_null();
                     } else {
                         let val = sa.value(i);
-                        let hash = crate::governance::simd_ops::compute_salted_hash_into(val, &mut hex_buffer);
+                        let hash = crate::governance::simd_ops::compute_salted_hash_into(
+                            val,
+                            &mut hex_buffer,
+                        );
                         builder.append_value(hash);
                     }
                 }
@@ -262,7 +265,10 @@ impl GovernanceManager {
                         builder.append_null();
                     } else {
                         let val = sa.value(i);
-                        let hash = crate::governance::simd_ops::compute_salted_hash_into(val, &mut hex_buffer);
+                        let hash = crate::governance::simd_ops::compute_salted_hash_into(
+                            val,
+                            &mut hex_buffer,
+                        );
                         builder.append_value(hash);
                     }
                 }
@@ -358,7 +364,8 @@ pub mod tests {
             .downcast_ref::<arrow::array::StringArray>()
             .unwrap();
         let mut hex_buf = [0u8; 64];
-        let expected_hash = crate::governance::simd_ops::compute_salted_hash_into("test@test.com", &mut hex_buf);
+        let expected_hash =
+            crate::governance::simd_ops::compute_salted_hash_into("test@test.com", &mut hex_buf);
         assert_eq!(str_res1.value(0), expected_hash);
 
         // Case 2: User has RoleA and RoleB -> Should be error without assumed_role

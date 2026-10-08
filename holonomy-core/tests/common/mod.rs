@@ -42,9 +42,12 @@ impl holonomy_core::manager::crypto_manager::KmsProvider for MockKmsProvider {
                 None
             };
             if context != expected_ctx.as_ref() {
-                return Err(holonomy_core::manager::crypto_manager::CryptoError::KmsFailed(
-                    format!("AAD Context mismatch! Expected {:?}, got {:?}", expected_ctx, context)
-                ));
+                return Err(
+                    holonomy_core::manager::crypto_manager::CryptoError::KmsFailed(format!(
+                        "AAD Context mismatch! Expected {:?}, got {:?}",
+                        expected_ctx, context
+                    )),
+                );
             }
             _key = &rest[4 + ctx_len..];
         }

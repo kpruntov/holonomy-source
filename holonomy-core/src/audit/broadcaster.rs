@@ -71,10 +71,13 @@ impl AuditBroadcaster {
                 "UNLICENSED"
             };
 
-            let enriched_batch: Vec<_> = batch.iter().map(|event| EnrichedAuditEvent {
-                event,
-                license_status,
-            }).collect();
+            let enriched_batch: Vec<_> = batch
+                .iter()
+                .map(|event| EnrichedAuditEvent {
+                    event,
+                    license_status,
+                })
+                .collect();
 
             let body_json = match serde_json::to_string(&enriched_batch) {
                 Ok(j) => j,

@@ -44,7 +44,13 @@ fn init(
 ) -> PyResult<()> {
     use holonomy_core::config::{AuthConfig, TelemetryConfig};
     let programmatic = Configuration {
-        kms: if kms_provider.is_some() || kms_endpoint.is_some() || kms_key_id.is_some() || kms_region.is_some() || kms_token_file_path.is_some() || kms_credential.is_some() {
+        kms: if kms_provider.is_some()
+            || kms_endpoint.is_some()
+            || kms_key_id.is_some()
+            || kms_region.is_some()
+            || kms_token_file_path.is_some()
+            || kms_credential.is_some()
+        {
             Some(KmsConfig {
                 provider: kms_provider,
                 endpoint: kms_endpoint,
@@ -56,7 +62,11 @@ fn init(
         } else {
             None
         },
-        policy: if policy_bucket.is_some() || cache_ttl_hours.is_some() || hash_salt.is_some() || public_key.is_some() {
+        policy: if policy_bucket.is_some()
+            || cache_ttl_hours.is_some()
+            || hash_salt.is_some()
+            || public_key.is_some()
+        {
             Some(PolicyConfig {
                 central_bucket: policy_bucket,
                 cache_ttl_hours,
@@ -67,7 +77,12 @@ fn init(
             None
         },
         storage: None,
-        auth: if identity_provider.is_some() || jwks_url.is_some() || audience.is_some() || issuer.is_some() || client_id.is_some() {
+        auth: if identity_provider.is_some()
+            || jwks_url.is_some()
+            || audience.is_some()
+            || issuer.is_some()
+            || client_id.is_some()
+        {
             Some(AuthConfig {
                 provider: identity_provider,
                 jwks_url,
@@ -116,8 +131,6 @@ use holonomy_core::manager::read_orchestrator::ReadOrchestrator;
 
 use holonomy_core::manager::governance_manager::SchemaRegistryProvider;
 
-
-
 struct DefaultSchemaRegistryProvider;
 impl SchemaRegistryProvider for DefaultSchemaRegistryProvider {
     fn resolve_contract(&self, _target: &str) -> Option<String> {
@@ -151,10 +164,16 @@ impl holonomy_core::manager::crypto_manager::KmsProvider for MockKmsProvider {
     }
 }
 
-fn get_policy_manager(provider: Arc<dyn PolicyProvider>, config: &holonomy_core::config::resolver::ResolvedConfiguration) -> Result<Arc<PolicyManager>, String> {
+fn get_policy_manager(
+    provider: Arc<dyn PolicyProvider>,
+    config: &holonomy_core::config::resolver::ResolvedConfiguration,
+) -> Result<Arc<PolicyManager>, String> {
     let pub_key_hex = config.policy.public_key.clone();
     if pub_key_hex.is_empty() {
-        return Err("HOLONOMY_PUBLIC_KEY configuration is required for cryptographic verification".to_string());
+        return Err(
+            "HOLONOMY_PUBLIC_KEY configuration is required for cryptographic verification"
+                .to_string(),
+        );
     }
     let pub_key_bytes = hex::decode(&pub_key_hex)
         .map_err(|_| "HOLONOMY_PUBLIC_KEY must be a valid hex string".to_string())?;
@@ -201,7 +220,6 @@ fn build_engine_state(
         );
         let _guard = get_runtime().enter();
         broadcaster.start();
-
     }
 
     let dek_cache = Arc::new(DekCache::default());
@@ -213,11 +231,16 @@ fn build_engine_state(
     }
 
     let kms_provider: Arc<dyn holonomy_core::manager::crypto_manager::KmsProvider> = if bucket
-        == "mock" || bucket == "local"
+        == "mock"
+        || bucket == "local"
     {
         Arc::new(MockKmsProvider)
     } else {
-        let provider_name = if config.kms.provider.is_empty() { "gcp".to_string() } else { config.kms.provider.clone() };
+        let provider_name = if config.kms.provider.is_empty() {
+            "gcp".to_string()
+        } else {
+            config.kms.provider.clone()
+        };
         match provider_name.to_lowercase().as_str() {
             "gcp" => {
                 let key_id = config.kms.key_id.clone();
@@ -265,15 +288,22 @@ fn build_engine_state(
                 }
                 let endpoint = config.kms.endpoint.clone();
                 if endpoint.is_empty() {
-                    return Err("FATAL: HOLONOMY_KMS_ENDPOINT is required for Vault KMS".to_string());
+                    return Err(
+                        "FATAL: HOLONOMY_KMS_ENDPOINT is required for Vault KMS".to_string()
+                    );
                 }
-                
+
                 let mut token = config.kms.credential.clone();
-                
+
                 if token.is_empty() && !config.kms.token_file_path.is_empty() {
                     let path = &config.kms.token_file_path;
                     token = std::fs::read_to_string(path)
-                        .map_err(|e| format!("FATAL: Failed to read Vault token from file {}: {}", path, e))?
+                        .map_err(|e| {
+                            format!(
+                                "FATAL: Failed to read Vault token from file {}: {}",
+                                path, e
+                            )
+                        })?
                         .trim()
                         .to_string();
                 }
@@ -281,26 +311,41 @@ fn build_engine_state(
                 if token.is_empty() {
                     token = std::env::var("VAULT_TOKEN").unwrap_or_else(|_| "".to_string());
                 }
-                
+
                 if token.is_empty() {
                     return Err("FATAL: Vault KMS requires a token via config credential, token_file_path, or VAULT_TOKEN env var".to_string());
                 }
-                let adapter = holonomy_core::adapters::vault::VaultAdapter::new(endpoint, token, key_id);
+                let adapter =
+                    holonomy_core::adapters::vault::VaultAdapter::new(endpoint, token, key_id);
                 Arc::new(adapter)
             }
-            "azure" => return Err("FATAL: Azure Key Vault KMS adapter is not yet implemented.".to_string()),
+            "azure" => {
+                return Err(
+                    "FATAL: Azure Key Vault KMS adapter is not yet implemented.".to_string()
+                );
+            }
             "mock" => Arc::new(MockKmsProvider),
-            _ => return Err(format!(
-                "FATAL: Unknown HOLONOMY_KMS_PROVIDER '{}'. Must be 'gcp', 'aws', or 'mock'.",
-                provider_name
-            )),
+            _ => {
+                return Err(format!(
+                    "FATAL: Unknown HOLONOMY_KMS_PROVIDER '{}'. Must be 'gcp', 'aws', or 'mock'.",
+                    provider_name
+                ));
+            }
         }
     };
 
     let crypto_manager = Arc::new(CryptoManager::new(dek_cache, kms_provider));
 
-    let storage_endpoint = if config.storage.endpoint.is_empty() { None } else { Some(config.storage.endpoint.clone()) };
-    let storage_region = if config.storage.region.is_empty() { None } else { Some(config.storage.region.clone()) };
+    let storage_endpoint = if config.storage.endpoint.is_empty() {
+        None
+    } else {
+        Some(config.storage.endpoint.clone())
+    };
+    let storage_region = if config.storage.region.is_empty() {
+        None
+    } else {
+        Some(config.storage.region.clone())
+    };
 
     let (policy_provider, override_pub_key): (
         Arc<dyn holonomy_core::manager::policy_manager::PolicyProvider>,
@@ -614,20 +659,28 @@ fn write(
 
     let result = rt.block_on(async {
         let config = get_config();
-        let storage_endpoint = if config.storage.endpoint.is_empty() { None } else { Some(config.storage.endpoint.clone()) };
-        let storage_region = if config.storage.region.is_empty() { None } else { Some(config.storage.region.clone()) };
+        let storage_endpoint = if config.storage.endpoint.is_empty() {
+            None
+        } else {
+            Some(config.storage.endpoint.clone())
+        };
+        let storage_region = if config.storage.region.is_empty() {
+            None
+        } else {
+            Some(config.storage.region.clone())
+        };
 
         let (bucket, key, endpoint) = parse_target(&target, storage_endpoint);
-        let uploader: Arc<dyn holonomy_core::crypto::pme_encrypt::StorageUploader> = if target.starts_with("file://") {
+        let uploader: Arc<dyn holonomy_core::crypto::pme_encrypt::StorageUploader> = if target
+            .starts_with("file://")
+        {
             Arc::new(crate::writer::MockStorageUploader {
                 target_path: target.replace("file://", ""),
             })
         } else {
-            Arc::new(
-                S3MultipartUploader::new(bucket, endpoint, storage_region, None, None).await
-            )
+            Arc::new(S3MultipartUploader::new(bucket, endpoint, storage_region, None, None).await)
         }; // @trace TASK-057
-        
+
         let orchestrator = WriteOrchestrator::new(
             state.audit_buffer.clone(),
             state.crypto_manager.clone(),
@@ -703,7 +756,8 @@ mod tests {
     #[test]
     fn test_engine_state_requires_bucket() {
         use holonomy_core::config::resolver::{
-            ResolvedConfiguration, ResolvedKmsConfig, ResolvedPolicyConfig, ResolvedAuthConfig, ResolvedTelemetryConfig,
+            ResolvedAuthConfig, ResolvedConfiguration, ResolvedKmsConfig, ResolvedPolicyConfig,
+            ResolvedTelemetryConfig,
         };
 
         let mut mock_config = ResolvedConfiguration {
@@ -719,7 +773,8 @@ mod tests {
                 central_bucket: "".to_string(),
                 hash_salt: "dummy_salt".to_string(),
                 cache_ttl_hours: 24,
-                public_key: "0000000000000000000000000000000000000000000000000000000000000000".to_string(),
+                public_key: "0000000000000000000000000000000000000000000000000000000000000000"
+                    .to_string(),
             },
             auth: ResolvedAuthConfig {
                 provider: "".to_string(),
@@ -758,10 +813,18 @@ mod tests {
     async fn test_parse_user_context_jwt() {
         let mock_config = holonomy_core::config::resolver::ResolvedConfiguration {
             kms: holonomy_core::config::resolver::ResolvedKmsConfig {
-                provider: "".to_string(), endpoint: "".to_string(), key_id: "".to_string(), region: "".to_string(), token_file_path: "".to_string(), credential: "".to_string(),
+                provider: "".to_string(),
+                endpoint: "".to_string(),
+                key_id: "".to_string(),
+                region: "".to_string(),
+                token_file_path: "".to_string(),
+                credential: "".to_string(),
             },
             policy: holonomy_core::config::resolver::ResolvedPolicyConfig {
-                central_bucket: "".to_string(), hash_salt: "".to_string(), cache_ttl_hours: 24, public_key: "".to_string(),
+                central_bucket: "".to_string(),
+                hash_salt: "".to_string(),
+                cache_ttl_hours: 24,
+                public_key: "".to_string(),
             },
             auth: holonomy_core::config::resolver::ResolvedAuthConfig {
                 provider: "".to_string(),
@@ -772,10 +835,12 @@ mod tests {
                 credential_file: None,
             },
             telemetry: holonomy_core::config::resolver::ResolvedTelemetryConfig {
-                endpoint: "".to_string(), auth_token: None,
+                endpoint: "".to_string(),
+                auth_token: None,
             },
             storage: holonomy_core::config::resolver::ResolvedStorageConfig {
-                endpoint: "".to_string(), region: "".to_string(),
+                endpoint: "".to_string(),
+                region: "".to_string(),
             },
             license: Default::default(),
         };

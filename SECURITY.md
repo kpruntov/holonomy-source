@@ -17,7 +17,7 @@ We take the security of Holonomy very seriously. If you believe you have found a
 
 Instead, please report them to us via email:
 
-*   **Email:** security@holonomy.io
+*   **Email:** pruntoff@gmail.com
 
 ### What to include in your report
 

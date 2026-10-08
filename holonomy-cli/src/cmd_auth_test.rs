@@ -121,5 +121,5 @@ async fn test_auth_logout_no_file() {
     assert!(!creds_path.exists());
     let result = crate::cmd_auth::perform_logout_with_config(&config);
     // Should succeed gracefully if file doesn't exist
-    assert!(result.is_ok()); 
+    assert!(result.is_ok());
 }

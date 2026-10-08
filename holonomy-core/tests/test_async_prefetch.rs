@@ -1,16 +1,19 @@
 mod common;
+use arrow::datatypes::{DataType, Field, Schema};
+use arrow::record_batch::RecordBatch;
+use async_trait::async_trait;
+use bytes::Bytes;
 use common::MockPolicyProvider;
 use holonomy_core::crypto::dek_cache::DekCache;
-use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
-use std::time::Duration;
-use arrow::record_batch::RecordBatch;
-use holonomy_core::manager::scan_orchestrator::ScanOrchestrator;
 use holonomy_core::ingestion::s3_client::{IngestionError, IngestionProvider};
-use async_trait::async_trait;
-use parquet::file::metadata::ParquetMetaData;
-use bytes::Bytes;
-use arrow::datatypes::{Schema, Field, DataType};
+use holonomy_core::manager::scan_orchestrator::ScanOrchestrator;
 use parquet::arrow::arrow_writer::ArrowWriter;
+use parquet::file::metadata::ParquetMetaData;
+use std::sync::{
+    Arc,
+    atomic::{AtomicUsize, Ordering},
+};
+use std::time::Duration;
 
 use arrow::array::Int64Array;
 
@@ -28,7 +31,7 @@ impl MockPrefetchS3Client {
             footer_delay_ms,
         }
     }
-    
+
     // helper to generate a valid parquet file
     fn generate_parquet() -> Vec<u8> {
         let schema = Arc::new(Schema::new(vec![Field::new("id", DataType::Int64, false)]));
@@ -38,7 +41,8 @@ impl MockPrefetchS3Client {
             let batch = RecordBatch::try_new(
                 schema.clone(),
                 vec![Arc::new(Int64Array::from(vec![1, 2, 3]))],
-            ).unwrap();
+            )
+            .unwrap();
             writer.write(&batch).unwrap();
             writer.close().unwrap();
         }
@@ -53,20 +57,26 @@ impl IngestionProvider for MockPrefetchS3Client {
         _url: &str,
         range: std::ops::Range<usize>,
     ) -> Result<Bytes, IngestionError> {
-        let t = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis();
-        println!("[{}] fetch_byte_range called for {} range {:?}", t, _url, range);
+        let t = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_millis();
+        println!(
+            "[{}] fetch_byte_range called for {} range {:?}",
+            t, _url, range
+        );
         // If we are fetching footer (e.g. range end > some threshold)
         if range.end > 0 {
             self.fetch_calls.fetch_add(1, Ordering::SeqCst);
             tokio::time::sleep(Duration::from_millis(self.footer_delay_ms)).await;
         }
-        
+
         let buf = Self::generate_parquet();
         let end = std::cmp::min(range.end, buf.len());
         let start = std::cmp::min(range.start, end);
         let sliced = &buf[start..end];
         let bytes = Bytes::copy_from_slice(sliced);
-        
+
         Ok(bytes)
     }
 
@@ -87,11 +97,14 @@ impl IngestionProvider for MockPrefetchS3Client {
         _url: &str,
         _decryption_props: Option<parquet::encryption::decrypt::FileDecryptionProperties>,
     ) -> Result<ParquetMetaData, IngestionError> {
-        let t = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis();
+        let t = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_millis();
         println!("[{}] fetch_parquet_metadata called for {}", t, _url);
         self.fetch_calls.fetch_add(1, Ordering::SeqCst);
         tokio::time::sleep(Duration::from_millis(self.footer_delay_ms)).await;
-        
+
         let buf = Self::generate_parquet();
         let len = buf.len();
         let metadata_len = u32::from_le_bytes(buf[len - 8..len - 4].try_into().unwrap()) as usize;
@@ -104,7 +117,6 @@ impl IngestionProvider for MockPrefetchS3Client {
     async fn fetch_entire_file(&self, _url: &str) -> Result<Bytes, IngestionError> {
         Err(IngestionError::ParseFailed("Not found".to_string()))
     }
-    
 }
 
 struct MockKmsProvider;
@@ -134,11 +146,20 @@ async fn test_concurrent_prefetch() {
     let audit_buffer = Arc::new(holonomy_core::audit::ring_buffer::AuditRingBuffer::new(100));
     let dek_cache = Arc::new(DekCache::default());
     let crypto_manager = Arc::new(holonomy_core::manager::crypto_manager::CryptoManager::new(
-        dek_cache, Arc::new(MockKmsProvider)
+        dek_cache,
+        Arc::new(MockKmsProvider),
     ));
-    let policy_manager = Arc::new(holonomy_core::manager::policy_manager::PolicyManager::new_dangerously_allow_unsigned(Arc::new(MockPolicyProvider)));
-    let gov_manager = Arc::new(holonomy_core::manager::governance_manager::GovernanceManager::new(Arc::new(common::MockSchemaRegistryProvider)));
-    
+    let policy_manager = Arc::new(
+        holonomy_core::manager::policy_manager::PolicyManager::new_dangerously_allow_unsigned(
+            Arc::new(MockPolicyProvider),
+        ),
+    );
+    let gov_manager = Arc::new(
+        holonomy_core::manager::governance_manager::GovernanceManager::new(Arc::new(
+            common::MockSchemaRegistryProvider,
+        )),
+    );
+
     let orchestrator = ScanOrchestrator::new(
         audit_buffer,
         mock_s3.clone(),
@@ -146,7 +167,7 @@ async fn test_concurrent_prefetch() {
         policy_manager,
         gov_manager,
     );
-    
+
     let user_ctx = holonomy_core::auth::jwt_validator::UserContext {
         sub: Some("user".to_string()),
         client_id: None,
@@ -154,34 +175,37 @@ async fn test_concurrent_prefetch() {
         principals: vec!["role1".into()],
         extra: std::collections::HashMap::new(),
     };
-    
+
     let targets = vec![
         "mock://file1.parquet".to_string(),
         "mock://file2.parquet".to_string(),
         "mock://file3.parquet".to_string(),
     ];
-    
+
     let start_time = std::time::Instant::now();
-    let scan_iter = orchestrator.scan(
-        targets,
-        Some("test"),
-        &user_ctx,
-        None,
-        &[],
-        None,
-        None,
-        None,
-        None,
-    ).await.expect("Failed to create scan iterator");
-    
+    let scan_iter = orchestrator
+        .scan(
+            targets,
+            Some("test"),
+            &user_ctx,
+            None,
+            &[],
+            None,
+            None,
+            None,
+            None,
+        )
+        .await
+        .expect("Failed to create scan iterator");
+
     // We haven't awaited the first batch yet, but the background task is spawned.
     // Let's yield and wait briefly to let background tasks fetch footers.
     tokio::time::sleep(Duration::from_millis(100)).await;
-    
+
     // Since buffered(2) is used, we expect 2 footer fetches to be in-flight concurrently.
     // wait for them to finish (takes 500ms).
     // Let's just collect all batches.
-    
+
     let batch_count = tokio::task::spawn_blocking(move || {
         let mut count = 0;
         for batch in scan_iter {
@@ -189,10 +213,12 @@ async fn test_concurrent_prefetch() {
             count += 1;
         }
         count
-    }).await.unwrap();
-    
+    })
+    .await
+    .unwrap();
+
     assert_eq!(batch_count, 3);
-    
+
     let duration = start_time.elapsed();
     // 3 files, each footer takes 500ms. If sequential, it would take 1500ms.
     // With concurrent fetching:
@@ -202,7 +228,7 @@ async fn test_concurrent_prefetch() {
     // 500ms file2 data
     // 500ms file3 data
     // Total should be around 2500ms.
-    
+
     assert!(
         duration.as_millis() < 2800,
         "Execution took too long, prefetching is not concurrent"
