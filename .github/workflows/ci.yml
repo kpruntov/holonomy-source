@@ -63,8 +63,8 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install maturin pytest pyarrow duckdb pytest-asyncio polars
+          python -m pip install pip==24.0.0
+          pip install maturin==1.15.0 pytest==9.1.1 pyarrow==25.0.1 duckdb==1.1.2 pytest-asyncio==0.24.0 polars==1.44.2
           
       - name: Build and install Python package
         working-directory: holonomy-py

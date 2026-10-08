@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: '30 4 * * 0'
 
+permissions:
+  contents: read
+
 jobs:
   analyze-python:
     name: Analyze Python
