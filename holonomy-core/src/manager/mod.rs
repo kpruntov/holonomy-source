@@ -7,6 +7,7 @@ pub mod governance_manager;
 pub mod license_manager;
 pub mod policy_manager;
 pub mod read_orchestrator;
+#[rustfmt::skip]
 pub mod scan_orchestrator;
 pub mod sidecar;
 pub mod write_orchestrator;

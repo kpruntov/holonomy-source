@@ -1,5 +1,3 @@
-#![rustfmt::skip]
-
 // @trace TASK-078
 
 
@@ -175,11 +173,7 @@ impl ScanOrchestrator {
 
 
     #[allow(clippy::too_many_arguments)]
-
     #[allow(clippy::type_complexity)]
-
-
-
     pub async fn scan(
 
         &self,

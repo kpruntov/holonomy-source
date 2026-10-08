@@ -59,14 +59,21 @@ jobs:
           toolchain: stable
 
       - name: Install maturin and dependencies
+        working-directory: holonomy-py
         run: |
+          python -m venv .venv
+          source .venv/bin/activate
           python -m pip install --upgrade pip
           pip install maturin pytest pyarrow duckdb pytest-asyncio polars
           
       - name: Build and install Python package
         working-directory: holonomy-py
-        run: maturin develop --release
+        run: |
+          source .venv/bin/activate
+          maturin develop --release
 
       - name: Run Pytest
         working-directory: holonomy-py
-        run: pytest tests/
+        run: |
+          source .venv/bin/activate
+          pytest tests/
