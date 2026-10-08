@@ -46,7 +46,11 @@ async fn test_vault_transit_engine() {
         .expect("Failed to create transit key");
     assert!(key_res.status().is_success() || key_res.status().as_u16() == 204);
 
-    let vault_adapter = VaultAdapter::new(endpoint_url.to_string(), token.to_string(), "my-test-key".to_string());
+    let vault_adapter = VaultAdapter::new(
+        endpoint_url.to_string(),
+        token.to_string(),
+        "my-test-key".to_string(),
+    );
 
     let original_plaintext = b"Hello from Vault Transit!";
 
@@ -59,9 +63,6 @@ async fn test_vault_transit_engine() {
     let ciphertext_str = std::str::from_utf8(&ciphertext).unwrap();
     assert!(ciphertext_str.starts_with("vault:v1:"));
 
-    let decrypted_plaintext = vault_adapter
-        .decrypt_dek(&ciphertext, None)
-        .await
-        .unwrap();
+    let decrypted_plaintext = vault_adapter.decrypt_dek(&ciphertext, None).await.unwrap();
     assert_eq!(decrypted_plaintext, original_plaintext);
 }

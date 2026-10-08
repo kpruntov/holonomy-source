@@ -18,6 +18,7 @@ pub enum CryptoError {
 }
 
 // @trace TASK-144
+#[allow(clippy::double_must_use)]
 #[async_trait::async_trait]
 pub trait KmsProvider: Send + Sync {
     async fn decrypt_dek(
@@ -139,7 +140,9 @@ impl CryptoManager {
             let wrapped_dek = key.wrapped_dek.clone();
             async move {
                 // We ignore errors here because some keys might belong to other purposes or fail
-                let _ = self.unwrap_key(&wrapped_dek, partition_context, user_ctx).await;
+                let _ = self
+                    .unwrap_key(&wrapped_dek, partition_context, user_ctx)
+                    .await;
             }
         });
         futures::future::join_all(futures).await;
@@ -195,23 +198,29 @@ impl KeyRetriever for ParquetKmsBridge {
         })?;
 
         // @trace TASK-144
-        let (ciphertext_b64, parsed_context) = if let Ok(json) = serde_json::from_str::<serde_json::Value>(metadata_str) {
-            let wrapped_dek = json.get("wrapped_dek").and_then(|v| v.as_str()).ok_or_else(|| {
-                parquet::errors::ParquetError::General("Missing wrapped_dek in metadata JSON".into())
-            })?;
-            
-            let mut aad = std::collections::BTreeMap::new();
-            if let Some(aad_obj) = json.get("aad").and_then(|v| v.as_object()) {
-                for (k, v) in aad_obj {
-                    if let Some(s) = v.as_str() {
-                        aad.insert(k.clone(), s.to_string());
+        let (ciphertext_b64, parsed_context) =
+            if let Ok(json) = serde_json::from_str::<serde_json::Value>(metadata_str) {
+                let wrapped_dek = json
+                    .get("wrapped_dek")
+                    .and_then(|v| v.as_str())
+                    .ok_or_else(|| {
+                        parquet::errors::ParquetError::General(
+                            "Missing wrapped_dek in metadata JSON".into(),
+                        )
+                    })?;
+
+                let mut aad = std::collections::BTreeMap::new();
+                if let Some(aad_obj) = json.get("aad").and_then(|v| v.as_object()) {
+                    for (k, v) in aad_obj {
+                        if let Some(s) = v.as_str() {
+                            aad.insert(k.clone(), s.to_string());
+                        }
                     }
                 }
-            }
-            (wrapped_dek.to_string(), Some(aad))
-        } else {
-            (metadata_str.to_string(), None)
-        };
+                (wrapped_dek.to_string(), Some(aad))
+            } else {
+                (metadata_str.to_string(), None)
+            };
 
         // Synchronously block the current thread to wait for the async KMS provider.
         // We use block_in_place to guarantee thread safety regardless of whether the parquet crate
@@ -229,16 +238,16 @@ impl KeyRetriever for ParquetKmsBridge {
         })
         .map_err(|e| parquet::errors::ParquetError::General(format!("KMS Failed: {:?}", e)))?;
 
-        // RISK ACCEPTANCE (BR-001 Zero Persistence): 
-        // The upstream Apache Parquet Rust crate's KeyRetriever trait strictly requires 
-        // returning a standard `Vec<u8>`. Parquet takes ownership of this vector and 
-        // drops it via the global allocator, bypassing the `Zeroizing` pattern. 
-        // Therefore, the DEK is briefly exposed in Parquet's standard `Vec<u8>` during 
-        // metadata encryption/decryption. 
-        // Attempting to zeroize this memory via a custom `Drop` interceptor leads to 
-        // Use-After-Free (UAF) corruption, and enforcing a global ScrubbingAllocator 
+        // RISK ACCEPTANCE (BR-001 Zero Persistence):
+        // The upstream Apache Parquet Rust crate's KeyRetriever trait strictly requires
+        // returning a standard `Vec<u8>`. Parquet takes ownership of this vector and
+        // drops it via the global allocator, bypassing the `Zeroizing` pattern.
+        // Therefore, the DEK is briefly exposed in Parquet's standard `Vec<u8>` during
+        // metadata encryption/decryption.
+        // Attempting to zeroize this memory via a custom `Drop` interceptor leads to
+        // Use-After-Free (UAF) corruption, and enforcing a global ScrubbingAllocator
         // introduces catastrophic performance penalties across the entire SDK.
-        // We accept this known limitation of the upstream crate. The DEK remains 
+        // We accept this known limitation of the upstream crate. The DEK remains
         // protected at rest and within our internal `DekCache`.
         Ok(plaintext.as_slice().to_vec())
     }

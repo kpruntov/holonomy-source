@@ -18,15 +18,17 @@ pub enum AuthError {
     Protocol(String),
 }
 
-pub fn get_credentials_path(config: &holonomy_core::config::resolver::ResolvedConfiguration) -> Result<PathBuf, AuthError> {
+pub fn get_credentials_path(
+    config: &holonomy_core::config::resolver::ResolvedConfiguration,
+) -> Result<PathBuf, AuthError> {
     if let Some(cred_file) = &config.auth.credential_file
-        && !cred_file.is_empty() {
-            return Ok(PathBuf::from(cred_file));
-        }
+        && !cred_file.is_empty()
+    {
+        return Ok(PathBuf::from(cred_file));
+    }
 
-    let home_dir = dirs::home_dir().ok_or_else(|| {
-        AuthError::Config("Could not determine HOME directory".to_string())
-    })?;
+    let home_dir = dirs::home_dir()
+        .ok_or_else(|| AuthError::Config("Could not determine HOME directory".to_string()))?;
 
     Ok(home_dir.join(".holonomy").join("credentials"))
 }
@@ -43,7 +45,9 @@ pub fn perform_logout() -> Result<(), AuthError> {
     perform_logout_with_config(config)
 }
 
-pub fn perform_logout_with_config(config: &holonomy_core::config::resolver::ResolvedConfiguration) -> Result<(), AuthError> {
+pub fn perform_logout_with_config(
+    config: &holonomy_core::config::resolver::ResolvedConfiguration,
+) -> Result<(), AuthError> {
     let credentials_path = get_credentials_path(config)?;
 
     if credentials_path.exists() {
@@ -56,8 +60,9 @@ pub fn perform_logout_with_config(config: &holonomy_core::config::resolver::Reso
     Ok(())
 }
 
-pub async fn perform_login_with_config(config: &holonomy_core::config::resolver::ResolvedConfiguration) -> Result<(), AuthError> {
-
+pub async fn perform_login_with_config(
+    config: &holonomy_core::config::resolver::ResolvedConfiguration,
+) -> Result<(), AuthError> {
     let credentials_path = get_credentials_path(config)?;
 
     // 1. Check for existing credential file fallback
@@ -89,14 +94,14 @@ pub async fn perform_login_with_config(config: &holonomy_core::config::resolver:
     let client = Client::new();
 
     // PKCE: Generate code_verifier and code_challenge
-    use rand::Rng;
-    use sha2::{Sha256, Digest};
     use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
+    use rand::Rng;
+    use sha2::{Digest, Sha256};
 
     let mut verifier_bytes = [0u8; 32];
     rand::rng().fill_bytes(&mut verifier_bytes);
     let code_verifier = URL_SAFE_NO_PAD.encode(verifier_bytes);
-    
+
     let mut hasher = Sha256::new();
     hasher.update(code_verifier.as_bytes());
     let code_challenge = URL_SAFE_NO_PAD.encode(hasher.finalize());
@@ -169,9 +174,10 @@ pub async fn perform_login_with_config(config: &holonomy_core::config::resolver:
                         token_data.get("access_token").and_then(|v| v.as_str())
                     {
                         if let Some(parent) = credentials_path.parent()
-                            && !parent.exists() {
-                                fs::create_dir_all(parent)?;
-                            }
+                            && !parent.exists()
+                        {
+                            fs::create_dir_all(parent)?;
+                        }
                         fs::write(&credentials_path, access_token)?;
 
                         println!(

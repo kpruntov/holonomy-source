@@ -1,7 +1,9 @@
 // @trace TASK-119
 use arrow::pyarrow::PyArrowType;
 use arrow::record_batch::RecordBatch;
-use holonomy_core::crypto::pme_encrypt::{PmeEncryptor, S3MultipartUploader, StorageUploader, StreamItem};
+use holonomy_core::crypto::pme_encrypt::{
+    PmeEncryptor, S3MultipartUploader, StorageUploader, StreamItem,
+};
 use holonomy_core::linter::validator::Validator;
 use holonomy_core::manager::channel_writer::ChannelWriter;
 use pyo3::prelude::*;
@@ -39,7 +41,9 @@ impl Writer {
         contract_json: Option<String>,
     ) -> PyResult<Self> {
         let user_ctx = user_context.ok_or_else(|| {
-            pyo3::exceptions::PyValueError::new_err("MissingIdentityError: user_context is required")
+            pyo3::exceptions::PyValueError::new_err(
+                "MissingIdentityError: user_context is required",
+            )
         })?;
 
         Ok(Self {
@@ -59,28 +63,39 @@ impl Writer {
         let batch = batch.0;
 
         if self.state.is_none() {
-            let engine_state = get_engine_state()
-                .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
+            let engine_state =
+                get_engine_state().map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
             let rt = get_runtime();
             let state_result = rt.block_on(async {
-
-                let valid_purpose = self.purpose.as_deref().ok_or_else(|| {
-                    pyo3::exceptions::PyValueError::new_err("MissingPurpose")
-                })?;
-
+                let valid_purpose = self
+                    .purpose
+                    .as_deref()
+                    .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("MissingPurpose"))?;
 
                 let config = holonomy_core::config::resolver::get_config();
-                let storage_endpoint = if config.storage.endpoint.is_empty() { None } else { Some(config.storage.endpoint.clone()) };
-                let storage_region = if config.storage.region.is_empty() { None } else { Some(config.storage.region.clone()) };
-                let (bucket, key, endpoint) = crate::parse_target(&self.target, storage_endpoint);
-                
-                let uploader: Arc<dyn holonomy_core::crypto::pme_encrypt::StorageUploader> = if self.target.starts_with("file://") {
-                    Arc::new(MockStorageUploader {
-                        target_path: self.target.replace("file://", ""),
-                    })
+                let storage_endpoint = if config.storage.endpoint.is_empty() {
+                    None
                 } else {
-                    Arc::new(S3MultipartUploader::new(bucket, endpoint, storage_region, None, None).await)
+                    Some(config.storage.endpoint.clone())
                 };
+                let storage_region = if config.storage.region.is_empty() {
+                    None
+                } else {
+                    Some(config.storage.region.clone())
+                };
+                let (bucket, key, endpoint) = crate::parse_target(&self.target, storage_endpoint);
+
+                let uploader: Arc<dyn holonomy_core::crypto::pme_encrypt::StorageUploader> =
+                    if self.target.starts_with("file://") {
+                        Arc::new(MockStorageUploader {
+                            target_path: self.target.replace("file://", ""),
+                        })
+                    } else {
+                        Arc::new(
+                            S3MultipartUploader::new(bucket, endpoint, storage_region, None, None)
+                                .await,
+                        )
+                    };
 
                 let contract_str = if let Some(canonical) = engine_state
                     .governance_manager
@@ -184,8 +199,7 @@ impl Writer {
 
                 let props = props_builder.build();
 
-                let (channel_writer, result_rx) =
-                    ChannelWriter::spawn(batch.schema(), Some(props));
+                let (channel_writer, result_rx) = ChannelWriter::spawn(batch.schema(), Some(props));
 
                 Ok::<WriterState, PyErr>(WriterState {
                     channel_writer,
@@ -205,12 +219,7 @@ impl Writer {
 
         let res = py.detach(move || {
             let rt = get_runtime();
-            rt.block_on(async {
-                channel_writer
-                    .send(batch)
-                    .await
-                    .map_err(|e| e.to_string())
-            })
+            rt.block_on(async { channel_writer.send(batch).await.map_err(|e| e.to_string()) })
         });
 
         res.map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
@@ -232,7 +241,8 @@ impl Writer {
         }
 
         if let Some(state) = self.state.take() {
-            let engine_state = get_engine_state().map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
+            let engine_state =
+                get_engine_state().map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
             py.detach(move || {
                 let rt = get_runtime();
                 rt.block_on(async move {
@@ -240,11 +250,20 @@ impl Writer {
                         pyo3::exceptions::PyRuntimeError::new_err("Failed to close channel writer")
                     })?;
 
-                    let buffer = state.result_rx.await.map_err(|_| {
-                        pyo3::exceptions::PyRuntimeError::new_err("Failed to receive serialized data")
-                    })?.map_err(|e| {
-                        pyo3::exceptions::PyRuntimeError::new_err(format!("Serialization failed: {}", e))
-                    })?;
+                    let buffer = state
+                        .result_rx
+                        .await
+                        .map_err(|_| {
+                            pyo3::exceptions::PyRuntimeError::new_err(
+                                "Failed to receive serialized data",
+                            )
+                        })?
+                        .map_err(|e| {
+                            pyo3::exceptions::PyRuntimeError::new_err(format!(
+                                "Serialization failed: {}",
+                                e
+                            ))
+                        })?;
 
                     let (tx, rx) = tokio::sync::mpsc::channel(2);
                     let _ = tx.send(StreamItem::Data(buffer)).await;
@@ -254,7 +273,12 @@ impl Writer {
                         .uploader
                         .upload_stream(&state.target_key, rx)
                         .await
-                        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("Upload failed: {:?}", e)))?;
+                        .map_err(|e| {
+                            pyo3::exceptions::PyRuntimeError::new_err(format!(
+                                "Upload failed: {:?}",
+                                e
+                            ))
+                        })?;
 
                     use holonomy_core::audit::ring_buffer::{Action, AuditEvent};
                     let event = AuditEvent {
@@ -288,7 +312,7 @@ impl StorageUploader for MockStorageUploader {
     ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         use tokio::io::AsyncWriteExt;
         let mut file = tokio::fs::File::create(&self.target_path).await?;
-        
+
         while let Some(item) = rx.recv().await {
             match item {
                 StreamItem::Data(chunk) => {

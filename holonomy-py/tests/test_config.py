@@ -1,6 +1,8 @@
 # @trace TASK-029
 # @trace TASK-030
 # @trace TASK-075
+import os
+FIXTURE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../test_fixtures"))
 import pytest
 import sys
 import subprocess
@@ -21,11 +23,11 @@ def run_isolated_python_code(code_str, cwd=None):
 
 def test_init_programmatic_overrides():
     """Test that holonomy.init() correctly sets programmatic overrides."""
-    code = """
+    code = f"""
         import holonomy
         import os
         os.environ["HOLONOMY_PUBLIC_KEY"] = "0" * 64
-        os.environ["HOLONOMY_JWKS_URL"] = "file:///home/pruntoff/projects/holonomy/test_fixtures/dummy_jwks.json"
+        os.environ["HOLONOMY_JWKS_URL"] = "file://{FIXTURE_DIR}/dummy_jwks.json"
         os.environ["HOLONOMY_ISSUER"] = "holonomy-test-issuer"
         os.environ["HOLONOMY_AUDIENCE"] = "holonomy-test-audience"
         os.environ["HOLONOMY_POLICY_BUCKET"] = "mock"
@@ -45,7 +47,7 @@ def test_init_programmatic_overrides():
         
         # Test read() handles missing S3 URL gracefully (Integration Gate)
         try:
-            token = open("/home/pruntoff/projects/holonomy/test_fixtures/dummy_token.txt").read().strip()
+            token = open("{FIXTURE_DIR}/dummy_token.txt").read().strip()
             result = holonomy.read("dummy_target", user_context=token, columns_to_read=["dummy"])
         except RuntimeError as e:
             assert "Missing purpose metadata" in str(e) or "Ingestion error: Http" in str(e) or "relative URL without a base" in str(e)
@@ -54,18 +56,18 @@ def test_init_programmatic_overrides():
 
 def test_read_without_init_implicitly_resolves():
     """Test that read() works even if init() wasn't called explicitly."""
-    code = """
+    code = f"""
         import holonomy
         import os
         os.environ["HOLONOMY_PUBLIC_KEY"] = "0" * 64
-        os.environ["HOLONOMY_JWKS_URL"] = "file:///home/pruntoff/projects/holonomy/test_fixtures/dummy_jwks.json"
+        os.environ["HOLONOMY_JWKS_URL"] = "file://{FIXTURE_DIR}/dummy_jwks.json"
         os.environ["HOLONOMY_ISSUER"] = "holonomy-test-issuer"
         os.environ["HOLONOMY_AUDIENCE"] = "holonomy-test-audience"
         os.environ["HOLONOMY_POLICY_BUCKET"] = "mock"
         os.environ["HOLONOMY_CACHE_TTL_HOURS"] = "99"
         
         try:
-            token = open("/home/pruntoff/projects/holonomy/test_fixtures/dummy_token.txt").read().strip()
+            token = open("{FIXTURE_DIR}/dummy_token.txt").read().strip()
             result = holonomy.read("another_target", user_context=token, columns_to_read=["dummy"])
         except RuntimeError as e:
             assert "Missing purpose metadata" in str(e) or "Ingestion error: Http" in str(e) or "relative URL without a base" in str(e)
@@ -78,7 +80,7 @@ def test_read_without_init_implicitly_resolves():
 
 def test_reinitialization_fails():
     """Test that calling init() multiple times fails explicitly."""
-    code = """
+    code = f"""
         import holonomy
         
         holonomy.init(cache_ttl_hours=10)
@@ -93,7 +95,7 @@ def test_reinitialization_fails():
     run_isolated_python_code(code)
 
 def test_missing_jwks_url_fails():
-    code = """
+    code = f"""
         import holonomy
         import os
         os.environ["HOLONOMY_PUBLIC_KEY"] = "0" * 64
@@ -101,7 +103,7 @@ def test_missing_jwks_url_fails():
         if "HOLONOMY_JWKS_URL" in os.environ:
             del os.environ["HOLONOMY_JWKS_URL"]
         try:
-            holonomy.read("dummy", user_context='{"sub": "test", "groups": []}', columns_to_read=["dummy"])
+            holonomy.read("dummy", user_context='{{"sub": "test", "groups": []}}', columns_to_read=["dummy"])
         except RuntimeError as e:
             assert "environment variable is required" in str(e) or "MissingIdentityConfigurationError" in str(e)
         else:

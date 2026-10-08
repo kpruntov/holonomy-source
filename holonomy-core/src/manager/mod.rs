@@ -1,12 +1,13 @@
 // @trace TASK-122
 // @trace TASK-013
 // @trace TASK-118
+pub mod channel_writer;
 pub mod crypto_manager;
 pub mod governance_manager;
+pub mod license_manager;
 pub mod policy_manager;
 pub mod read_orchestrator;
+#[rustfmt::skip]
 pub mod scan_orchestrator;
-pub mod write_orchestrator;
 pub mod sidecar;
-pub mod channel_writer;
-pub mod license_manager;
+pub mod write_orchestrator;

@@ -43,9 +43,10 @@ impl KmsProvider for MockKmsProvider {
                 None
             };
             if context != expected_ctx.as_ref() {
-                return Err(CryptoError::KmsFailed(
-                    format!("AAD Context mismatch! Expected {:?}, got {:?}", expected_ctx, context)
-                ));
+                return Err(CryptoError::KmsFailed(format!(
+                    "AAD Context mismatch! Expected {:?}, got {:?}",
+                    expected_ctx, context
+                )));
             }
             key = &rest[4 + ctx_len..];
         }

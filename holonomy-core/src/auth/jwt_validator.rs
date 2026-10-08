@@ -127,10 +127,13 @@ impl JwtValidator {
     async fn fetch_jwks(&self) -> Result<(), String> {
         let jwks: Jwks = if self.jwks_url.starts_with("file://") {
             let path = self.jwks_url.trim_start_matches("file://");
-            let content = std::fs::read_to_string(path).map_err(|e| format!("Failed to read JWKS file: {}", e))?;
-            serde_json::from_str(&content).map_err(|e| format!("Failed to parse local JWKS: {}", e))?
+            let content = std::fs::read_to_string(path)
+                .map_err(|e| format!("Failed to read JWKS file: {}", e))?;
+            serde_json::from_str(&content)
+                .map_err(|e| format!("Failed to parse local JWKS: {}", e))?
         } else {
-            let parsed_url = reqwest::Url::parse(&self.jwks_url).map_err(|e| format!("Invalid JWKS URL: {}", e))?;
+            let parsed_url = reqwest::Url::parse(&self.jwks_url)
+                .map_err(|e| format!("Invalid JWKS URL: {}", e))?;
             if parsed_url.scheme() == "http" {
                 let is_localhost = matches!(
                     parsed_url.host_str(),
@@ -139,12 +142,15 @@ impl JwtValidator {
                 let allow_insecure = std::env::var("HOLONOMY_ALLOW_INSECURE_JWKS")
                     .map(|v| v.to_lowercase() == "true")
                     .unwrap_or(false);
-                
+
                 if !is_localhost && !allow_insecure {
                     return Err("Insecure JWKS fetching is blocked. Use HTTPS or set HOLONOMY_ALLOW_INSECURE_JWKS=true for development.".to_string());
                 }
             } else if parsed_url.scheme() != "https" {
-                return Err(format!("Unsupported JWKS URL scheme: {}", parsed_url.scheme()));
+                return Err(format!(
+                    "Unsupported JWKS URL scheme: {}",
+                    parsed_url.scheme()
+                ));
             }
 
             self.client

@@ -17,6 +17,7 @@ use reqwest::{Client, Error as ReqwestError, header};
 use std::ops::Range;
 use std::time::Duration;
 
+#[allow(clippy::double_must_use)]
 #[async_trait::async_trait]
 pub trait IngestionProvider: Send + Sync {
     async fn fetch_byte_range(
@@ -93,12 +94,14 @@ impl S3Client {
     }
 
     pub fn parse_url(&self, url: &str) -> Result<ParsedS3Url, IngestionError> {
-        let region = self.sdk_config
+        let region = self
+            .sdk_config
             .as_ref()
             .and_then(|c| c.region().map(|r| r.as_ref().to_string()))
             .unwrap_or_else(|| "us-east-1".to_string());
 
-        let endpoint_url = self.sdk_config
+        let endpoint_url = self
+            .sdk_config
             .as_ref()
             .and_then(|c| c.endpoint_url().map(|s| s.to_string()))
             .or_else(|| {
@@ -297,10 +300,7 @@ impl IngestionProvider for S3Client {
 
     async fn fetch_entire_file(&self, url: &str) -> Result<Bytes, IngestionError> {
         let parsed = self.parse_url(url)?;
-        let mut request = self
-            .client
-            .get(&parsed.http_url)
-            .build()?;
+        let mut request = self.client.get(&parsed.http_url).build()?;
         self.sign_request(&mut request, &parsed.region).await?;
         let response = self.client.execute(request).await?;
         if response.status() == reqwest::StatusCode::NOT_FOUND {

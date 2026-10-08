@@ -1,7 +1,7 @@
 // @trace TASK-123
 mod common;
 
-
+use async_trait::async_trait;
 use holonomy_core::audit::ring_buffer::AuditRingBuffer;
 use holonomy_core::crypto::dek_cache::DekCache;
 use holonomy_core::ingestion::s3_client::IngestionProvider;
@@ -11,7 +11,6 @@ use holonomy_core::manager::policy_manager::PolicyManager;
 use holonomy_core::manager::scan_orchestrator::ScanOrchestrator;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use async_trait::async_trait;
 
 struct MockS3WithSidecar {
     pub sidecar_fetched: Arc<Mutex<bool>>,
@@ -19,11 +18,19 @@ struct MockS3WithSidecar {
 
 #[async_trait]
 impl IngestionProvider for MockS3WithSidecar {
-    async fn fetch_byte_range(&self, _target: &str, _range: std::ops::Range<usize>) -> Result<bytes::Bytes, holonomy_core::ingestion::s3_client::IngestionError> {
+    async fn fetch_byte_range(
+        &self,
+        _target: &str,
+        _range: std::ops::Range<usize>,
+    ) -> Result<bytes::Bytes, holonomy_core::ingestion::s3_client::IngestionError> {
         Err(holonomy_core::ingestion::s3_client::IngestionError::ParseFailed("Not found".into()))
     }
 
-    async fn fetch_multiple_ranges(&self, _target: &str, _ranges: Vec<std::ops::Range<usize>>) -> Result<Vec<bytes::Bytes>, holonomy_core::ingestion::s3_client::IngestionError> {
+    async fn fetch_multiple_ranges(
+        &self,
+        _target: &str,
+        _ranges: Vec<std::ops::Range<usize>>,
+    ) -> Result<Vec<bytes::Bytes>, holonomy_core::ingestion::s3_client::IngestionError> {
         Err(holonomy_core::ingestion::s3_client::IngestionError::ParseFailed("Not found".into()))
     }
 
@@ -31,11 +38,17 @@ impl IngestionProvider for MockS3WithSidecar {
         &self,
         _url: &str,
         _decryption_props: Option<parquet::encryption::decrypt::FileDecryptionProperties>,
-    ) -> Result<parquet::file::metadata::ParquetMetaData, holonomy_core::ingestion::s3_client::IngestionError> {
+    ) -> Result<
+        parquet::file::metadata::ParquetMetaData,
+        holonomy_core::ingestion::s3_client::IngestionError,
+    > {
         Err(holonomy_core::ingestion::s3_client::IngestionError::ParseFailed("Not found".into()))
     }
 
-    async fn fetch_entire_file(&self, target: &str) -> Result<bytes::Bytes, holonomy_core::ingestion::s3_client::IngestionError> {
+    async fn fetch_entire_file(
+        &self,
+        target: &str,
+    ) -> Result<bytes::Bytes, holonomy_core::ingestion::s3_client::IngestionError> {
         if target.ends_with("_holonomy_keys.json") {
             let mut fetched = self.sidecar_fetched.lock().await;
             *fetched = true;
@@ -65,8 +78,12 @@ async fn test_sidecar_read() {
         Arc::new(AuditRingBuffer::new(10)),
         provider,
         crypto_manager,
-        Arc::new(PolicyManager::new_dangerously_allow_unsigned(Arc::new(common::MockPolicyProvider))),
-        Arc::new(GovernanceManager::new(Arc::new(common::MockSchemaRegistryProvider))),
+        Arc::new(PolicyManager::new_dangerously_allow_unsigned(Arc::new(
+            common::MockPolicyProvider,
+        ))),
+        Arc::new(GovernanceManager::new(Arc::new(
+            common::MockSchemaRegistryProvider,
+        ))),
     );
 
     let user_ctx = holonomy_core::auth::jwt_validator::UserContext {
@@ -76,20 +93,22 @@ async fn test_sidecar_read() {
         principals: vec!["role1".into()],
         extra: std::collections::HashMap::new(),
     };
-    
+
     // We expect this to fail eventually because the Parquet file doesn't actually exist in our mock,
     // but it should first fetch the sidecar and try to parse it.
-    let _ = orchestrator.scan(
-        vec!["s3://bucket/partition/file.parquet".to_string()],
-        Some("mock_purpose"),
-        &user_ctx,
-        None,
-        &[],
-        None,
-        None,
-        None,
-        None,
-    ).await;
+    let _ = orchestrator
+        .scan(
+            vec!["s3://bucket/partition/file.parquet".to_string()],
+            Some("mock_purpose"),
+            &user_ctx,
+            None,
+            &[],
+            None,
+            None,
+            None,
+            None,
+        )
+        .await;
 
     let was_fetched = *fetched.lock().await;
     assert!(was_fetched, "Should have fetched sidecar json");

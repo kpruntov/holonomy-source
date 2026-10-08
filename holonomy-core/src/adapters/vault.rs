@@ -4,7 +4,6 @@ use base64::{Engine as _, engine::general_purpose::STANDARD as base64_standard};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-
 pub struct VaultAdapter {
     client: Client,
     endpoint: String,
@@ -80,15 +79,20 @@ impl crate::manager::crypto_manager::KmsProvider for VaultAdapter {
         if !res.status().is_success() {
             let status = res.status();
             let body = res.text().await.unwrap_or_default();
-            return Err(crate::manager::crypto_manager::CryptoError::KmsFailed(format!("Vault encrypt error: {} - {}", status, body)));
+            return Err(crate::manager::crypto_manager::CryptoError::KmsFailed(
+                format!("Vault encrypt error: {} - {}", status, body),
+            ));
         }
 
-        let resp_json: VaultResponse = res.json().await
+        let resp_json: VaultResponse = res
+            .json()
+            .await
             .map_err(|e| crate::manager::crypto_manager::CryptoError::KmsFailed(e.to_string()))?;
-        let ciphertext = resp_json
-            .data
-            .ciphertext
-            .ok_or_else(|| crate::manager::crypto_manager::CryptoError::KmsFailed("Missing ciphertext in response".to_string()))?;
+        let ciphertext = resp_json.data.ciphertext.ok_or_else(|| {
+            crate::manager::crypto_manager::CryptoError::KmsFailed(
+                "Missing ciphertext in response".to_string(),
+            )
+        })?;
 
         Ok(ciphertext.into_bytes())
     }
@@ -126,14 +130,17 @@ impl crate::manager::crypto_manager::KmsProvider for VaultAdapter {
             return Err(crate::manager::crypto_manager::CryptoError::DecryptionFailed);
         }
 
-        let resp_json: VaultResponse = res.json().await
+        let resp_json: VaultResponse = res
+            .json()
+            .await
             .map_err(|e| crate::manager::crypto_manager::CryptoError::KmsFailed(e.to_string()))?;
         let b64_plaintext = resp_json
             .data
             .plaintext
             .ok_or(crate::manager::crypto_manager::CryptoError::DecryptionFailed)?;
 
-        let decoded = base64_standard.decode(&b64_plaintext)
+        let decoded = base64_standard
+            .decode(&b64_plaintext)
             .map_err(|_| crate::manager::crypto_manager::CryptoError::DecryptionFailed)?;
         Ok(decoded)
     }

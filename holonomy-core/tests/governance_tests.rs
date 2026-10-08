@@ -294,20 +294,26 @@ fn test_semantic_lookup_and_fail_closed() {
 fn test_role_resolution() {
     let _gov = GovernanceManager::new(Arc::new(MockSchemaProvider));
     let mut principals_map = HashMap::new();
-    principals_map.insert("analyst".to_string(), holonomy_core::policy::manifest::PrincipalPolicy {
-        global_row_filters: vec![],
-        selective_row_filters: vec![],
-        column_masks: HashMap::new(),
-        tag_masks: HashMap::new(),
-        sampling_cap: None,
-    });
-    principals_map.insert("engineer".to_string(), holonomy_core::policy::manifest::PrincipalPolicy {
-        global_row_filters: vec![],
-        selective_row_filters: vec![],
-        column_masks: HashMap::new(),
-        tag_masks: HashMap::new(),
-        sampling_cap: None,
-    });
+    principals_map.insert(
+        "analyst".to_string(),
+        holonomy_core::policy::manifest::PrincipalPolicy {
+            global_row_filters: vec![],
+            selective_row_filters: vec![],
+            column_masks: HashMap::new(),
+            tag_masks: HashMap::new(),
+            sampling_cap: None,
+        },
+    );
+    principals_map.insert(
+        "engineer".to_string(),
+        holonomy_core::policy::manifest::PrincipalPolicy {
+            global_row_filters: vec![],
+            selective_row_filters: vec![],
+            column_masks: HashMap::new(),
+            tag_masks: HashMap::new(),
+            sampling_cap: None,
+        },
+    );
 
     let policy = PolicyManifest {
         version: "1.0".to_string(),
@@ -325,7 +331,11 @@ fn test_role_resolution() {
         client_id: None,
         email: None,
         // Add "slack-users" to prove the engine correctly ignores irrelevant token roles
-        principals: vec!["analyst".to_string(), "engineer".to_string(), "slack-users".to_string()],
+        principals: vec![
+            "analyst".to_string(),
+            "engineer".to_string(),
+            "slack-users".to_string(),
+        ],
         extra: HashMap::new(),
     };
 

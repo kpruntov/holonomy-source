@@ -29,7 +29,9 @@ impl ChannelWriter {
                 Ok(w) => w,
                 Err(e) => {
                     if result_tx.send(Err(e)).is_err() {
-                        eprintln!("Warning: Serialization thread failed to send error because receiver was dropped");
+                        eprintln!(
+                            "Warning: Serialization thread failed to send error because receiver was dropped"
+                        );
                     }
                     return;
                 }
@@ -38,7 +40,9 @@ impl ChannelWriter {
             while let Some(batch) = rx.blocking_recv() {
                 if let Err(e) = writer.write(&batch) {
                     if result_tx.send(Err(e)).is_err() {
-                        eprintln!("Warning: Serialization thread failed to send write error because receiver was dropped");
+                        eprintln!(
+                            "Warning: Serialization thread failed to send write error because receiver was dropped"
+                        );
                     }
                     return;
                 }
@@ -47,12 +51,16 @@ impl ChannelWriter {
             match writer.close() {
                 Ok(_) => {
                     if result_tx.send(Ok(buffer)).is_err() {
-                        eprintln!("Warning: Serialization thread finished successfully but receiver was dropped");
+                        eprintln!(
+                            "Warning: Serialization thread finished successfully but receiver was dropped"
+                        );
                     }
                 }
                 Err(e) => {
                     if result_tx.send(Err(e)).is_err() {
-                        eprintln!("Warning: Serialization thread failed to send close error because receiver was dropped");
+                        eprintln!(
+                            "Warning: Serialization thread failed to send close error because receiver was dropped"
+                        );
                     }
                 }
             }
@@ -62,7 +70,10 @@ impl ChannelWriter {
     }
 
     /// Sends a RecordBatch to the background writer thread.
-    pub async fn send(&mut self, batch: RecordBatch) -> Result<(), mpsc::error::SendError<RecordBatch>> {
+    pub async fn send(
+        &mut self,
+        batch: RecordBatch,
+    ) -> Result<(), mpsc::error::SendError<RecordBatch>> {
         self.tx.send(batch).await
     }
 
