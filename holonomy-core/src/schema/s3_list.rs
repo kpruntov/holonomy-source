@@ -76,14 +76,23 @@ pub async fn list_s3_objects(
                 },
                 Ok(Event::Text(e)) => {
                     if inside_key {
-                        let key_text = quick_xml::escape::unescape(std::str::from_utf8(&e).unwrap()).unwrap().into_owned();
+                        let key_text =
+                            quick_xml::escape::unescape(std::str::from_utf8(&e).unwrap())
+                                .unwrap()
+                                .into_owned();
                         if key_text.ends_with(".parquet") {
                             keys.push(format!("{}{}/{}", scheme, bucket, key_text));
                         }
                     } else if inside_next_token {
-                        current_next_token = Some(quick_xml::escape::unescape(std::str::from_utf8(&e).unwrap()).unwrap().into_owned());
+                        current_next_token = Some(
+                            quick_xml::escape::unescape(std::str::from_utf8(&e).unwrap())
+                                .unwrap()
+                                .into_owned(),
+                        );
                     } else if inside_is_truncated {
-                        let text = quick_xml::escape::unescape(std::str::from_utf8(&e).unwrap()).unwrap().into_owned();
+                        let text = quick_xml::escape::unescape(std::str::from_utf8(&e).unwrap())
+                            .unwrap()
+                            .into_owned();
                         if text == "true" {
                             is_truncated = true;
                         }
