@@ -20,7 +20,7 @@ futures = "0.3"
 bytes = "1.9"
 parquet = { version = "59.0.0", features = ["encryption", "async"] }
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "charset", "http2", "macos-system-configuration", "json"] }
-quick-xml = "0.31.0"
+quick-xml = "0.41.0"
 # @trace TASK-011
 aes-gcm = "0.10.3"
 thiserror = "2.0.18"
@@ -39,10 +39,7 @@ aws-credential-types = "1.2.14"
 aws-smithy-types = "1.5.0"
 ed25519-dalek = { version = "2.2.0", features = ["rand_core"] }
 aws-sdk-kms = { version = "1.111.0", default-features = false, features = ["rt-tokio"] }
-# @trace TASK-026
-azure_core = { version = "0.21.0", default-features = false, features = ["enable_reqwest_rustls", "tokio"] }
-azure_storage = { version = "0.21.0", default-features = false, features = ["enable_reqwest_rustls", "hmac_rust"] }
-azure_storage_blobs = { version = "0.21.0", default-features = false, features = ["enable_reqwest_rustls", "hmac_rust"] }
+# azure dependencies removed
 iana-time-zone = "0.1.65"
 get_if_addrs = "0.5.3"
 async-trait = "0.1.89"
