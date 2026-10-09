@@ -16,7 +16,7 @@ tokio = { version = "1.0", features = ["rt-multi-thread", "sync"] }
 arrow = { version = "59.0.0", features = ["pyarrow"] }
 serde_json = "1.0.138"
 hex = "0.4.3"
-aws-config = { version = "1.8.18", default-features = false, features = ["behavior-version-latest", "rustls", "rt-tokio"] }
+aws-config = { version = "1.8.18", default-features = false, features = ["behavior-version-latest", "client-hyper", "rt-tokio"] }
 parquet = "59.0.0"
 chrono = "0.4.38"
 ed25519-dalek = { version = "2.2.0", features = ["rand_core"] }
