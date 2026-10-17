@@ -2,7 +2,7 @@
 # @trace TASK-091
 [package]
 name = "holonomy-core"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 
 [dependencies]
