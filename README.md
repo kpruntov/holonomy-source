@@ -11,7 +11,10 @@ Holonomy is a Data Governance tool designed specifically for local data processi
 
 By integrating directly into your Python process, Holonomy decrypts, filters, and masks data locally in memory without requiring complex proxy servers or remote compute clusters.
 
+![Holonomy Demo](Holonomy_demo.gif)
+
 **Supported Stack:**
+- **KMS:** AWS KMS, GCP KMS.
 - **Storage:** Local file systems and S3-compatible object storage (AWS S3, Cloudflare R2).
 - **Format:** Exclusively supports Apache Parquet (leveraging Parquet Modular Encryption).
 - **Compute:** Zero-copy integration with Polars, DuckDB, Pandas, and PyArrow.
