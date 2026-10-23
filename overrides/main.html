@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holonomy | In-Process Data Governance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@1,500;1,700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Holonomy | Column-level encryption and masking for local Python analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@1,500;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-flax: #E7D889;
@@ -13,6 +13,7 @@
             --white: #FFFFFF;
             --coral: #FD7C6E;
             --lapis: #2F62A2;
+            --dark-navy: #0F172A;
             --skew-angle: -6deg;
         }
 
@@ -32,25 +33,26 @@
             max-width: 1200px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
+            gap: 2.5rem;
         }
 
         .block {
             transform: skewX(var(--skew-angle));
             border: 3px solid var(--lapis);
-            box-shadow: 12px 12px 0px var(--lapis);
+            box-shadow: 10px 10px 0px var(--lapis);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
+            background-color: var(--white);
         }
 
         .block:hover {
-            transform: skewX(var(--skew-angle)) translate(-4px, -4px);
-            box-shadow: 16px 16px 0px var(--lapis);
+            transform: skewX(var(--skew-angle)) translate(-3px, -3px);
+            box-shadow: 14px 14px 0px var(--lapis);
         }
 
         .content {
             transform: skewX(calc(var(--skew-angle) * -1));
-            padding: 2.5rem;
+            padding: 2.2rem;
             height: 100%;
             box-sizing: border-box;
             display: flex;
@@ -66,35 +68,57 @@
         }
 
         p {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.6;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
         }
 
+        /* Hero Block */
         .header-block {
             grid-column: 1 / -1;
             background-color: var(--white);
             color: var(--lapis);
             text-align: center;
-            align-items: center;
         }
 
         .header-block h1 {
             font-size: 4rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             color: var(--coral);
         }
 
-        .header-block p {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 0;
+        .header-block .hero-subtitle {
+            font-family: 'Oswald', sans-serif;
+            font-style: italic;
+            font-size: 1.85rem;
+            color: var(--lapis);
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-block .hero-description {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0 auto;
             max-width: 900px;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
         }
 
         .docs-btn {
             display: inline-block;
-            margin-top: 2rem;
-            padding: 1rem 3rem;
+            padding: 0.85rem 2.2rem;
             background-color: var(--lapis);
             color: var(--white);
             text-decoration: none;
@@ -115,17 +139,171 @@
             transform: skewX(calc(var(--skew-angle) * -1));
             font-family: 'Oswald', sans-serif;
             font-style: italic;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             text-transform: uppercase;
         }
 
-        .pillar h3 { font-size: 1.8rem; }
-        .block-company { background-color: var(--white); color: var(--lapis); }
-        .block-company h3 { color: var(--coral); }
-        .block-dev { background-color: var(--lapis); color: var(--white); box-shadow: 12px 12px 0px var(--goldenrod); border-color: var(--lapis); }
-        .block-dev h3 { color: var(--bg-flax); }
-        .block-comp { background-color: var(--coral); color: var(--white); box-shadow: 12px 12px 0px var(--white); border-color: var(--white); }
-        .block-comp h3 { color: var(--bg-flax); }
+        .install-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--dark-navy);
+            border: 3px solid var(--lapis);
+            transform: skewX(var(--skew-angle));
+            box-shadow: 6px 6px 0px var(--goldenrod);
+            padding: 0.75rem 1.2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .install-box:hover {
+            transform: skewX(var(--skew-angle)) translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--goldenrod);
+        }
+
+        .install-box-inner {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.85rem;
+            transform: skewX(calc(var(--skew-angle) * -1));
+        }
+
+        .install-cmd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #F8FAFC;
+            user-select: all;
+        }
+
+        .copy-btn {
+            background: var(--coral);
+            border: 2px solid var(--white);
+            color: var(--white);
+            padding: 0.35rem 0.65rem;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .copy-btn:hover {
+            background: #e26154;
+            transform: scale(1.03);
+        }
+
+        .copy-btn.copied {
+            background: #10B981;
+            border-color: #10B981;
+        }
+
+        /* Section Headers */
+        .section-header-block {
+            grid-column: 1 / -1;
+            background-color: var(--white);
+            text-align: center;
+            border-color: var(--lapis);
+            box-shadow: 8px 8px 0px var(--coral);
+        }
+
+        .section-header-block h2 {
+            font-size: 2.4rem;
+            margin: 0;
+            color: var(--coral);
+        }
+
+        /* Steps */
+        .step-block {
+            background-color: var(--white);
+            color: var(--lapis);
+            border-color: var(--lapis);
+            box-shadow: 8px 8px 0px var(--lapis);
+        }
+
+        .step-block h3 {
+            font-size: 1.55rem;
+            color: var(--coral);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        /* Guardrails Divider Header */
+        .guardrails-header-block {
+            grid-column: 1 / -1;
+            background-color: var(--dark-navy);
+            color: #F8FAFC;
+            border: 3px solid var(--lapis);
+            box-shadow: 10px 10px 0px var(--goldenrod);
+            text-align: center;
+        }
+
+        .guardrails-header-block h2 {
+            font-size: 2.3rem;
+            color: var(--bg-flax);
+            margin: 0;
+        }
+
+        .guardrails-header-block p {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            max-width: 950px;
+            margin: 0.75rem auto 0 auto;
+            color: #E2E8F0;
+        }
+
+        /* Benefits Cards */
+        .benefit-1 {
+            background-color: var(--white);
+            color: var(--lapis);
+            box-shadow: 8px 8px 0px var(--lapis);
+            border-color: var(--lapis);
+        }
+        .benefit-1 h3 {
+            color: var(--coral);
+            font-size: 1.55rem;
+            line-height: 1.3;
+        }
+
+        .benefit-2 {
+            background-color: var(--lapis);
+            color: var(--white);
+            box-shadow: 8px 8px 0px var(--goldenrod);
+            border-color: var(--lapis);
+        }
+        .benefit-2 h3 {
+            color: var(--bg-flax);
+            font-size: 1.55rem;
+            line-height: 1.3;
+        }
+
+        .benefit-3 {
+            background-color: var(--coral);
+            color: var(--white);
+            box-shadow: 8px 8px 0px var(--lapis);
+            border-color: var(--white);
+        }
+        .benefit-3 h3 {
+            color: var(--bg-flax);
+            font-size: 1.55rem;
+            line-height: 1.3;
+        }
+
+        /* Early Adopter Block */
+        .licensing-block {
+            grid-column: 1 / -1;
+            background-color: var(--white);
+            border-color: var(--coral);
+            box-shadow: 12px 12px 0px var(--goldenrod);
+            text-align: center;
+        }
+
+        .licensing-block h2 {
+            color: var(--coral);
+            font-size: 2.2rem;
+        }
 
         @media (max-width: 900px) {
             body {
@@ -138,863 +316,154 @@
             .header-block h1 {
                 font-size: 2.8rem;
             }
-            .header-block p {
-                font-size: 1.15rem;
+            .header-block .hero-subtitle {
+                font-size: 1.4rem;
             }
-            .demo-block {
-                margin: 0 !important;
-                box-shadow: 8px 8px 0px var(--lapis);
+            .header-block .hero-description {
+                font-size: 1.1rem;
             }
-            .demo-header-bar {
-                padding: 0.8rem 1rem;
+            .guardrails-header-block h2 {
+                font-size: 1.8rem;
             }
-            .demo-title-group h2 {
-                font-size: 1.3rem;
+            .guardrails-header-block p {
+                font-size: 1.05rem;
             }
-            .demo-title-group p {
-                font-size: 0.85rem;
-            }
-            #single-role-selector {
-                padding: 0.6rem 0.8rem !important;
-                gap: 0.4rem !important;
-            }
-            #single-role-selector span {
-                font-size: 0.75rem;
-            }
-            .demo-btn {
-                padding: 0.35rem 0.65rem;
-                font-size: 0.78rem;
-            }
-            #btn-toggle-cycle {
-                margin-left: 0 !important;
-            }
-            .demo-comparison {
-                grid-template-columns: 1fr !important;
-                gap: 1.25rem;
-                padding: 0.9rem !important;
-            }
-            .terminal-box {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            }
-            .terminal-header {
-                font-size: 0.75rem;
-                padding: 0.45rem 0.75rem;
-                flex-wrap: wrap;
-                gap: 0.35rem;
-            }
-            .terminal-sub-header {
-                padding: 0.4rem 0.75rem !important;
-                flex-wrap: wrap;
-                gap: 0.35rem;
-            }
-            .code-area {
-                padding: 0.75rem 0.85rem;
-                font-size: 0.78rem;
-            }
-            .table-area {
-                padding: 0.75rem 0.85rem;
-            }
-            .demo-table {
-                font-size: 0.72rem;
-            }
-            .demo-table th, .demo-table td {
-                padding: 4px 3px;
-            }
-            .val-red, .val-green {
-                padding: 1px 3px;
-                font-size: 0.7rem;
-            }
-            .panel-footer-note {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.74rem;
-                min-height: auto;
+            .hero-actions {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
 
         @media (max-width: 480px) {
             body {
-                padding: 1rem 0.5rem;
+                padding: 1.5rem 0.75rem;
             }
             .header-block h1 {
-                font-size: 2.2rem;
+                font-size: 2.4rem;
             }
-            .demo-block {
-                box-shadow: 4px 4px 0px var(--lapis);
+            .content {
+                padding: 1.5rem;
             }
-            .demo-title-group h2 {
-                font-size: 1.1rem;
+            .install-cmd {
+                font-size: 0.95rem;
             }
-            .demo-comparison {
-                padding: 0.6rem !important;
-                gap: 1rem;
-            }
-        }
-
-        /* Interactive Live Demo Component */
-        .demo-block {
-            grid-column: 1 / -1;
-            background-color: #0b0f19;
-            color: #f1f5f9;
-            border: 3px solid var(--lapis);
-            box-shadow: 12px 12px 0px var(--lapis);
-            border-radius: 4px;
-            overflow: hidden;
-            transform: none !important;
-            margin: 0 2.5rem;
-        }
-
-        .demo-block .content {
-            transform: none !important;
-            padding: 0;
-        }
-
-        .demo-header-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background: #141b2d;
-            border-bottom: 2px solid #233054;
-            gap: 1rem;
-        }
-
-        .demo-title-group h2 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.6rem;
-            color: var(--bg-flax);
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .demo-title-group p {
-            margin: 0.2rem 0 0 0;
-            font-size: 0.95rem;
-            color: #94a3b8;
-        }
-
-        .demo-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
-
-        .demo-btn {
-            background: #1e293b;
-            color: #f8fafc;
-            border: 1px solid #334155;
-            padding: 0.45rem 0.9rem;
-            border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-
-        .demo-btn:hover {
-            background: #334155;
-            border-color: #64748b;
-        }
-
-        .demo-btn.active {
-            background: var(--coral);
-            border-color: var(--coral);
-            color: #ffffff;
-            box-shadow: 0 0 10px rgba(253, 124, 110, 0.4);
-        }
-
-        .role-pill {
-            font-size: 0.75rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .role-pill-analyst { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
-        .role-pill-marketing { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
-        .role-pill-hr { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4); }
-        .role-pill-auditor { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
-
-        .demo-comparison {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 1.5rem;
-            padding: 1.5rem;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        .panel-container {
-            min-width: 0;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        .terminal-box {
-            background: #070a12;
-            border: 2px solid #1e293b;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-            box-sizing: border-box;
-        }
-
-        .terminal-box.bad {
-            border-color: rgba(239, 68, 68, 0.4);
-        }
-
-        .terminal-box.good {
-            border-color: rgba(34, 197, 94, 0.4);
-        }
-
-        .terminal-header {
-            background: #111827;
-            padding: 0.5rem 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #1f2937;
-            font-size: 0.8rem;
-            font-family: monospace;
-            flex-shrink: 0;
-        }
-
-        .terminal-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .terminal-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .dot-red { background: #ef4444; }
-        .dot-yellow { background: #f59e0b; }
-        .dot-green { background: #10b981; }
-
-        .terminal-title {
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        .terminal-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        .badge-danger {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-        }
-
-        .badge-secure {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.4);
-        }
-
-        .code-area {
-            padding: 1rem 1.2rem;
-            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-            font-size: 0.82rem;
-            line-height: 1.5;
-            background: #090d16;
-            color: #e2e8f0;
-            border-bottom: 1px dashed #1e293b;
-            white-space: pre-wrap;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            overflow: hidden;
-            box-sizing: border-box;
-            flex-shrink: 0;
-        }
-
-        .table-area {
-            padding: 1rem 1.2rem;
-            background: #070a12;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .table-caption {
-            font-size: 0.75rem;
-            font-family: monospace;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.35rem;
-            flex-shrink: 0;
-        }
-
-        .demo-table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-            font-size: 0.78rem;
-            text-align: left;
-        }
-
-        .demo-table th, .demo-table td {
-            padding: 6px 5px;
-            border-bottom: 1px solid #111827;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .demo-table th {
-            color: #94a3b8;
-            border-bottom: 1px solid #1e293b;
-            font-weight: 600;
-        }
-
-        .col-id { width: 12%; }
-        .col-name { width: 24%; }
-        .col-email { width: 28%; }
-        .col-ssn { width: 18%; }
-        .col-salary { width: 18%; }
-
-        .val-red {
-            color: #f87171;
-            background: rgba(239, 68, 68, 0.15);
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-weight: 700;
-            border: 1px solid rgba(239, 68, 68, 0.35);
-            display: inline-block;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: middle;
-            white-space: nowrap;
-            box-sizing: border-box;
-        }
-
-        .val-green {
-            color: #4ade80;
-            background: rgba(34, 197, 94, 0.15);
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-weight: 600;
-            border: 1px solid rgba(34, 197, 94, 0.35);
-            display: inline-block;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: middle;
-            white-space: nowrap;
-            box-sizing: border-box;
-        }
-
-        .panel-footer-note {
-            padding: 0.75rem 1rem;
-            font-size: 0.78rem;
-            line-height: 1.45;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-weight: 600;
-            box-sizing: border-box;
-            flex-shrink: 0;
-            word-break: break-word;
-            overflow-wrap: break-word;
-        }
-        .note-bad { background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
-        .note-good { background: rgba(34, 197, 94, 0.1); color: #86efac; }
-
-        .cycle-progress-container {
-            width: 100%;
-            height: 4px;
-            background: #141b2d;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cycle-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--coral), #22c55e);
-            width: 0%;
-            transition: width 0.05s linear;
-        }
-
-        .table-fade-in {
-            animation: fadeInTable 0.3s ease-out forwards;
-        }
-
-        @keyframes fadeInTable {
-            from { opacity: 0.3; transform: translateY(2px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <div class="grid-container">
         
+        <!-- HERO BLOCK -->
         <div class="block header-block">
             <div class="content" style="align-items: center;">
                 <h1>Holonomy</h1>
-                <p>Lightweight, decentralized governance for well-intentioned users. Evaluate Row-Level Security (RLS) and Data Masking entirely in-process using client-side Parquet Modular Encryption—without expensive proxies.</p>
-                <a href="{{ base_url }}/1_introduction_and_core_concepts/" class="docs-btn">
-                    <span>Read the Documentation &rarr;</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- LIVE INTERACTIVE TERMINAL SHOWCASE: WITHOUT VS WITH HOLONOMY -->
-        <div class="block demo-block">
-            <div class="content" style="padding: 0;">
-                <div class="demo-header-bar">
-                    <div class="demo-title-group">
-                        <h2>LIVE COMPARISON: RAW S3 PROCESSING VS IN-PROCESS HOLONOMY</h2>
+                <div class="hero-subtitle">Column-level encryption and masking for local Python analytics</div>
+                <p class="hero-description">
+                    Holonomy is a data minimisation tool that applies masking and hashing policies on personal data in local compute or containers. Single S3 can be shared across different roles for different processing purposes in Python analytics.
+                </p>
+                <div class="hero-actions">
+                    <a href="{{ base_url }}/1_introduction_and_core_concepts/" class="docs-btn">
+                        <span>Read the Documentation &rarr;</span>
+                    </a>
+                    <div class="install-box">
+                        <div class="install-box-inner">
+                            <span class="install-cmd">pip install holonomy</span>
+                            <button class="copy-btn" onclick="copyInstallCmd(this)" title="Copy to clipboard">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Active Identity Selector & Cycle Controls -->
-                <div id="single-role-selector" style="display: flex; gap: 0.6rem; align-items: center; padding: 0.75rem 1.5rem; background: #0c1222; border-bottom: 1px solid #1e293b; flex-wrap: wrap;">
-                    <span style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Active Identity:</span>
-                    <button class="demo-btn active" id="pill-analyst" onclick="selectRole('analyst', true)">Analyst</button>
-                    <button class="demo-btn" id="pill-marketing" onclick="selectRole('marketing', true)">Marketing</button>
-                    <button class="demo-btn" id="pill-hr" onclick="selectRole('hr', true)">HR / Payroll</button>
-                    <button class="demo-btn" id="pill-auditor" onclick="selectRole('auditor', true)">External Auditor</button>
-                    <button class="demo-btn" id="btn-toggle-cycle" onclick="toggleCycle()" style="margin-left: auto;">
-                        ⏸ Pause
-                    </button>
-                </div>
-
-                <!-- Cyclic Animation Progress Indicator -->
-                <div class="cycle-progress-container" title="Continuous cycle timeline">
-                    <div class="cycle-progress-bar" id="cycle-progress"></div>
-                </div>
-
-                <!-- Main Comparison Display -->
-                <div class="demo-comparison" id="demo-comparison-area">
-                    
-                    <!-- LEFT COLUMN: WITHOUT HOLONOMY -->
-                    <div class="panel-container" id="panel-left">
-                        <!-- Populated by JS -->
-                    </div>
-
-                    <!-- RIGHT COLUMN: WITH HOLONOMY -->
-                    <div class="panel-container" id="panel-right">
-                        <!-- Populated by JS -->
-                    </div>
-
                 </div>
             </div>
         </div>
 
-        <script>
-        // Data and Roles Specification
-        const ROLES = {
-            analyst: {
-                title: "Analyst",
-                pillClass: "role-pill-analyst",
-                descWithout: "Direct query without governance",
-                descWith: "In-process policy evaluates Analyst role",
-                withoutBadCols: ["id", "email", "ssn", "salary"], // Red
-                withoutGoodCols: ["name"], // Green
-                withoutRows: [
-                    { id: "101", name: "Alice Smith", email: "alice@acme.corp", ssn: "987-65-4321", salary: "$145,000" },
-                    { id: "102", name: "Bob Jones", email: "bob@acme.corp", ssn: "876-54-3210", salary: "$120,000" },
-                    { id: "103", name: "Charlie Ray", email: "charlie@acme.corp", ssn: "765-43-2109", salary: "$160,000" }
-                ],
-                withRows: [
-                    { id: "***", name: "Alice Smith", email: "f47ac10b-...-uuid", ssn: "***", salary: "***" },
-                    { id: "***", name: "Bob Jones", email: "e18f26b4-...-uuid", ssn: "***", salary: "***" },
-                    { id: "***", name: "Charlie Ray", email: "2a9b3c4d-...-uuid", ssn: "***", salary: "***" }
-                ],
-                withoutAlert: "Plaintext SSN, Email, and Salary loaded into client process memory without restrictions.",
-                withAlert: "Policy applied: SSN and Salary masked in RAM; Email pseudonymized via salted hash."
-            },
-            marketing: {
-                title: "Marketing",
-                pillClass: "role-pill-marketing",
-                descWithout: "Direct query without governance",
-                descWith: "Policy grants Marketing access to Name and Email only",
-                withoutBadCols: ["id", "ssn", "salary"], // Red
-                withoutGoodCols: ["name", "email"], // Green
-                withoutRows: [
-                    { id: "101", name: "Alice Smith", email: "alice@acme.corp", ssn: "987-65-4321", salary: "$145,000" },
-                    { id: "102", name: "Bob Jones", email: "bob@acme.corp", ssn: "876-54-3210", salary: "$120,000" },
-                    { id: "103", name: "Charlie Ray", email: "charlie@acme.corp", ssn: "765-43-2109", salary: "$160,000" }
-                ],
-                withRows: [
-                    { id: "***", name: "Alice Smith", email: "alice@acme.corp", ssn: "***", salary: "***" },
-                    { id: "***", name: "Bob Jones", email: "bob@acme.corp", ssn: "***", salary: "***" },
-                    { id: "***", name: "Charlie Ray", email: "charlie@acme.corp", ssn: "***", salary: "***" }
-                ],
-                withoutAlert: "Local engine loaded unneeded SSN and Salary fields into client process memory.",
-                withAlert: "Policy applied: Name and Email decrypted; SSN and Salary columns kept sealed without key unwrap."
-            },
-            hr: {
-                title: "HR / Payroll",
-                pillClass: "role-pill-hr",
-                descWithout: "Direct query without governance",
-                descWith: "HR holds authorized key to unwrap encrypted columns",
-                withoutBadCols: ["id"],
-                withoutGoodCols: ["name", "email", "ssn", "salary"],
-                withoutRows: [
-                    { id: "101", name: "Alice Smith", email: "alice@acme.corp", ssn: "987-65-4321", salary: "$145,000" },
-                    { id: "102", name: "Bob Jones", email: "bob@acme.corp", ssn: "876-54-3210", salary: "$120,000" },
-                    { id: "103", name: "Charlie Ray", email: "charlie@acme.corp", ssn: "765-43-2109", salary: "$160,000" }
-                ],
-                withRows: [
-                    { id: "101", name: "Alice Smith", email: "alice@acme.corp", ssn: "987-65-4321", salary: "$145,000" },
-                    { id: "102", name: "Bob Jones", email: "bob@acme.corp", ssn: "876-54-3210", salary: "$120,000" },
-                    { id: "103", name: "Charlie Ray", email: "charlie@acme.corp", ssn: "765-43-2109", salary: "$160,000" }
-                ],
-                withoutAlert: "Direct S3 read: Local compute has full access but no tamper-evident audit record generated.",
-                withAlert: "HR role verified: Authorized KMS key unwrapped in volatile RAM; audit event emitted."
-            },
-            auditor: {
-                title: "External Auditor",
-                pillClass: "role-pill-auditor",
-                descWithout: "Direct query without governance",
-                descWith: "Auditor policy: all identifying attributes masked or pseudonymized",
-                withoutBadCols: ["id", "name", "email", "ssn", "salary"],
-                withoutGoodCols: [],
-                withoutRows: [
-                    { id: "101", name: "Alice Smith", email: "alice@acme.corp", ssn: "987-65-4321", salary: "$145,000" },
-                    { id: "102", name: "Bob Jones", email: "bob@acme.corp", ssn: "876-54-3210", salary: "$120,000" },
-                    { id: "103", name: "Charlie Ray", email: "charlie@acme.corp", ssn: "765-43-2109", salary: "$160,000" }
-                ],
-                withRows: [
-                    { id: "***", name: "***", email: "c4a89b12-...-uuid", ssn: "***", salary: "***" },
-                    { id: "***", name: "***", email: "e18f26b4-...-uuid", ssn: "***", salary: "***" },
-                    { id: "***", name: "***", email: "3f719a05-...-uuid", ssn: "***", salary: "***" }
-                ],
-                withoutAlert: "External contractor process read raw dataset directly without column redaction.",
-                withAlert: "Auditor policy applied: Direct identifiers masked ('***'), email pseudonymized."
-            }
-        };
+        <!-- HOW IT WORKS IN 3 STEPS -->
+        <div class="block section-header-block">
+            <div class="content" style="align-items: center;">
+                <h2>How it works in 3 steps</h2>
+            </div>
+        </div>
 
-        const CODE_WITHOUT = `import local_engine as engine
-
-# Direct remote S3 query (unprotected)
-df = engine.read_parquet("s3://acme-corp/employees.parquet")
-
-print(df.select("id", "name", "email", "ssn", "salary").limit(3))`;
-
-        const CODE_WITH = `import holonomy
-import local_engine as engine
-
-# Scan S3 parquet with in-process RLS & column protection
-arrow_stream = holonomy.scan("s3://acme-corp/employees.parquet")
-df = engine.from_arrow(arrow_stream)
-print(df.select("id", "name", "email", "ssn", "salary").limit(3))`;
-
-        const ROLE_CYCLE = ["analyst", "marketing", "hr", "auditor"];
-        const ROLE_DURATION = 15000; // 15 seconds per role
-        let currentRoleIdx = 0;
-        let roleElapsed = 0;
-        let isCycleActive = true;
-        let cycleTimer = null;
-        let activeRole = "analyst";
-        const TICK_MS = 50;
-
-        function selectRole(role, fromUser = false) {
-            activeRole = role;
-            currentRoleIdx = ROLE_CYCLE.indexOf(role);
-            if (currentRoleIdx === -1) currentRoleIdx = 0;
-            roleElapsed = 0;
-
-            document.querySelectorAll("#single-role-selector .demo-btn").forEach(b => {
-                if (b.id.startsWith("pill-")) b.classList.remove("active");
-            });
-            const pill = document.getElementById("pill-" + role);
-            if (pill) pill.classList.add("active");
-
-            renderView();
-
-            if (fromUser) {
-                pauseCycle();
-            }
-        }
-
-        function toggleCycle() {
-            if (isCycleActive) {
-                pauseCycle();
-            } else {
-                resumeCycle();
-            }
-        }
-
-        function pauseCycle() {
-            isCycleActive = false;
-            updateCycleButton();
-        }
-
-        function resumeCycle() {
-            isCycleActive = true;
-            updateCycleButton();
-        }
-
-        function updateCycleButton() {
-            const btn = document.getElementById("btn-toggle-cycle");
-            if (btn) {
-                btn.innerHTML = isCycleActive ? "⏸ Pause" : "▶ Resume";
-                btn.classList.toggle("active", !isCycleActive);
-            }
-        }
-
-        function startCycleLoop() {
-            if (cycleTimer) clearInterval(cycleTimer);
-            cycleTimer = setInterval(cycleTick, TICK_MS);
-        }
-
-        function cycleTick() {
-            if (!isCycleActive) return;
-            roleElapsed += TICK_MS;
-            const pct = Math.min(100, (roleElapsed / ROLE_DURATION) * 100);
-            const bar = document.getElementById("cycle-progress");
-            if (bar) bar.style.width = pct + "%";
-
-            if (roleElapsed >= ROLE_DURATION) {
-                roleElapsed = 0;
-                currentRoleIdx = (currentRoleIdx + 1) % ROLE_CYCLE.length;
-                selectRole(ROLE_CYCLE[currentRoleIdx], false);
-            }
-        }
-
-        function renderView() {
-            renderSingleView(activeRole);
-        }
-
-        function buildTableRows(roleKey, isHolonomy) {
-            const role = ROLES[roleKey];
-            const rows = isHolonomy ? role.withRows : role.withoutRows;
-            const badCols = role.withoutBadCols || [];
-            
-            return rows.map(r => {
-                const idClass = isHolonomy ? "val-green" : (badCols.includes("id") ? "val-red" : "val-green");
-                const nameClass = isHolonomy ? "val-green" : (badCols.includes("name") ? "val-red" : "val-green");
-                const emailClass = isHolonomy ? "val-green" : (badCols.includes("email") ? "val-red" : "val-green");
-                const ssnClass = isHolonomy ? "val-green" : (badCols.includes("ssn") ? "val-red" : "val-green");
-                const salaryClass = isHolonomy ? "val-green" : (badCols.includes("salary") ? "val-red" : "val-green");
-
-                return `<tr>
-                    <td><span class="${idClass}">${r.id}</span></td>
-                    <td><span class="${nameClass}">${r.name}</span></td>
-                    <td><span class="${emailClass}">${r.email}</span></td>
-                    <td><span class="${ssnClass}">${r.ssn}</span></td>
-                    <td><span class="${salaryClass}">${r.salary}</span></td>
-                </tr>`;
-            }).join("");
-        }
-
-        function renderSingleView(roleKey) {
-            const role = ROLES[roleKey];
-            const left = document.getElementById("panel-left");
-            const right = document.getElementById("panel-right");
-            if (!left || !right) return;
-
-            left.innerHTML = `
-                <div class="terminal-box bad">
-                    <div class="terminal-header">
-                        <div class="terminal-dots">
-                            <span class="terminal-dot dot-red"></span>
-                            <span class="terminal-dot dot-yellow"></span>
-                            <span class="terminal-dot dot-green"></span>
-                        </div>
-                        <span class="terminal-title">WITHOUT HOLONOMY (RAW CLIENT S3)</span>
-                        <span class="terminal-badge badge-danger">NO POLICY</span>
-                    </div>
-                    <div class="terminal-sub-header" style="background: #111827; padding: 0.4rem 1rem; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
-                        <span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ACTIVE CALLER: <strong style="color: #f1f5f9;">user@acme.corp</strong></span>
-                        <span class="role-pill ${role.pillClass}">ROLE: ${role.title}</span>
-                    </div>
-                    <div class="code-area">${escapeHtml(CODE_WITHOUT)}</div>
-                    <div class="table-area table-fade-in">
-                        <div class="table-caption">
-                            <span>Returned PyArrow Buffer (Unprotected RAM)</span>
-                            <span style="color: #ef4444;">● 3 Rows Plaintext</span>
-                        </div>
-                        <table class="demo-table">
-                            <colgroup>
-                                <col class="col-id">
-                                <col class="col-name">
-                                <col class="col-email">
-                                <col class="col-ssn">
-                                <col class="col-salary">
-                            </colgroup>
-                            <thead>
-                                <tr><th>id</th><th>name</th><th>email</th><th>ssn</th><th>salary</th></tr>
-                            </thead>
-                            <tbody>
-                                ${buildTableRows(roleKey, false)}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="panel-footer-note note-bad">
-                        ${role.withoutAlert}
-                    </div>
-                </div>
-            `;
-
-            right.innerHTML = `
-                <div class="terminal-box good">
-                    <div class="terminal-header">
-                        <div class="terminal-dots">
-                            <span class="terminal-dot dot-red"></span>
-                            <span class="terminal-dot dot-yellow"></span>
-                            <span class="terminal-dot dot-green"></span>
-                        </div>
-                        <span class="terminal-title">WITH HOLONOMY (ARROW STREAM IN RAM)</span>
-                        <span class="terminal-badge badge-secure">POLICY ENFORCED</span>
-                    </div>
-                    <div class="terminal-sub-header" style="background: #111827; padding: 0.4rem 1rem; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
-                        <span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">VERIFIED IDENTITY: <strong style="color: #f1f5f9;">user@acme.corp [JWT]</strong></span>
-                        <span class="role-pill ${role.pillClass}">ROLE: ${role.title}</span>
-                    </div>
-                    <div class="code-area">${escapeHtml(CODE_WITH)}</div>
-                    <div class="table-area table-fade-in">
-                        <div class="table-caption">
-                            <span>Streamed PyArrow RecordBatch (In-Process PME Filtered)</span>
-                            <span style="color: #22c55e;">● 3 Rows Governed</span>
-                        </div>
-                        <table class="demo-table">
-                            <colgroup>
-                                <col class="col-id">
-                                <col class="col-name">
-                                <col class="col-email">
-                                <col class="col-ssn">
-                                <col class="col-salary">
-                            </colgroup>
-                            <thead>
-                                <tr><th>id</th><th>name</th><th>email</th><th>ssn</th><th>salary</th></tr>
-                            </thead>
-                            <tbody>
-                                ${buildTableRows(roleKey, true)}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="panel-footer-note note-good">
-                        ${role.withAlert}
-                    </div>
-                </div>
-            `;
-
-            requestAnimationFrame(syncPanelHeights);
-        }
-
-        function syncPanelHeights() {
-            const isDesktop = window.innerWidth > 850;
-            const leftCode = document.querySelector("#panel-left .code-area");
-            const rightCode = document.querySelector("#panel-right .code-area");
-            const leftFoot = document.querySelector("#panel-left .panel-footer-note");
-            const rightFoot = document.querySelector("#panel-right .panel-footer-note");
-
-            if (!isDesktop) {
-                if (leftCode) leftCode.style.minHeight = "auto";
-                if (rightCode) rightCode.style.minHeight = "auto";
-                if (leftFoot) leftFoot.style.minHeight = "auto";
-                if (rightFoot) rightFoot.style.minHeight = "auto";
-                return;
-            }
-
-            if (leftCode && rightCode) {
-                leftCode.style.minHeight = "auto";
-                rightCode.style.minHeight = "auto";
-                const maxCodeH = Math.max(leftCode.scrollHeight, rightCode.scrollHeight);
-                leftCode.style.minHeight = maxCodeH + "px";
-                rightCode.style.minHeight = maxCodeH + "px";
-            }
-
-            if (leftFoot && rightFoot) {
-                leftFoot.style.minHeight = "auto";
-                rightFoot.style.minHeight = "auto";
-                const maxFootH = Math.max(leftFoot.scrollHeight, rightFoot.scrollHeight);
-                leftFoot.style.minHeight = maxFootH + "px";
-                rightFoot.style.minHeight = maxFootH + "px";
-            }
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        window.addEventListener("resize", syncPanelHeights);
-
-        // Initialize on DOM load
-        document.addEventListener("DOMContentLoaded", () => {
-            selectRole("analyst", false);
-            startCycleLoop();
-        });
-        </script>
-
-        <div class="block pillar block-company">
+        <div class="block step-block">
             <div class="content">
-                <h3>Local Processing Enablement</h3>
+                <h3>1. Write Once with Encrypted Columns</h3>
                 <p>
-                    Stop forcing analytical workloads into centralized cloud compute clusters just to enforce access policies. 
-                </p>
-                <p>
-                    Holonomy leverages your existing infrastructure (KMS, IdP, S3) to filter data entirely in-process. Ideal for EU and GDPR-minded teams requiring strict data localization and pseudonymization without the cloud egress costs.
+                    Tag sensitive fields (pii, finance) in your schema contract. Holonomy writes standard Parquet files to S3 with sensitive columns locked via Parquet Modular Encryption (PME).
                 </p>
             </div>
         </div>
 
-        <div class="block pillar block-dev">
+        <div class="block step-block">
             <div class="content">
-                <h3>Lightweight & Transparent</h3>
+                <h3>2. Define Access & Purpose in code</h3>
                 <p>
-                    Built on a highly concurrent Rust core and the Apache Arrow C Data Interface to keep local analytics blazing fast with native integrations for Polars and DuckDB.
-                </p>
-                <p>
-                    A clean DX with a zero-config local mock mode ensures developers can rapidly prototype notebooks and pipelines while preventing accidental exposure of sensitive columns.
+                    Map your corporate IdP groups (Okta, Azure AD) and business purposes (churn-model, marketing) to masking rules (HASH, REDACT, PLAINTEXT) in a cryptographically signed JSON policy.
                 </p>
             </div>
         </div>
 
-        <div class="block pillar block-comp">
+        <div class="block step-block">
             <div class="content">
-                <h3>Cross-Org & Central Control</h3>
+                <h3>3. Query Locally at Memory Speed</h3>
                 <p>
-                    Share encrypted Parquet files safely across organization boundaries.
-                </p>
-                <p>
-                    Compliance officers dictate access rules via centralized JSON Policy Manifests. Holonomy applies these as guardrails at runtime to enforce masking, enabling secure collaboration and dev/test environments.
+                    Analysts run holonomy.scan("s3://..."). The Rust core verifies their identity, unwraps permitted keys via your AWS/GCP KMS, transforms restricted columns in RAM, and hands a zero-copy Arrow stream to local engines.
                 </p>
             </div>
         </div>
 
-        <div class="block header-block" style="margin-top: 2rem; border-color: var(--coral); box-shadow: 12px 12px 0px var(--goldenrod);">
+        <!-- PRAGMATIC GUARDRAILS (SECTION DIVIDER) -->
+        <div class="block guardrails-header-block">
+            <div class="content" style="align-items: center;">
+                <h2>Pragmatic Guardrails Instead of Enclaves</h2>
+                <p>
+                    Most data leaks aren't malicious — they happen by accident when engineers pull production dumps into local notebooks. Holonomy ensures that authorized analysts and AI agents never accidentally pull raw PII into local memory or logs, helping with GDPR data minimization without slowing your team down.
+                </p>
+            </div>
+        </div>
+
+        <!-- THREE BENEFIT CARDS -->
+        <div class="block benefit-1">
+            <div class="content">
+                <h3>Kill Defensive ETL Pipelines (One File, Many Views)</h3>
+                <p>
+                    Stop duplicating S3 tables into users_raw, users_marketing, and users_anonymized just for masking purposes. Store one encrypted Parquet file on S3. Holonomy dynamically morphs columns at read-time based on who is asking and why.
+                </p>
+            </div>
+        </div>
+
+        <div class="block benefit-2">
+            <div class="content">
+                <h3>Pseudonymization That Doesn't Break JOINs</h3>
+                <p>
+                    Replacing emails or user IDs with NULL ruins cohort analysis. Holonomy’s in-memory deterministic SHA-256 hashing hides raw PII from data scientists while preserving primary-to-foreign key relationships across tables.
+                </p>
+            </div>
+        </div>
+
+        <div class="block benefit-3">
+            <div class="content">
+                <h3>Zero Infrastructure to Maintain</h3>
+                <p>
+                    No proxy servers, no Java clusters, no vendor lock-in. Holonomy runs 100% in-process inside your existing Jupyter notebooks, Airflow workers, or Kubernetes jobs with &lt;5% memory-copy overhead. You keep full ownership of your S3 buckets and cloud KMS keys.
+                </p>
+            </div>
+        </div>
+
+        <!-- LICENSING & CONTACT FOOTER -->
+        <div class="block licensing-block" style="margin-top: 1rem;">
             <div class="content" style="align-items: center; text-align: center;">
-                <h2 style="color: var(--coral); font-size: 2.2rem;">Early Adopter Licensing</h2>
+                <h2>Early Adopter Licensing</h2>
                 <p style="max-width: 900px; margin: 0 auto 1.5rem auto; font-size: 1.25rem;">
-                    Holonomy is currently in its final stages of development. The source code is made available under the <a href="https://github.com/kpruntov/holonomy-source/blob/main/LICENSE" style="color: var(--lapis);">Business Source License (BSL 1.1)</a>.
+                    Holonomy is currently in its final stages of development. The source code is made available under the <a href="https://github.com/kpruntov/holonomy-source/blob/main/LICENSE" style="color: var(--lapis); font-weight: 600;">Business Source License (BSL 1.1)</a>.
                 </p>
                 <p style="max-width: 900px; margin: 0 auto 1.5rem auto; font-size: 1.15rem;">
                     Although Holonomy requires a commercial license for production use, we are currently offering Early Adopter licenses completely free of charge, valid for full production use until <strong>June 1, 2027</strong>.
                 </p>
-                <p style="font-size: 1.5rem; font-family: 'Oswald', sans-serif; font-style: italic; margin-top: 1rem;">
+                <p style="font-size: 1.4rem; font-family: 'Oswald', sans-serif; font-style: italic; margin-top: 1rem;">
                     Reach out for early access keys and inquiries: <br>
                     <a href="mailto:license@holonomy.eu" style="color: var(--coral); text-decoration: none; font-size: 2rem; display: inline-block; margin-top: 0.5rem;">license@holonomy.eu</a>
                 </p>
@@ -1006,6 +475,24 @@ print(df.select("id", "name", "email", "ssn", "salary").limit(3))`;
         </div>
 
     </div>
+
+    <script>
+    function copyInstallCmd(btn) {
+        const cmd = "pip install holonomy";
+        navigator.clipboard.writeText(cmd).then(() => {
+            const textSpan = btn.querySelector(".copy-text");
+            const original = textSpan ? textSpan.innerText : "Copy";
+            if (textSpan) textSpan.innerText = "Copied!";
+            btn.classList.add("copied");
+            setTimeout(() => {
+                if (textSpan) textSpan.innerText = original;
+                btn.classList.remove("copied");
+            }, 2000);
+        }).catch(err => {
+            console.error("Clipboard copy failed: ", err);
+        });
+    }
+    </script>
 </body>
 </html>
 {% else %}
