@@ -665,9 +665,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sigv4"
-version = "1.6.0"
+version = "1.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2312577f088c9fbf4206dfdb884cf1de9407b43e1a923cbed5237775116fc24b"
+checksum = "0a3ccec0607ae3839cd76830df5ed62468ac1330acdb3dc4ec0502404113d2b6"
 dependencies = [
  "aws-credential-types",
  "aws-smithy-eventstream",
@@ -719,9 +719,9 @@ dependencies = [
 
 [[package]]
 name = "aws-smithy-eventstream"
-version = "0.61.4"
+version = "0.61.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80c2051c2f1016fb8e6548dd07b8bc2ac9c3fe583721444b92f515e856d31609"
+checksum = "14c8a643d0e114cae39e45415e3225793a6396698b7779a0c9e3ede731d8fc71"
 dependencies = [
  "aws-smithy-types",
  "bytes",
@@ -730,9 +730,9 @@ dependencies = [
 
 [[package]]
 name = "aws-smithy-http"
-version = "0.64.1"
+version = "0.64.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "639b4d8f8555f24a9be649811c3eb0b4d4616f4d61daf0c32e28873bc1ea9af1"
+checksum = "ba8960956e0ee0ca3f3161e62913a61bc65a7ef638ca3ef1d4c7159f8443e398"
 dependencies = [
  "aws-smithy-eventstream",
  "aws-smithy-runtime-api",
@@ -746,7 +746,6 @@ dependencies = [
  "http-body-util",
  "percent-encoding",
  "pin-project-lite",
- "pin-utils",
  "tracing",
 ]
 
